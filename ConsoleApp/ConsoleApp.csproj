@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Hotel.Application\Hotel.Application.csproj" />
     <ProjectReference Include="..\Hotel.Domain\Hotel.Domain.csproj" />
+    <ProjectReference Include="..\Hotel.Sql\Hotel.Sql.csproj" />
   </ItemGroup>
 
 </Project>

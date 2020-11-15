@@ -1,4 +1,5 @@
 ﻿using Hotel.Domain.Entities.Common;
+using Hotel.Domain.Excetions;
 using System;
 
 namespace Hotel.Domain.Entities.PriceRuleEntity
@@ -6,35 +7,59 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
     public class PriceRule : Entity
     {
         public RuleName RuleName { get; private set; }        
-        public RuleType RuleType { get; set; }
-        public int PercetageValue { get; private set; }
-        public int NumericValue { get; private set; }
+        public RuleType RuleType { get; private set; }
+        public string FriendlyName { get; set; }
+        public int Value { get; private set; }
+        public int Priority { get; private set; }
 
-        private PriceRule() { }
+        protected PriceRule() { }
 
-        public decimal GetCalculatedPrice(decimal price)
+        public PriceRule(RuleName ruleName, RuleType ruleType, string frienldyName, int value, int priority)
         {
-            if (PercetageValue > 0)
-                switch (RuleType)
-                {
-                    case RuleType.Increasing:
-                        return price + (price * PercetageValue * 0.01m);
+            RuleName = ruleName;
+            RuleType = ruleType;
 
-                    case RuleType.Decreasing:
-                        return price - (price * PercetageValue * 0.01m);
-                }
+            if (string.IsNullOrEmpty(frienldyName) || string.IsNullOrWhiteSpace(frienldyName))
+                throw new HotelException("Nazwa reguły jesy wymagana.");
 
-            if (NumericValue > 0)
-                switch (RuleType)
-                {
-                    case RuleType.Increasing:
-                        return price + NumericValue;
+            if (ruleType.ToString().Contains("Percentage"))
+                if (value < 0 || value > 100)
+                    throw new HotelException("Nieprawidłowa wartość procentowa reguły.");
 
-                    case RuleType.Decreasing:
-                        return price - NumericValue;
-                }
+            if (priority <= 0)
+                throw new HotelException("Priorytet musi być większy od zera.");
 
-            throw new NotImplementedException();
+            Value = value;
+            Priority = priority;
+        }
+
+        public decimal GetCalculatedPrice(decimal price) 
+        {
+            return RuleType switch
+            {
+                RuleType.IncreasingByValue => IncreaseValue(price, Value),
+                RuleType.IncreasingByPercentage => IncreaseValue(price, GetValue(price)),
+                RuleType.DecreasingByValue => DecreaseValue(price, Value),
+                RuleType.DecreasingByPercentage => DecreaseValue(price, GetValue(price)),
+
+                _ => throw new NotImplementedException(),
+            };
+        }
+
+        private decimal GetValue(decimal price) => price * (Value * 0.01m);  
+        private decimal IncreaseValue(decimal price, decimal value) => price + value;
+        private decimal DecreaseValue(decimal price, decimal value) => price - value;
+
+        public bool IsRuleObligatoring(RoomGuest roomGuest)
+        {
+            return RuleName switch
+            {
+                RuleName.PriceWhenBreakfest => roomGuest.OrderedBreakfest,
+                RuleName.PriceWhenChild => roomGuest.IsChild,
+                RuleName.PriceWhenNewlywed => roomGuest.IsNewlyweds,
+
+                _ => throw new NotImplementedException()
+            };
         }
     }
 }

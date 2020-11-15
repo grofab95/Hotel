@@ -1,6 +1,5 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Excetions;
-using System;
 using System.Collections.Generic;
 
 namespace Hotel.Domain.Entities
@@ -9,9 +8,9 @@ namespace Hotel.Domain.Entities
     {
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
-        public List<Reservation> Reservations { get; private set; }
+        public virtual List<Reservation> Reservations { get; private set; }
 
-        private Customer() { }
+        protected Customer() { }
         public Customer(string firstName, string lastName)
         {
             if (string.IsNullOrEmpty(firstName) || string.IsNullOrWhiteSpace(firstName))
@@ -26,5 +25,7 @@ namespace Hotel.Domain.Entities
             FirstName = firstName;
             LastName = lastName;
         }
+
+        public override string ToString() => $"{FirstName} {LastName}";
     }
 }

@@ -2,7 +2,10 @@
 {
     public enum RuleType
     {
-        Increasing,
-        Decreasing
+        IncreasingByValue,
+        IncreasingByPercentage,
+
+        DecreasingByValue,
+        DecreasingByPercentage
     }
 }

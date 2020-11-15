@@ -6,10 +6,10 @@ namespace Hotel.Domain.Entities
     public class Room : Entity
     {
         public string Name { get; private set; }
-        public int PeopleAmount { get; private set; }
-        public Area Area { get; private set; }
+        public int PeopleCapacity { get; private set; }
+        public virtual Area Area { get; private set; }
 
-        private Room() { }
+        protected Room() { }
         public Room(Area area, string name, int peopleAmount)
         {
             if (area == null)
@@ -23,7 +23,7 @@ namespace Hotel.Domain.Entities
 
             Area = area;
             Name = name;
-            PeopleAmount = peopleAmount;
+            PeopleCapacity = peopleAmount;
         }
 
         public override string ToString()

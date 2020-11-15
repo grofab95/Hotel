@@ -8,7 +8,7 @@ namespace Hotel.Domain.Entities
     {
         public string Name { get; private set; }
 
-        private Area() { }
+        protected Area() { }
         public Area(string name)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))

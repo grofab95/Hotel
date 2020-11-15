@@ -2,8 +2,8 @@
 {
     public enum RuleName
     {
-        PriceWithBreakfest,
-        PriceWhenChildren,
-        PriceWhenNewlyweds        
+        PriceWhenBreakfest,
+        PriceWhenChild,
+        PriceWhenNewlywed        
     }
 }
