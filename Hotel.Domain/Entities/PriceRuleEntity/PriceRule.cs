@@ -8,13 +8,14 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
     {
         public RuleName RuleName { get; private set; }        
         public RuleType RuleType { get; private set; }
-        public string FriendlyName { get; set; }
+        public string FriendlyName { get; private set; }
         public int Value { get; private set; }
         public int Priority { get; private set; }
+        public bool ApplyNextRules { get; private set; }
 
         protected PriceRule() { }
 
-        public PriceRule(RuleName ruleName, RuleType ruleType, string frienldyName, int value, int priority)
+        public PriceRule(RuleName ruleName, RuleType ruleType, string frienldyName, int value, int priority, bool applyNextRules)
         {
             RuleName = ruleName;
             RuleType = ruleType;
@@ -31,6 +32,8 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
 
             Value = value;
             Priority = priority;
+            FriendlyName = frienldyName;
+            ApplyNextRules = applyNextRules;
         }
 
         public decimal GetCalculatedPrice(decimal price) 

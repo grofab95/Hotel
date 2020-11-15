@@ -2,11 +2,7 @@
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Tests.Helpers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Hotel.Domain.Tests.EntitiesTests.PriceRuleEnetityTests
@@ -21,15 +17,15 @@ namespace Hotel.Domain.Tests.EntitiesTests.PriceRuleEnetityTests
             _reservation = FakeReservationCreator.Get();
             _priceCalculator = new PriceCalculator(new List<PriceRule>
             {
-                new PriceRule(RuleName.PriceWhenChild, RuleType.DecreasingByPercentage, "Reguła dla dzieci", 50, 1),
-                new PriceRule(RuleName.PriceWhenNewlywed, RuleType.DecreasingByPercentage, "Reguła dla nowożeńców", 100, 2),
-                new PriceRule(RuleName.PriceWhenBreakfest, RuleType.IncreasingByValue, "Reguła dla śniadań", 10, 3)
+                new PriceRule(RuleName.PriceWhenChild, RuleType.DecreasingByPercentage, "Reguła dla dzieci", 50, 1, true),
+                new PriceRule(RuleName.PriceWhenNewlywed, RuleType.DecreasingByPercentage, "Reguła dla nowożeńców", 100, 2, false),
+                new PriceRule(RuleName.PriceWhenBreakfest, RuleType.IncreasingByValue, "Reguła dla śniadań", 10, 3, true)
             });
         }
 
         [Theory]
         [InlineData(0, 170)]
-        [InlineData(1, 20)] // para mloda tylko za sniadanie placi ???
+        [InlineData(1, 0)] 
         [InlineData(2, 120)]
         [InlineData(3, 20)] // ustalone ceny
         public void CalculateRoomPrice_Expected_CalculatedRoomPrice(int roomId, decimal expectedPrice)
@@ -44,7 +40,7 @@ namespace Hotel.Domain.Tests.EntitiesTests.PriceRuleEnetityTests
         public void CalculateReservationPrice_Excpected_CalculatedReservationPrice()
         {
             var actual = _reservation.GetCalculatedPrice(_priceCalculator);
-            var expected = 330;
+            var expected = 310;
 
             actual.Should().Be(expected);
         }

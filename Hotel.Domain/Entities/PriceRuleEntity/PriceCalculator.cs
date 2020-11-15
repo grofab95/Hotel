@@ -27,6 +27,9 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
                     continue;
 
                 guestPrice = _ruleManager.GetCalculatedPrice(priceRule.RuleName, guestPrice);
+
+                if (!priceRule.ApplyNextRules)
+                    break;
             }
 
             return Math.Max(guestPrice, 0);
