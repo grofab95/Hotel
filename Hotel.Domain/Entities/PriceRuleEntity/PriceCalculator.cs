@@ -6,12 +6,12 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
 {
     public class PriceCalculator
     {
-        private RuleManager _ruleManager;
+        private PriceRuleManager _ruleManager;
         private const decimal normalPrice = 50;
 
         public PriceCalculator(List<PriceRule> priceRules)
         {
-            _ruleManager = new RuleManager(priceRules);
+            _ruleManager = new PriceRuleManager(priceRules);
         }
 
         private decimal CalculatedGuestPrice(RoomGuest roomGuest)

@@ -1,5 +1,5 @@
 ﻿using Hotel.Domain.Entities;
-using Hotel.Domain.Excetions;
+using Hotel.Domain.Exceptions;
 
 namespace Hotel.Domain.Validators
 {

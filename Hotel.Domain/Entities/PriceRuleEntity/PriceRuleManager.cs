@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace Hotel.Domain.Entities.PriceRuleEntity
 {
-    public class RuleManager
+    public class PriceRuleManager
     {
         private List<PriceRule> _priceRules;
 
-        public RuleManager(List<PriceRule> priceRules)
+        public PriceRuleManager(List<PriceRule> priceRules)
         {
             _priceRules = priceRules;
         }

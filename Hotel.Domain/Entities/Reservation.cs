@@ -1,6 +1,6 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Entities.PriceRuleEntity;
-using Hotel.Domain.Excetions;
+using Hotel.Domain.Exceptions;
 using Hotel.Domain.Utilities;
 using Hotel.Domain.Validators;
 using System;

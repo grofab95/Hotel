@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Hotel.Domain.Excetions
+namespace Hotel.Domain.Exceptions
 {
     public class HotelException : Exception
     {
