@@ -1,0 +1,54 @@
+﻿@*@layout LoginLayout
+
+@if (_anyUser)
+{
+    @if (_isSigning)
+    {
+        <div>
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"
+                               Style="margin-top: 60px" />
+        </div>
+    }
+
+    <RadzenCard Style="width: 450px; margin-top: 1px;">    
+        <RadzenTemplateForm Data="@_user" Submit="@(async (LoginDto loginDto) => await Login(loginDto))">
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-md-3">
+                    <RadzenLabel Text="E-Mail:" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="_user.Email" Name="Email" Style="width: 100%;" />
+                    <RadzenRequiredValidator Component="Email" Text="E-Mail jest wymagany"
+                                                Popup="@false" Style="position: inherit; width: 300px;" />
+                    <RadzenEmailValidator Component="Email" Text="Podany adres jest błędny"
+                                            Popup="@false" Style="position: inherit; width: 300px;" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-md-3">
+                    <RadzenLabel Text="Hasło:" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenPassword @bind-Value="_user.Password" Name="Password" Style="width: 100%;" />
+                    <RadzenRequiredValidator Component="Password" Text="Hasło jest wymagane"
+                                                Popup="@false" Style="position: inherit; width: 300px;" />
+                </div>
+            </div>
+
+            <div class="row text-right">
+                <div class="col-xl-4">
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="Zaloguj"
+                                  Disabled="@_isSigning"
+                                    ButtonStyle="ButtonStyle.Light" Style="margin-top: 15px" />
+                </div>
+            </div>
+        </RadzenTemplateForm>
+    </RadzenCard>
+}
+else
+{
+    <CreateFirstUserComponent />
+}*@
+
+

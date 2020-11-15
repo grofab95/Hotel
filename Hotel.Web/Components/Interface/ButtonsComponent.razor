@@ -1,0 +1,22 @@
+﻿<div class="row">
+    <div class="col-6">
+        <h3>@LeftContent</h3>
+    </div>
+
+    <div class="col-6 d-flex" style="justify-content: flex-end; ">
+        <SaveCancelComponent OnSave="OnSave"
+                             OnCancel="OnCancel"
+                             SaveDisabled="SaveDisabled"
+                             CancelDisabled="CancelDisabled" />
+    </div>
+</div>
+
+@code {
+    [Parameter] public RenderFragment LeftContent { get; set; }
+
+    [Parameter] public EventCallback<bool> OnSave { get; set; }
+    [Parameter] public EventCallback<bool> OnCancel { get; set; }
+
+    [Parameter] public bool SaveDisabled { get; set; }
+    [Parameter] public bool CancelDisabled { get; set; }
+}

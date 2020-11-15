@@ -1,0 +1,13 @@
+﻿
+@code {
+    private void ShowWindow(WindowConfiguration windowConfiguration) => _dialogService.Open(windowConfiguration.Title, ds =>
+    @<div>
+        @windowConfiguration.Content
+    </div>, windowConfiguration.DialogOptions);
+
+    private void ShowWaitingWindow(string waitingText) => _dialogService.Open("Proszę czekać", ds =>
+    @<div>
+        <WaitingComponent WaitingText="@waitingText" />
+    </div>, new DialogOptions { Width = "300px", ShowTitle = false });
+}
+

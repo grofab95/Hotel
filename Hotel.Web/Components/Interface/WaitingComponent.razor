@@ -1,0 +1,20 @@
+﻿
+<div style="text-align: center">
+    <p>@WaitingText</p>
+    <div class="spinner-grow text-primary" style="width: 5rem; height: 5rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+@code {  
+
+        [Parameter] public string WaitingText { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrEmpty(WaitingText))
+            WaitingText = "Proszę czekać ...";
+
+        WaitingText = Hotel.Application.Extensions.StringExtensions.ReductStringLength(WaitingText, 30);
+    }
+} 
