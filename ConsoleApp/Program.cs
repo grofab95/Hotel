@@ -1,6 +1,7 @@
 ﻿using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Sql;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,14 @@ namespace ConsoleApp
         static void Main()
         {
             //Refiller.Start();
-            var priceRules = context.PriceRules.ToList();
+            var priceRules = context.PriceRules.AsNoTracking().ToList();
             var priceCalculator = new PriceCalculator(priceRules);
+
+            var x1 = priceRules[0];
+            var x2 = priceRules[1];
+
+            var same = x1.Equals(x2);
+            var same2 = x1 == x2;
 
             var reservation = context.Reservations.First();
 

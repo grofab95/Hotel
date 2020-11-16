@@ -18,10 +18,14 @@ else
                 </EditTemplate>
             </RadzenGridColumn>
 
-            <RadzenGridColumn Width="200px" TItem="PriceRuleDto" Property="FriendlyName" Title="Typ reguły">
-                @*<EditTemplate Context="priceRule">
-            <RadzenDropDown @bind-Value="PriceRule.CustomerID" Data="@customers" TextProperty="CompanyName" ValueProperty="CustomerID" Style="width:100%" />
-        </EditTemplate>*@
+            <RadzenGridColumn Width="200px" TItem="PriceRuleDto" Property="RuleType" Title="Typ reguły">
+                <Template Context="priceRule">
+                    <p>@priceRule.RuleType.GetDescription()</p>
+                </Template>
+                <EditTemplate Context="priceRule">
+                    <RadzenDropDown @bind-Value="priceRule.RuleType" Data="@_ruleTypesNames" 
+                                    TextProperty="Value" ValueProperty="Key" Style="width:100%" />
+                </EditTemplate>
             </RadzenGridColumn>
 
             <RadzenGridColumn Width="50px" TItem="PriceRuleDto" Property="Value" Title="Wartość">
@@ -44,7 +48,7 @@ else
                     </RadzenButton>
                 </Template>
                 <EditTemplate Context="priceRule">
-                    <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(priceRule))">
+                    <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@(async (args) => await SaveRow(priceRule))">
                     </RadzenButton>
                     <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => CancelEdit(priceRule))">
                     </RadzenButton>

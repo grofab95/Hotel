@@ -1,6 +1,6 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Exceptions;
-using System;
+using Hotel.Domain.Extensions;
 
 namespace Hotel.Domain.Entities
 {
@@ -11,7 +11,7 @@ namespace Hotel.Domain.Entities
         protected Area() { }
         public Area(string name)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            if (name.IsNotExist())
                 throw new HotelException("Nazwa obszaru jest wymagana.");
 
             Name = name;

@@ -1,8 +1,12 @@
+using AutoMapper;
+using Hotel.Sql;
+using Hotel.Sql.ContextFactory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Hotel.Web
 {
@@ -19,6 +23,10 @@ namespace Hotel.Web
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddContextFactory<HotelContext>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddDaos();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -35,7 +43,6 @@ namespace Hotel.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

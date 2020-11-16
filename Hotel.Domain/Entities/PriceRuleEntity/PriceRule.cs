@@ -1,6 +1,5 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Exceptions;
-using Hotel.Domain.Utilities;
 using System;
 
 namespace Hotel.Domain.Entities.PriceRuleEntity
@@ -22,7 +21,7 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
             RuleType = ruleType;
 
             if (string.IsNullOrEmpty(frienldyName) || string.IsNullOrWhiteSpace(frienldyName))
-                throw new HotelException("Nazwa reguły jesy wymagana.");
+                throw new HotelException("Nazwa reguły jest wymagana.");
 
             if (ruleType.ToString().Contains("Percentage"))
                 if (value < 0 || value > 100)
@@ -37,25 +36,17 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
             ApplyNextRules = applyNextRules;
         }
 
-        public Result<PriceRule> Update(PriceRule updatedPriceRule)
+        public PriceRule Update(PriceRule updatedPriceRule)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(updatedPriceRule.FriendlyName) || string.IsNullOrWhiteSpace(updatedPriceRule.FriendlyName))
-                    throw new HotelException("Nazwa reguły jesy wymagana.");
+            if (string.IsNullOrEmpty(updatedPriceRule.FriendlyName) || string.IsNullOrWhiteSpace(updatedPriceRule.FriendlyName))
+                throw new HotelException("Nazwa reguły jesy wymagana.");
 
-                if (updatedPriceRule.RuleType.ToString().Contains("Percentage"))
-                    if (updatedPriceRule.Value < 0 || updatedPriceRule.Value > 100)
-                        throw new HotelException("Nieprawidłowa wartość procentowa reguły.");
+            if (updatedPriceRule.RuleType.ToString().Contains("Percentage"))
+                if (updatedPriceRule.Value < 0 || updatedPriceRule.Value > 100)
+                    throw new HotelException("Nieprawidłowa wartość procentowa reguły.");
 
-                if (updatedPriceRule.Priority <= 0)
-                    throw new HotelException("Priorytet musi być większy od zera.");
-            }
-            catch (Exception ex)
-            {
-                return Result<PriceRule>.Fail(ex.Message);
-            }
-            
+            if (updatedPriceRule.Priority <= 0)
+                throw new HotelException("Priorytet musi być większy od zera.");
 
             RuleType = updatedPriceRule.RuleType;
             Value = updatedPriceRule.Value;
@@ -63,7 +54,7 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
             FriendlyName = updatedPriceRule.FriendlyName;
             ApplyNextRules = updatedPriceRule.ApplyNextRules;
 
-            return Result<PriceRule>.Ok(this);
+            return this;
         }
 
         public decimal GetCalculatedPrice(decimal price) 

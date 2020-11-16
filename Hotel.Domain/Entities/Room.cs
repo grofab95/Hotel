@@ -1,5 +1,6 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Exceptions;
+using Hotel.Domain.Extensions;
 
 namespace Hotel.Domain.Entities
 {
@@ -15,7 +16,7 @@ namespace Hotel.Domain.Entities
             if (area == null)
                 throw new HotelException("Obszar jest wymagany.");
 
-            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            if (name.IsNotExist())
                 throw new HotelException("Nazwa pokoju jest wymagana.");
 
             if (peopleAmount <= 0)

@@ -22,8 +22,8 @@ namespace Hotel.Sql
             //if (Config.Get.IsTestMode())
             //{
             optionsBuilder.UseLazyLoadingProxies();
-                //optionsBuilder.EnableSensitiveDataLogging();
-                //optionsBuilder.UseLoggerFactory(DbLogger.Factory);
+                optionsBuilder.EnableSensitiveDataLogging();
+                optionsBuilder.UseLoggerFactory(DbLogger.Factory);
             //}
         }
 

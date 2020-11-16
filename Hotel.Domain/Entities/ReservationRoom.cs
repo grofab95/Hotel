@@ -47,10 +47,10 @@ namespace Hotel.Domain.Entities
         {
             try
             {
-                if (updatedReservationRoom.Room.Id != Room.Id)
+                if (updatedReservationRoom.Room != Room)
                     throw new HotelException("Nie można zmieniać pokoju.");
 
-                if (updatedReservationRoom.Reservation.Id != Reservation.Id)
+                if (updatedReservationRoom.Reservation != Reservation)
                     throw new HotelException("Nie można zmieniać przypisanej rezerwacji.");
 
                 if (!updatedReservationRoom.RoomGuests?.Any() ?? true)
@@ -88,7 +88,8 @@ namespace Hotel.Domain.Entities
 
         internal Result RemoveRoomGuest(RoomGuest roomGuest)
         {
-            if (!RoomGuests.Any(x => x.Id == roomGuest.Id))
+            //if (!RoomGuests.Any(x => x.Id == roomGuest.Id))
+            if (!RoomGuests.Contains(roomGuest))
                 return Result.Fail($"Gość {roomGuest} nie jest przypisany do pokoju {Room}.");
 
             RoomGuests.Remove(roomGuest);

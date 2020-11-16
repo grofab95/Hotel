@@ -51,8 +51,8 @@ namespace Hotel.Domain.Entities
 
         public Result AddReservationRoom(Room room)
         {
-            //if (ReservationRooms.Any(x => x.Room.Id == room.Id))
-            //    return Result.Fail($"Pokój {room} już istnieje w tej rezerwacji.");
+            //if (ReservationRooms.Any(x => x.Room == room))
+                //return Result.Fail($"Pokój {room} już istnieje w tej rezerwacji.");
 
             var createReservationRoomResult = ReservationRoom
                 .CreateReservationRoom(this, room);
