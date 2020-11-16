@@ -1,7 +1,6 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Exceptions;
-using Hotel.Domain.Utilities;
 using Hotel.Domain.Validators;
 using System;
 using System.Collections.Generic;
@@ -23,99 +22,65 @@ namespace Hotel.Domain.Entities
             ReservationRooms = new List<ReservationRoom>();
         }
 
-        public static Result<Reservation> CreateReservation(Customer customer, DateTime checkIn, DateTime checkOut)
+        public static Reservation Create(Customer customer, DateTime checkIn, DateTime checkOut)
         {
-            try
-            {
-                if (customer == null)
-                    throw new HotelException("Klient nie został określony.");
+            if (customer == null)
+                throw new MissingValueException("Klient nie został określony.");
 
-                if (checkIn < DateTime.Now)
-                    throw new HotelException("Nie można stworzyć rezerwacji w przeszłości.");
+            if (checkIn < DateTime.Now)
+                throw new HotelException("Nie można stworzyć rezerwacji w przeszłości.");
 
-                if (checkIn > checkOut)
-                    throw new HotelException("Date zameldowania nie może byc późniejsza od daty wymeldowania.");
-            }
-            catch (Exception ex)
-            {
-                return Result<Reservation>.Fail(ex.Message);
-            }
+            if (checkIn > checkOut)
+                throw new HotelException("Date zameldowania nie może byc późniejsza od daty wymeldowania.");
 
-            return Result<Reservation>.Ok(new Reservation 
+            return new Reservation 
             {
                 Customer = customer,
                 CheckIn = checkIn,
                 CheckOut = checkOut
-            });
+            };
         }
 
-        public Result AddReservationRoom(Room room)
+        public void AddRoom(Room room)
         {
             //if (ReservationRooms.Any(x => x.Room == room))
                 //return Result.Fail($"Pokój {room} już istnieje w tej rezerwacji.");
 
-            var createReservationRoomResult = ReservationRoom
-                .CreateReservationRoom(this, room);
+            var reservationRoom = new ReservationRoom(this, room);
 
-            if (createReservationRoomResult.IsError)
-                return Result.Fail(createReservationRoomResult.Message);
-
-            ReservationRooms.Add(createReservationRoomResult.Value);
-            return Result.Ok();
+            ReservationRooms.Add(reservationRoom);
         }
 
-        public Result DeleteReservationRoom(ReservationRoom reservationRoom)
+        public void DeleteRoom(ReservationRoom reservationRoom)
         {
             if (!ReservationRooms.Contains(reservationRoom))
-                return Result.Fail($"{reservationRoom} nie należy do tej rezerwacji.");
+                throw new HotelException($"{reservationRoom} nie należy do tej rezerwacji.");
 
             ReservationRooms.Remove(reservationRoom);
-            return Result.Ok();
         }
 
-        public Result<ReservationRoom> UpdateReservationRoom(ReservationRoom updatedReservationRoom)
+        public ReservationRoom UpdateRoom(ReservationRoom updatedReservationRoom)
         {
-            try
-            {
-                ReservationValidators.ValidIfReservationRoomExistInReservation(this, updatedReservationRoom);
-            }
-            catch (Exception ex)
-            {
-                return Result<ReservationRoom>.Fail(ex.Message);
-            }
-           
+            ReservationValidators.ValidIfReservationRoomExistInReservation(this, updatedReservationRoom);
+
             var reservationRoom = ReservationRooms.FirstOrDefault(x => x.Id == updatedReservationRoom.Id);
 
             return reservationRoom.Update(updatedReservationRoom);
         }
 
-        public Result<RoomGuest> AddGuestToRoom(ReservationRoom reservationRoom, string name, bool isChild,
+        public RoomGuest AddGuestToRoom(ReservationRoom reservationRoom, string name, bool isChild,
             bool isNewlyweds, bool orderedBreakfest, decimal? priceForStay = null)
         {
-            try
-            {
-                ReservationValidators.ValidIfReservationRoomExistInReservation(this, reservationRoom);
-            }
-            catch (Exception ex)
-            {
-                return Result<RoomGuest>.Fail(ex.Message);
-            }
+            ReservationValidators.ValidIfReservationRoomExistInReservation(this, reservationRoom);
 
             return reservationRoom.AddRoomGuest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay);
         }
 
-        public Result RemoveGuestFromRoom(ReservationRoom reservationRoom, RoomGuest roomGuest)
+        public void RemoveGuestFromRoom(ReservationRoom reservationRoom, RoomGuest roomGuest)
         {
-            try
-            {
-                ReservationValidators.ValidIfReservationRoomExistInReservation(this, reservationRoom);
-            }
-            catch (Exception ex)
-            {
-                return Result.Fail(ex.Message);
-            }
+            ReservationValidators.ValidIfReservationRoomExistInReservation(this, reservationRoom);
 
-            return reservationRoom.RemoveRoomGuest(roomGuest);
+            reservationRoom.RemoveRoomGuest(roomGuest);
         }
 
         public decimal GetCalculatedPrice(PriceCalculator priceCalculator)

@@ -21,7 +21,7 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
             RuleType = ruleType;
 
             if (string.IsNullOrEmpty(frienldyName) || string.IsNullOrWhiteSpace(frienldyName))
-                throw new HotelException("Nazwa reguły jest wymagana.");
+                throw new MissingValueException("Nazwa reguły jest wymagana.");
 
             if (ruleType.ToString().Contains("Percentage"))
                 if (value < 0 || value > 100)
@@ -39,7 +39,7 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
         public PriceRule Update(PriceRule updatedPriceRule)
         {
             if (string.IsNullOrEmpty(updatedPriceRule.FriendlyName) || string.IsNullOrWhiteSpace(updatedPriceRule.FriendlyName))
-                throw new HotelException("Nazwa reguły jesy wymagana.");
+                throw new MissingValueException("Nazwa reguły jesy wymagana.");
 
             if (updatedPriceRule.RuleType.ToString().Contains("Percentage"))
                 if (updatedPriceRule.Value < 0 || updatedPriceRule.Value > 100)

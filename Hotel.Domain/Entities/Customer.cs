@@ -1,6 +1,5 @@
 ﻿using Hotel.Domain.Entities.Common;
-using Hotel.Domain.Exceptions;
-using Hotel.Domain.Extensions;
+using Hotel.Domain.Validators;
 using System.Collections.Generic;
 
 namespace Hotel.Domain.Entities
@@ -14,14 +13,9 @@ namespace Hotel.Domain.Entities
         protected Customer() { }
         public Customer(string firstName, string lastName)
         {
-            if (firstName.IsNotExist())
-                throw new HotelException("Imię jest wymagane.");
-
-            if (lastName.IsNotExist())
-                throw new HotelException("Nazwisko jest wymagane.");
-
-            if (firstName.IsLike(lastName))
-                throw new HotelException("Imię i nazwisko nie mogą byc takie same.");
+            CustomerValidators.ValidIfFirstNameExist(firstName);
+            CustomerValidators.ValidIfLastNameExist(lastName);
+            CustomerValidators.ValidIfFirstAndLastNameAreTheSame(firstName, lastName);
 
             FirstName = firstName;
             LastName = lastName;

@@ -1,8 +1,6 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Exceptions;
-using Hotel.Domain.Utilities;
 using Hotel.Domain.Validators;
-using System;
 
 namespace Hotel.Domain.Entities
 {
@@ -16,32 +14,38 @@ namespace Hotel.Domain.Entities
 
         protected RoomGuest() { }
 
-        internal static Result<RoomGuest> Create(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest,
+        internal RoomGuest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest,
             decimal? priceForStay = null)
         {
-            try
-            {
-                RoomGuestValidators.ValidName(name);
-                RoomGuestValidators.ValidPriceForStay(priceForStay);
+            RoomGuestValidators.ValidIfNameExist(name);
+            RoomGuestValidators.ValidPriceForStay(priceForStay);
 
-                return Result<RoomGuest>.Ok(new RoomGuest
-                {
-                    Name = name,
-                    IsChild = isChild,
-                    IsNewlyweds = isNewlyweds,
-                    OrderedBreakfest = orderedBreakfest,
-                    PriceForStay = priceForStay
-                });
-            }
-            catch (Exception ex)
-            {
-                return Result<RoomGuest>.Fail(ex.Message);
-            }         
+            Name = name;
+            IsChild = isChild;
+            IsNewlyweds = isNewlyweds;
+            OrderedBreakfest = orderedBreakfest;
+            PriceForStay = priceForStay;
         }
+
+        //internal static RoomGuest Create(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest,
+        //    decimal? priceForStay = null)
+        //{
+        //    RoomGuestValidators.ValidName(name);
+        //    RoomGuestValidators.ValidPriceForStay(priceForStay);
+
+        //    return new RoomGuest
+        //    {
+        //        Name = name,
+        //        IsChild = isChild,
+        //        IsNewlyweds = isNewlyweds,
+        //        OrderedBreakfest = orderedBreakfest,
+        //        PriceForStay = priceForStay
+        //    };
+        //}
 
         internal RoomGuest Update(RoomGuest updatedRoomGuest)
         {
-            RoomGuestValidators.ValidName(updatedRoomGuest.Name);
+            RoomGuestValidators.ValidIfNameExist(updatedRoomGuest.Name);
             RoomGuestValidators.ValidPriceForStay(updatedRoomGuest.PriceForStay);
 
             if (updatedRoomGuest.Id != Id)

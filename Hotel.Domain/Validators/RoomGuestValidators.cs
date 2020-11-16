@@ -1,12 +1,13 @@
 ﻿using Hotel.Domain.Exceptions;
+using Hotel.Domain.Extensions;
 
 namespace Hotel.Domain.Validators
 {
     public class RoomGuestValidators
     {
-        public static void ValidName(string name)
+        public static void ValidIfNameExist(string name)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            if (name.IsNotExist())
                 throw new HotelException("Nazwa gościa jest wymagana.");
         }
 

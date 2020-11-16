@@ -57,16 +57,12 @@ namespace ConsoleApp
             var checkIn = new DateTime(2020, 11, 20);
             var checkOut = new DateTime(2020, 11, 27);
 
-            var createReservationResult = Reservation.CreateReservation(customers[0], checkIn, checkOut);
-            if (createReservationResult.IsError)
-                throw new Exception(createReservationResult.Message);
+            var reservation = Reservation.Create(customers[0], checkIn, checkOut);
 
-            var reservation = createReservationResult.Value;
-
-            var res1 = reservation.AddReservationRoom(rooms[0]);
-            var res2 = reservation.AddReservationRoom(rooms[1]);
-            var res3 = reservation.AddReservationRoom(rooms[2]);
-            var res4 = reservation.AddReservationRoom(rooms[3]);
+            reservation.AddRoom(rooms[0]);
+            reservation.AddRoom(rooms[1]);
+            reservation.AddRoom(rooms[2]);
+            reservation.AddRoom(rooms[3]);
 
             context.Reservations.Add(reservation);
             context.SaveChanges();

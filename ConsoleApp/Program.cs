@@ -14,6 +14,7 @@ namespace ConsoleApp
 
         static void Main()
         {
+            var reeees = FakeReservationCreator.Get();
             //Refiller.Start();
             var priceRules = context.PriceRules.AsNoTracking().ToList();
             var priceCalculator = new PriceCalculator(priceRules);

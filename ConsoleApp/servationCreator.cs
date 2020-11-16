@@ -1,10 +1,13 @@
 ﻿using Hotel.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Hotel.Domain.Tests.Helpers
+namespace ConsoleApp
 {
-    public class FakeReservationCreator
+    internal class FakeReservationCreator
     {
         public static Reservation Get()
         {

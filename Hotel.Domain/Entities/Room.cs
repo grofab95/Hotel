@@ -1,6 +1,5 @@
 ﻿using Hotel.Domain.Entities.Common;
-using Hotel.Domain.Exceptions;
-using Hotel.Domain.Extensions;
+using Hotel.Domain.Validators;
 
 namespace Hotel.Domain.Entities
 {
@@ -11,20 +10,16 @@ namespace Hotel.Domain.Entities
         public virtual Area Area { get; private set; }
 
         protected Room() { }
-        public Room(Area area, string name, int peopleAmount)
+
+        public Room(Area area, string name, int peopleCapcity)
         {
-            if (area == null)
-                throw new HotelException("Obszar jest wymagany.");
-
-            if (name.IsNotExist())
-                throw new HotelException("Nazwa pokoju jest wymagana.");
-
-            if (peopleAmount <= 0)
-                throw new HotelException("Ilość musi być większa od zera.");
+            RoomValidators.ValidIfAreaExist(area);
+            RoomValidators.ValidIfNameExist(name);
+            RoomValidators.ValidIfPeopleCapacityIsPositive(peopleCapcity);
 
             Area = area;
             Name = name;
-            PeopleCapacity = peopleAmount;
+            PeopleCapacity = peopleCapcity;
         }
 
         public override string ToString()

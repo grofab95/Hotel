@@ -1,7 +1,5 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Exceptions;
-using Hotel.Domain.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,84 +14,78 @@ namespace Hotel.Domain.Entities
 
         public int BookingAmount => RoomGuests?.Count ?? 0;
 
-        protected ReservationRoom()
+        protected ReservationRoom() { }
+
+        internal ReservationRoom(Reservation reservation, Room room)
         {
+            if (reservation == null)
+                throw new MissingValueException($"Rezerwacja jest wymagana.");
+
+            if (room == null)
+                throw new HotelException("Pokój jest wymagany.");
+
+            Room = room;
+            Reservation = reservation;
             RoomGuests = new List<RoomGuest>();
         }
 
-        internal static Result<ReservationRoom> CreateReservationRoom(Reservation reservation, Room room)
+        //internal static ReservationRoom CreateReservationRoom(Reservation reservation, Room room)
+        //{
+        //    if (reservation == null)
+        //        throw new MissingValueException($"Rezerwacja jest wymagana.");
+
+        //    if (room == null)
+        //        throw new HotelException("Pokój jest wymagany.");
+
+        //    return new ReservationRoom
+        //    {
+        //        Room = room,
+        //        Reservation = reservation
+        //    };
+        //}
+
+        internal ReservationRoom Update(ReservationRoom updatedReservationRoom)
         {
-            try
-            {
-                if (reservation == null)
-                    throw new HotelException($"Rezerwacja jest wymagana.");
+            if (updatedReservationRoom.Room != Room)
+                throw new HotelException("Nie można zmieniać pokoju.");
 
-                if (room == null)
-                    throw new HotelException("Pokój jest wymagany.");
-            }
-            catch (Exception ex)
-            {
-                return Result<ReservationRoom>.Fail(ex.Message);
-            }
+            if (updatedReservationRoom.Reservation != Reservation)
+                throw new HotelException("Nie można zmieniać przypisanej rezerwacji.");
 
-            return Result<ReservationRoom>.Ok(new ReservationRoom
-            {
-                Room = room,
-                Reservation = reservation
-            });
+            if (!updatedReservationRoom.RoomGuests?.Any() ?? true)
+                throw new HotelException("Należy przypisać gości do pokoju.");
+
+            var joined = (from roomGuest in RoomGuests
+                            join updatedRoomGuest in updatedReservationRoom.RoomGuests on roomGuest.Id equals updatedReservationRoom.Id
+                            select new { roomGuest, updatedRoomGuest }).ToList();
+
+            joined.ForEach(x => x.roomGuest.Update(x.updatedRoomGuest));
+
+            return this;            
         }
 
-        internal Result<ReservationRoom> Update(ReservationRoom updatedReservationRoom)
-        {
-            try
-            {
-                if (updatedReservationRoom.Room != Room)
-                    throw new HotelException("Nie można zmieniać pokoju.");
-
-                if (updatedReservationRoom.Reservation != Reservation)
-                    throw new HotelException("Nie można zmieniać przypisanej rezerwacji.");
-
-                if (!updatedReservationRoom.RoomGuests?.Any() ?? true)
-                    throw new HotelException("Należy przypisać gości do pokoju.");
-
-                var joined = (from roomGuest in RoomGuests
-                              join updatedRoomGuest in updatedReservationRoom.RoomGuests on roomGuest.Id equals updatedReservationRoom.Id
-                              select new { roomGuest, updatedRoomGuest }).ToList();
-
-                joined.ForEach(x => x.roomGuest.Update(x.updatedRoomGuest));
-
-                return Result<ReservationRoom>.Ok(this);
-            }
-            catch (Exception ex)
-            {
-                return Result<ReservationRoom>.Fail(ex.Message);
-            }            
-        }
-
-        internal Result<RoomGuest> AddRoomGuest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest,
+        internal RoomGuest AddRoomGuest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest,
             decimal? priceForStay = null)
         {
             if (BookingAmount == Room.PeopleCapacity)
-                return Result<RoomGuest>.Fail("Nie można dodać osoby - pokój jest pełny.");
+                throw new HotelException("Nie można dodać osoby - pokój jest pełny.");
 
             if (isChild && isNewlyweds)
-                return Result<RoomGuest>.Fail("Nie można dodać osoby - dziecko nie może być nowożeńcem XD");
+                throw new HotelException("Nie można dodać osoby - dziecko nie może być nowożeńcem XD");
 
-            var createRoomGuestResult = RoomGuest.Create(name, isChild, isNewlyweds, orderedBreakfest, priceForStay);
-            if (createRoomGuestResult.IsSuccess)
-                RoomGuests.Add(createRoomGuestResult.Value);
+            var roomGuest = new RoomGuest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay);
+            RoomGuests.Add(roomGuest);
 
-            return createRoomGuestResult;
+            return roomGuest;
         }
 
-        internal Result RemoveRoomGuest(RoomGuest roomGuest)
+        internal void RemoveRoomGuest(RoomGuest roomGuest)
         {
             //if (!RoomGuests.Any(x => x.Id == roomGuest.Id))
             if (!RoomGuests.Contains(roomGuest))
-                return Result.Fail($"Gość {roomGuest} nie jest przypisany do pokoju {Room}.");
+                throw new HotelException($"Gość {roomGuest} nie jest przypisany do pokoju {Room}.");
 
             RoomGuests.Remove(roomGuest);
-            return Result.Ok();
         }
     }
 }
