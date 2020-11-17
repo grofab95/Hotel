@@ -44,11 +44,11 @@
     <RadzenSteps>
         <Steps>
             <RadzenStepsItem Text="Wybierz pokoje">
-                <RoomsSelectionComponent Rooms="_rooms" Reservation="_reservation" />
+                <RoomsSelectionComponent Rooms="_rooms" Reservation="_reservation" RoomIdGuests="_roomIdGuests" />
             </RadzenStepsItem>
 
             <RadzenStepsItem Text="Rozmieść gości">
-                <GuestOrderComponent Reservation="_reservation" />
+                <GuestOrderComponent Reservation="_reservation" RoomIdGuests="_roomIdGuests" />
             </RadzenStepsItem>
 
             <RadzenStepsItem Text="Podsumowanie">

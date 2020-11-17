@@ -7,5 +7,10 @@
         public bool IsNewlyweds { get; set; }
         public bool OrderedBreakfest { get; set; }
         public decimal? PriceForStay { get; set; }
+
+        public GuestDto(string name)
+        {
+            Name = name;
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿
-@if (Reservation != null && _roomIdGuests != null)
+@if (Reservation != null && RoomIdGuests != null)
 {
     <table class="table">
         <thead class="thead-dark">
@@ -13,38 +13,68 @@
                 <th scope="col"></th>
             </tr>
         </thead>
+
         <tbody>
             @foreach (var reservationRoom in Reservation.ReservationRooms)
             {
-                var roomGuests = _roomIdGuests[reservationRoom.Room.Id];
-                roomGuests.Add(new GuestDto { Name = "Ujek" });
-                @*<tr>
-                    <td scope="row" rowspan="2">
-                        @reservationRoom.Room.Name
-                        <br />
-                        <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę" Click="(() => AddGuest(roomGuests))" />
-                    </td>*@
+                var roomGuests = RoomIdGuests[reservationRoom.Room.Id];
 
+                if (!roomGuests.Any())
+                {
                     <tr>
-                        @foreach (var guest in roomGuests)
-                        {
-                            if (roomGuests.IndexOf(guest) == 0)
-                            {
-                                <td rowspan="2">
-                                    @reservationRoom.Room.Name
-                                    <br />
-                                    <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę" Click="(() => AddGuest(roomGuests))" />
-                                </td>
-                            }
+                        <td>
+                            <p>@reservationRoom.Room.Name</p>
+                            <p>(@reservationRoom.Room.Area.Name)</p>
+                            <p>@($"{roomGuests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
+                            <br />
+                            <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę" Click="(() => AddGuest(roomGuests))" />
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+                else
+                {
+                    var firstGuest = roomGuests.FirstOrDefault();
+                    <tr>
+                        <td rowspan="@roomGuests.Count()">
+                            <p>@reservationRoom.Room.Name</p>
+                            <p>(@reservationRoom.Room.Area.Name)</p>
+                            <p>@($"{roomGuests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
+                            <br />
+                            <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę"
+                                          Click="(() => AddGuest(roomGuests))" Visible="(roomGuests.Count < reservationRoom.Room.PeopleCapacity)" />
+                        </td>
+                        <td>@firstGuest.Name</td>
+                        <td>@firstGuest.IsChild.GetName()</td>
+                        <td>@firstGuest.IsNewlyweds.GetName()</td>
+                        <td>@firstGuest.OrderedBreakfest.GetName()</td>
+                        <td>50 zł</td>
+                        <td>
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Small" Text="Usuń"
+                                          Click="(() => RemoveGuest(reservationRoom.Room.Id, firstGuest))" />
+                        </td>
+                    </tr>
+
+                    @foreach (var guest in roomGuests.Skip(1).ToList())
+                    {
+                        <tr>
                             <td>@guest.Name</td>
                             <td>@guest.IsChild.GetName()</td>
                             <td>@guest.IsNewlyweds.GetName()</td>
                             <td>@guest.OrderedBreakfest.GetName()</td>
                             <td>50 zł</td>
-                            <td><RadzenButton ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Small" Text="Usuń" /></td>
-                        }        
-                    </tr>
-                @*</tr>*@
+                            <td>
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Small" Text="Usuń"
+                                              Click="(() => RemoveGuest(reservationRoom.Room.Id, guest))" />
+                            </td>
+                        </tr>
+                    }
+                }
             }
         </tbody>
     </table>

@@ -16,10 +16,12 @@ namespace Hotel.Web.Components.ReservationComponents
         private SearchRoomDto _searchRoomDto;
         private Reservation _reservation;
         private List<Room> _rooms;
+        private Dictionary<int, List<GuestDto>> _roomIdGuests;
 
         protected override void OnInitialized()
         {
             _searchRoomDto = new SearchRoomDto();
+            _roomIdGuests = new Dictionary<int, List<GuestDto>>();
         }
 
         private async Task SearchRooms(SearchRoomDto searchRoomDto)
@@ -29,7 +31,7 @@ namespace Hotel.Web.Components.ReservationComponents
                 _rooms = await RoomDao.GetFreeByDateRangeAsync(searchRoomDto.PeopleAmount,
                     new DateRange(searchRoomDto.CheckIn, searchRoomDto.CheckOut));
 
-                _reservation = Reservation.Create(new Customer("Marta", "Nowak"), searchRoomDto.CheckIn, searchRoomDto.CheckOut);
+                _reservation = Reservation.Create(new Customer("Marta", "Nowak"), searchRoomDto.CheckIn, searchRoomDto.CheckOut);               
             }
             catch (Exception ex)
             {
