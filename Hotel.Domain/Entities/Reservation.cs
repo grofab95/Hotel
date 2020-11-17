@@ -90,5 +90,7 @@ namespace Hotel.Domain.Entities
 
         public decimal GetCalculatedPrice(PriceCalculator priceCalculator)
             => priceCalculator.CalculateReservationPrice(this);
+
+        public int GetGuestsAmount() => ReservationRooms.Sum(x => x.RoomGuests.Count());
     }
 }

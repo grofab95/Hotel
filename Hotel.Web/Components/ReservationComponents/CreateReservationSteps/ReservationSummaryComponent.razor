@@ -5,7 +5,7 @@
         </div>
 
         <div class="col-6">
-            <p>@($"{ReservationFactors.Reservation.CheckIn:dd.MM.yyyy} - {ReservationFactors.Reservation.CheckOut:dd.MM.yyyy}")</p>
+            <p>@($"{Reservation.CheckIn:dd.MM.yyyy} - {Reservation.CheckOut:dd.MM.yyyy}")</p>
         </div>
     </div>
 
@@ -15,7 +15,7 @@
         </div>
 
         <div class="col-6">
-            <p>@ReservationFactors.RoomIdGuests.Count()</p>
+            <p>@Reservation.ReservationRooms.Count()</p>
         </div>
     </div>
 
@@ -26,13 +26,13 @@
 
         <div class="col-6">
             <p>
-            @if (ReservationFactors.PeopleAmount < ReservationFactors.BookingAmount)
+            @if (Reservation.GetGuestsAmount() < Reservation.BookingAmount)
             {
-                <span style="color: red;">@ReservationFactors.PeopleAmount</span><span> / @ReservationFactors.BookingAmount</span>
+                <span style="color: red;">@Reservation.GetGuestsAmount()</span><span> / @Reservation.BookingAmount</span>
             }
             else
             {
-                <span> @ReservationFactors.PeopleAmount / @ReservationFactors.BookingAmount </span>
+                <span> @Reservation.GetGuestsAmount() / @Reservation.BookingAmount </span>
             }
             </p>
         </div>
@@ -44,7 +44,7 @@
         </div>
 
         <div class="col-6">
-            <p>@ReservationFactors.TotalCost</p>
+            <p>@Reservation.GetCalculatedPrice(PriceCalculator)</p>
         </div>
     </div>
 

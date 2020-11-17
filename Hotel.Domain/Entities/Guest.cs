@@ -6,11 +6,11 @@ namespace Hotel.Domain.Entities
 {
     public class Guest : Entity
     {
-        public string Name { get; private set; }
-        public bool IsChild { get; private set; }
-        public bool IsNewlyweds { get; private set; }
-        public bool OrderedBreakfest { get; private set; }
-        public decimal? PriceForStay { get; private set; }
+        public string Name { get; set; }
+        public bool IsChild { get; set; }
+        public bool IsNewlyweds { get; set; }
+        public bool OrderedBreakfest { get; set; }
+        public decimal? PriceForStay { get; set; }
 
         protected Guest() { }
 

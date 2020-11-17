@@ -1,5 +1,5 @@
 ﻿
-@if (ReservationFactors != null)
+@if (Reservation != null)
 {
     <table class="table" style="width: 1500px;">
         <thead class="thead-dark">
@@ -15,7 +15,7 @@
         <tbody>
             @foreach (var room in Rooms)
             {
-                var isSelected = ReservationFactors.Reservation.IsRoomInReservation(room);
+                var isSelected = Reservation.IsRoomInReservation(room);
 
                 <tr>
                     <th scope="row">@(Rooms.IndexOf(room)+1).</th>

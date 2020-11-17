@@ -10,32 +10,40 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
 {
     public partial class GuestOrderComponent
     {
-        [Parameter] public ReservationFactors ReservationFactors { get; set; }
+        [Parameter] public Reservation Reservation { get; set; }
         [Parameter] public EventCallback<bool> OnEvent { get; set; }
 
-        private async Task AddGuest(List<GuestDto> guestDtos)
+        private async Task AddGuest(ReservationRoom reservationRoom)
         {
             var standardPriceForStay = Config.Get.PriceForStay;
 
-            guestDtos.Add(new GuestDto($"Gość", standardPriceForStay));
-            await OnEvent.InvokeAsync(true);
+            Reservation.AddGuestToRoom(reservationRoom, "Gość", false, false, false);
+
+            //guestDtos.Add(new GuestDto($"Gość", standardPriceForStay));
+            await CallEvent();
         }
 
-        private async Task RemoveGuest(int roomId, GuestDto guestDto)
+        private async Task RemoveGuest(ReservationRoom reservationRoom, Guest guest)
         {
-            ReservationFactors.RoomIdGuests[roomId].Remove(guestDto);
-            await OnEvent.InvokeAsync(true);
+            Reservation.RemoveGuestFromRoom(reservationRoom, guest);
+            //ReservationFactors.RoomIdGuests[roomId].Remove(guestDto);
+            await CallEvent();
         }
 
-        private async Task PriceChanged(decimal price, GuestDto guestDto)
+        private async Task PriceChanged(decimal? price, Guest guestDto)
         {
+            if (price is null)
+                return;
+
             if (price < 0)
                 guestDto.PriceForStay = 0;
 
             if (price > 999)
                 guestDto.PriceForStay = 999;
 
-            await OnEvent.InvokeAsync(true);
+            await CallEvent();
         }
+
+        private async Task CallEvent(bool state = false) => await OnEvent.InvokeAsync(true);
     }
 }
