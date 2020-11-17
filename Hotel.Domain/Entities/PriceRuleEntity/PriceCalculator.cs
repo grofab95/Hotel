@@ -14,7 +14,7 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
             _ruleManager = new PriceRuleManager(priceRules);
         }
 
-        private decimal CalculatedGuestPrice(RoomGuest roomGuest)
+        private decimal CalculatedGuestPrice(Guest roomGuest)
         {
             if (roomGuest.PriceForStay != null)
                 return roomGuest.PriceForStay.Value;

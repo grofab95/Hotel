@@ -1,0 +1,31 @@
+﻿
+@if (Rooms != null && Reservation != null)
+{
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Budynek</th>
+                <th scope="col">Pokój</th>
+                <th scope="col">Ilość osób</th>
+                <th scope="col">Stan pokoju</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in Rooms)
+            {
+                var isSelected = Reservation.IsRoomInReservation(room);
+
+                <tr>
+                    <th scope="row">@(Rooms.IndexOf(room)+1).</th>
+                    <td>@room.Area.Name</td>
+                    <td>@room.Name</td>
+                    <td>@room.PeopleCapacity</td>
+                    <td>@room.Note</td>
+                    <td><RadzenCheckBox TValue="bool" @bind-Value="isSelected" Change="((bool args) => RoomCheckedHandler(args, room))" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -9,6 +9,7 @@ namespace Hotel.Web
         public static void AddDaos(this IServiceCollection services)
         {
             services.AddScoped<IPriceRuleDao, PriceRuleDao>();
+            services.AddScoped<IRoomDao, RoomDao>();
         }
     }
 }

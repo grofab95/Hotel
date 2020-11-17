@@ -1,5 +1,6 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Validators;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hotel.Domain.Entities
 {
@@ -8,6 +9,9 @@ namespace Hotel.Domain.Entities
         public string Name { get; private set; }
         public int PeopleCapacity { get; private set; }
         public virtual Area Area { get; private set; }
+
+        [NotMapped]
+        public string Note { get; private set; }
 
         protected Room() { }
 
@@ -21,6 +25,8 @@ namespace Hotel.Domain.Entities
             Name = name;
             PeopleCapacity = peopleCapcity;
         }
+
+        public void SetNote(string note) => Note = note;
 
         public override string ToString()
             => $"{Area?.Name} pokój {Name}";

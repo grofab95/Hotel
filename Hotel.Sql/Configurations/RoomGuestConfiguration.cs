@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Hotel.Sql.Configurations
 {
-    class RoomGuestConfiguration : IEntityTypeConfiguration<RoomGuest>
+    class RoomGuestConfiguration : IEntityTypeConfiguration<Guest>
     {
-        public void Configure(EntityTypeBuilder<RoomGuest> builder)
+        public void Configure(EntityTypeBuilder<Guest> builder)
         {
             builder.ToTable("RoomGuests");
             builder.HasKey(x => x.Id);

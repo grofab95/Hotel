@@ -1,0 +1,51 @@
+﻿
+@if (Reservation != null && _roomIdGuests != null)
+{
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Gość</th>
+                <th scope="col">Dziecko</th>
+                <th scope="col">Nowożeniec</th>
+                <th scope="col">Śniadanie</th>
+                <th scope="col">Cena</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reservationRoom in Reservation.ReservationRooms)
+            {
+                var roomGuests = _roomIdGuests[reservationRoom.Room.Id];
+                roomGuests.Add(new GuestDto { Name = "Ujek" });
+                @*<tr>
+                    <td scope="row" rowspan="2">
+                        @reservationRoom.Room.Name
+                        <br />
+                        <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę" Click="(() => AddGuest(roomGuests))" />
+                    </td>*@
+
+                    <tr>
+                        @foreach (var guest in roomGuests)
+                        {
+                            if (roomGuests.IndexOf(guest) == 0)
+                            {
+                                <td rowspan="2">
+                                    @reservationRoom.Room.Name
+                                    <br />
+                                    <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę" Click="(() => AddGuest(roomGuests))" />
+                                </td>
+                            }
+                            <td>@guest.Name</td>
+                            <td>@guest.IsChild.GetName()</td>
+                            <td>@guest.IsNewlyweds.GetName()</td>
+                            <td>@guest.OrderedBreakfest.GetName()</td>
+                            <td>50 zł</td>
+                            <td><RadzenButton ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Small" Text="Usuń" /></td>
+                        }        
+                    </tr>
+                @*</tr>*@
+            }
+        </tbody>
+    </table>
+}

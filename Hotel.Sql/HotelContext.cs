@@ -12,7 +12,7 @@ namespace Hotel.Sql
         public DbSet<Area> Areas { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<ReservationRoom> ReservationRooms { get; set; }
-        public DbSet<RoomGuest> RoomGuests { get; set; }
+        public DbSet<Guest> RoomGuests { get; set; }
         public DbSet<PriceRule> PriceRules { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -21,7 +21,7 @@ namespace Hotel.Sql
 
             //if (Config.Get.IsTestMode())
             //{
-            optionsBuilder.UseLazyLoadingProxies();
+            //optionsBuilder.UseLazyLoadingProxies();
                 optionsBuilder.EnableSensitiveDataLogging();
                 optionsBuilder.UseLoggerFactory(DbLogger.Factory);
             //}

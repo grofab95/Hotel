@@ -27,8 +27,8 @@ namespace Hotel.Domain.Entities
             if (customer == null)
                 throw new MissingValueException("Klient nie został określony.");
 
-            if (checkIn < DateTime.Now)
-                throw new HotelException("Nie można stworzyć rezerwacji w przeszłości.");
+            //if (checkIn < DateTime.Now)
+            //    throw new HotelException("Nie można stworzyć rezerwacji w przeszłości.");
 
             if (checkIn > checkOut)
                 throw new HotelException("Date zameldowania nie może byc późniejsza od daty wymeldowania.");
@@ -51,10 +51,13 @@ namespace Hotel.Domain.Entities
             ReservationRooms.Add(reservationRoom);
         }
 
-        public void DeleteRoom(ReservationRoom reservationRoom)
+        public void DeleteRoom(Room room)
         {
-            if (!ReservationRooms.Contains(reservationRoom))
-                throw new HotelException($"{reservationRoom} nie należy do tej rezerwacji.");
+            //if (!ReservationRooms.Contains(reservationRoom))
+            //    throw new HotelException($"{reservationRoom} nie należy do tej rezerwacji.");
+
+            var reservationRoom = ReservationRooms.FirstOrDefault(x => x.Room.Id == room.Id)
+                ?? throw new HotelException($"{room} nie należy do tej rezerwacji.");
 
             ReservationRooms.Remove(reservationRoom);
         }
@@ -68,7 +71,7 @@ namespace Hotel.Domain.Entities
             return reservationRoom.Update(updatedReservationRoom);
         }
 
-        public RoomGuest AddGuestToRoom(ReservationRoom reservationRoom, string name, bool isChild,
+        public Guest AddGuestToRoom(ReservationRoom reservationRoom, string name, bool isChild,
             bool isNewlyweds, bool orderedBreakfest, decimal? priceForStay = null)
         {
             ReservationValidators.ValidIfReservationRoomExistInReservation(this, reservationRoom);
@@ -76,12 +79,14 @@ namespace Hotel.Domain.Entities
             return reservationRoom.AddRoomGuest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay);
         }
 
-        public void RemoveGuestFromRoom(ReservationRoom reservationRoom, RoomGuest roomGuest)
+        public void RemoveGuestFromRoom(ReservationRoom reservationRoom, Guest roomGuest)
         {
             ReservationValidators.ValidIfReservationRoomExistInReservation(this, reservationRoom);
 
             reservationRoom.RemoveRoomGuest(roomGuest);
         }
+
+        public bool IsRoomInReservation(Room room) => ReservationRooms.Any(x => x.Room.Id == room.Id);
 
         public decimal GetCalculatedPrice(PriceCalculator priceCalculator)
             => priceCalculator.CalculateReservationPrice(this);

@@ -74,7 +74,7 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
         private decimal IncreaseValue(decimal price, decimal value) => price + value;
         private decimal DecreaseValue(decimal price, decimal value) => price - value;
 
-        public bool IsRuleObligatoring(RoomGuest roomGuest)
+        public bool IsRuleObligatoring(Guest roomGuest)
         {
             return RuleName switch
             {

@@ -10,7 +10,7 @@ namespace Hotel.Domain.Entities
         public virtual Room Room { get; private set; }
         public virtual Reservation Reservation { get; private set; }
         public virtual int ReservationId { get; private set; }
-        public virtual List<RoomGuest> RoomGuests { get; set; }
+        public virtual List<Guest> RoomGuests { get; set; }
 
         public int BookingAmount => RoomGuests?.Count ?? 0;
 
@@ -26,7 +26,7 @@ namespace Hotel.Domain.Entities
 
             Room = room;
             Reservation = reservation;
-            RoomGuests = new List<RoomGuest>();
+            RoomGuests = new List<Guest>();
         }
 
         //internal static ReservationRoom CreateReservationRoom(Reservation reservation, Room room)
@@ -64,7 +64,7 @@ namespace Hotel.Domain.Entities
             return this;            
         }
 
-        internal RoomGuest AddRoomGuest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest,
+        internal Guest AddRoomGuest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest,
             decimal? priceForStay = null)
         {
             if (BookingAmount == Room.PeopleCapacity)
@@ -73,13 +73,13 @@ namespace Hotel.Domain.Entities
             if (isChild && isNewlyweds)
                 throw new HotelException("Nie można dodać osoby - dziecko nie może być nowożeńcem XD");
 
-            var roomGuest = new RoomGuest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay);
+            var roomGuest = new Guest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay);
             RoomGuests.Add(roomGuest);
 
             return roomGuest;
         }
 
-        internal void RemoveRoomGuest(RoomGuest roomGuest)
+        internal void RemoveRoomGuest(Guest roomGuest)
         {
             //if (!RoomGuests.Any(x => x.Id == roomGuest.Id))
             if (!RoomGuests.Contains(roomGuest))
