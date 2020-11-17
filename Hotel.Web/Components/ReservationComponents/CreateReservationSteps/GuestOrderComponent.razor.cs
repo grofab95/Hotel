@@ -1,24 +1,41 @@
 ﻿using Hotel.Domain.Entities;
+using Hotel.Domain.Environment;
 using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
 {
     public partial class GuestOrderComponent
     {
-        [Parameter] public Reservation Reservation { get; set; }
-        [Parameter] public Dictionary<int, List<GuestDto>> RoomIdGuests { get; set; }
+        [Parameter] public ReservationFactors ReservationFactors { get; set; }
+        [Parameter] public EventCallback<bool> OnEvent { get; set; }
 
-        private void AddGuest(List<GuestDto> guestDtos)
+        private async Task AddGuest(List<GuestDto> guestDtos)
         {
-            guestDtos.Add(new GuestDto($"Gość {RoomIdGuests.SelectMany(x => x.Value).Count() + 1}"));
+            var standardPriceForStay = Config.Get.PriceForStay;
+
+            guestDtos.Add(new GuestDto($"Gość", standardPriceForStay));
+            await OnEvent.InvokeAsync(true);
         }
 
-        private void RemoveGuest(int roomId, GuestDto guestDto)
+        private async Task RemoveGuest(int roomId, GuestDto guestDto)
         {
-            RoomIdGuests[roomId].Remove(guestDto);
+            ReservationFactors.RoomIdGuests[roomId].Remove(guestDto);
+            await OnEvent.InvokeAsync(true);
+        }
+
+        private async Task PriceChanged(decimal price, GuestDto guestDto)
+        {
+            if (price < 0)
+                guestDto.PriceForStay = 0;
+
+            if (price > 999)
+                guestDto.PriceForStay = 999;
+
+            await OnEvent.InvokeAsync(true);
         }
     }
 }

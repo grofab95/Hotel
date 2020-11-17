@@ -1,5 +1,51 @@
-﻿<h3>ReservationSummaryComponent</h3>
+﻿<RadzenCard Style="width: 410px;">
+    <div class="row">
+        <div class="col-6">
+            <p>Okres rezerwacji:</p>
+        </div>
 
-@code {
+        <div class="col-6">
+            <p>@($"{ReservationFactors.Reservation.CheckIn:dd.MM.yyyy} - {ReservationFactors.Reservation.CheckOut:dd.MM.yyyy}")</p>
+        </div>
+    </div>
 
-}
+    <div class="row">
+        <div class="col-6">
+            <p>Wybranych pokoi:</p>
+        </div>
+
+        <div class="col-6">
+            <p>@ReservationFactors.RoomIdGuests.Count()</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <p>Rozmieszczonych gości:</p>
+        </div>
+
+        <div class="col-6">
+            <p>
+            @if (ReservationFactors.PeopleAmount < ReservationFactors.BookingAmount)
+            {
+                <span style="color: red;">@ReservationFactors.PeopleAmount</span><span> / @ReservationFactors.BookingAmount</span>
+            }
+            else
+            {
+                <span> @ReservationFactors.PeopleAmount / @ReservationFactors.BookingAmount </span>
+            }
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <p>Suma:</p>
+        </div>
+
+        <div class="col-6">
+            <p>@ReservationFactors.TotalCost</p>
+        </div>
+    </div>
+
+</RadzenCard>

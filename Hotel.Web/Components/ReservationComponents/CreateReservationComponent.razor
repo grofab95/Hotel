@@ -1,59 +1,75 @@
 ﻿
-@if (true)
-{
-    <div style="width: 480px; margin-bottom: 40px;">
-        <RadzenTemplateForm Data="_searchRoomDto" Submit="(async (SearchRoomDto args) => await SearchRooms(args))">
-            <div class="row">
-                <div class="col-4">
-                    <p>Data zameldowania:</p>
+<div class="row" style="width: 940px;">
+    <div class="col-6">
+        <RadzenCard Style="width: 430px;">
+            <RadzenTemplateForm Data="_searchRoomDto" Submit="(async (SearchRoomDto args) => await SearchRooms(args))">
+                <div class="row" style="margin-bottom: 5px;">
+                    <div class="col-5">
+                        <p>Data zameldowania:</p>
+                    </div>
+
+                    <div class="col-7">
+                        <RadzenDatePicker @bind-Value="_searchRoomDto.CheckIn" TValue="DateTime" />
+                    </div>
                 </div>
 
-                <div class="col-8">
-                    <RadzenDatePicker @bind-Value="_searchRoomDto.CheckIn" TValue="DateTime" />
-                </div>
-            </div>
+                <div class="row" style="margin-bottom: 5px;">
+                    <div class="col-5">
+                        <p>Data wymeldowania:</p>
+                    </div>
 
-            <div class="row">
-                <div class="col-4">
-                    <p>Data wymeldowania:</p>
-                </div>
-
-                <div class="col-8">
-                    <RadzenDatePicker @bind-Value="_searchRoomDto.CheckOut" TValue="DateTime" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-4">
-                    <p>Ilość osób:</p>
+                    <div class="col-7">
+                        <RadzenDatePicker @bind-Value="_searchRoomDto.CheckOut" TValue="DateTime" />
+                    </div>
                 </div>
 
-                <div class="col-8">
-                    <RadzenNumeric @bind-Value="_searchRoomDto.PeopleAmount" Min="1" TValue="int" />
-                </div>
-            </div>
+                <div class="row" style="margin-bottom: 5px;">
+                    <div class="col-5">
+                        <p>Ilość osób:</p>
+                    </div>
 
-            <div class="row" style="text-align: center; margin-top: 10px;">
-                <div class="col">
-                    <RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Text="Znajdź pokoje" ButtonType="ButtonType.Submit" />
+                    <div class="col-7">
+                        <RadzenNumeric @bind-Value="_searchRoomDto.BookingAmount" Min="1" TValue="int" />
+                    </div>
                 </div>
-            </div>
-        </RadzenTemplateForm>
+
+                <div class="row" style="text-align: right; margin-top: 20px;">
+                    <div class="col">
+                        <RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Text="Znajdź pokoje" ButtonType="ButtonType.Submit" />
+                    </div>
+                </div>
+            </RadzenTemplateForm>
+        </RadzenCard>
+        <div style="width: 940px; margin-bottom: 40px; float: left">
+            @if (_isRoomSearching)
+            {
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+            }
+        </div>
     </div>
 
-    <RadzenSteps>
-        <Steps>
-            <RadzenStepsItem Text="Wybierz pokoje">
-                <RoomsSelectionComponent Rooms="_rooms" Reservation="_reservation" RoomIdGuests="_roomIdGuests" />
-            </RadzenStepsItem>
 
-            <RadzenStepsItem Text="Rozmieść gości">
-                <GuestOrderComponent Reservation="_reservation" RoomIdGuests="_roomIdGuests" />
-            </RadzenStepsItem>
+    <div class="col-6">
+        @if (_reservationFactors != null)
+        {
+            <ReservationSummaryComponent ReservationFactors="_reservationFactors" />
+        }
+    </div>
+</div>
 
-            <RadzenStepsItem Text="Podsumowanie">
-                <ReservationSummaryComponent />
-            </RadzenStepsItem>
-        </Steps>
-    </RadzenSteps>
+@if (_reservationFactors != null)
+{
+    <RadzenCard Style="width: fit-content">
+        <RadzenSteps>
+            <Steps>
+                <RadzenStepsItem Text="Wybierz pokoje">
+                    <RoomsSelectionComponent Rooms="_rooms" ReservationFactors="_reservationFactors" OnEvent="OnEvent" />
+                </RadzenStepsItem>
+
+                <RadzenStepsItem Text="Rozmieść gości" Disabled="(!_reservationFactors.RoomIdGuests.Any())">
+                    <GuestOrderComponent ReservationFactors="_reservationFactors" OnEvent="OnEvent" />
+                </RadzenStepsItem>
+            </Steps>
+        </RadzenSteps>
+    </RadzenCard>
 }

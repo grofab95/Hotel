@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Hotel.Web.Dtos;
+using Microsoft.AspNetCore.Components;
 
 namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
 {
     public partial class ReservationSummaryComponent
     {
+        [Parameter] public ReservationFactors ReservationFactors { get; set; }
     }
 }

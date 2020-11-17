@@ -1,7 +1,7 @@
 ﻿
-@if (Rooms != null && Reservation != null)
+@if (ReservationFactors != null)
 {
-    <table class="table">
+    <table class="table" style="width: 1500px;">
         <thead class="thead-dark">
             <tr>
                 <th scope="col"></th>
@@ -15,7 +15,7 @@
         <tbody>
             @foreach (var room in Rooms)
             {
-                var isSelected = Reservation.IsRoomInReservation(room);
+                var isSelected = ReservationFactors.Reservation.IsRoomInReservation(room);
 
                 <tr>
                     <th scope="row">@(Rooms.IndexOf(room)+1).</th>
@@ -23,7 +23,8 @@
                     <td>@room.Name</td>
                     <td>@room.PeopleCapacity</td>
                     <td>@room.Note</td>
-                    <td><RadzenCheckBox TValue="bool" @bind-Value="isSelected" Change="((bool args) => RoomCheckedHandler(args, room))" /></td>
+                    <td><RadzenCheckBox TValue="bool" @bind-Value="isSelected" 
+                                        Change="(async (bool args) => await RoomCheckedHandler(args, room))" /></td>
                 </tr>
             }
         </tbody>

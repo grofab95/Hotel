@@ -6,6 +6,6 @@ namespace Hotel.Web.Dtos
     {
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
-        public int PeopleAmount { get; set; }
+        public int BookingAmount { get; set; }
     }
 }

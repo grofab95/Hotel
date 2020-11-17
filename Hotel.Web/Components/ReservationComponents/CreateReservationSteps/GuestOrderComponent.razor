@@ -1,7 +1,7 @@
 ﻿
-@if (Reservation != null && RoomIdGuests != null)
+@if (ReservationFactors != null)
 {
-    <table class="table">
+    <table class="table table-responsive-sm" style="width: 1500px;">
         <thead class="thead-dark">
             <tr>
                 <th scope="col"></th>
@@ -15,19 +15,20 @@
         </thead>
 
         <tbody>
-            @foreach (var reservationRoom in Reservation.ReservationRooms)
+            @foreach (var reservationRoom in ReservationFactors.Reservation.ReservationRooms)
             {
-                var roomGuests = RoomIdGuests[reservationRoom.Room.Id];
+                var roomGuests = ReservationFactors.RoomIdGuests[reservationRoom.Room.Id];
 
                 if (!roomGuests.Any())
                 {
                     <tr>
-                        <td>
+                        <td style="width: 160px;">
                             <p>@reservationRoom.Room.Name</p>
                             <p>(@reservationRoom.Room.Area.Name)</p>
                             <p>@($"{roomGuests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
                             <br />
-                            <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę" Click="(() => AddGuest(roomGuests))" />
+                            <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę" 
+                                          Click="(async () => await AddGuest(roomGuests))" />
                         </td>
                         <td></td>
                         <td></td>
@@ -41,36 +42,40 @@
                 {
                     var firstGuest = roomGuests.FirstOrDefault();
                     <tr>
-                        <td rowspan="@roomGuests.Count()">
+                        <td rowspan="@roomGuests.Count()" style="width: 160px;">
                             <p>@reservationRoom.Room.Name</p>
                             <p>(@reservationRoom.Room.Area.Name)</p>
                             <p>@($"{roomGuests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
                             <br />
                             <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę"
-                                          Click="(() => AddGuest(roomGuests))" Visible="(roomGuests.Count < reservationRoom.Room.PeopleCapacity)" />
+                                          Click="(async () => await AddGuest(roomGuests))" Disabled="(roomGuests.Count == reservationRoom.Room.PeopleCapacity)" />
                         </td>
-                        <td>@firstGuest.Name</td>
-                        <td>@firstGuest.IsChild.GetName()</td>
-                        <td>@firstGuest.IsNewlyweds.GetName()</td>
-                        <td>@firstGuest.OrderedBreakfest.GetName()</td>
-                        <td>50 zł</td>
+                        <td><RadzenTextBox @bind-Value="firstGuest.Name" /></td>
+                        <td><RadzenCheckBox @bind-Value="firstGuest.IsChild" /></td>
+                        <td><RadzenCheckBox @bind-Value="firstGuest.IsNewlyweds" /></td>
+                        <td><RadzenCheckBox @bind-Value="firstGuest.OrderedBreakfest" /></td>
+                        <td><RadzenNumeric TValue="decimal" @bind-Value="firstGuest.PriceForStay"
+                                           Change="(async ( decimal price) => await PriceChanged(price, firstGuest))"
+                                           Style="width: 60px;" Min="0" Max="999" /> zł</td>
                         <td>
                             <RadzenButton ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Small" Text="Usuń"
-                                          Click="(() => RemoveGuest(reservationRoom.Room.Id, firstGuest))" />
+                                          Click="(async () => await RemoveGuest(reservationRoom.Room.Id, firstGuest))" />
                         </td>
                     </tr>
 
                     @foreach (var guest in roomGuests.Skip(1).ToList())
                     {
                         <tr>
-                            <td>@guest.Name</td>
-                            <td>@guest.IsChild.GetName()</td>
-                            <td>@guest.IsNewlyweds.GetName()</td>
-                            <td>@guest.OrderedBreakfest.GetName()</td>
-                            <td>50 zł</td>
+                            <td><RadzenTextBox @bind-Value="guest.Name" /></td>
+                            <td><RadzenCheckBox @bind-Value="guest.IsChild" /></td>
+                            <td><RadzenCheckBox @bind-Value="guest.IsNewlyweds" /></td>
+                            <td><RadzenCheckBox @bind-Value="guest.OrderedBreakfest" /></td>
+                            <td><RadzenNumeric TValue="decimal" @bind-Value="guest.PriceForStay" 
+                                               Change="(async (decimal price) => await PriceChanged(price, guest))"
+                                               Style="width: 60px;" Min="0" Max="999" /> zł</td>
                             <td>
                                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Small" Text="Usuń"
-                                              Click="(() => RemoveGuest(reservationRoom.Room.Id, guest))" />
+                                              Click="(async () => await RemoveGuest(reservationRoom.Room.Id, guest))" />
                             </td>
                         </tr>
                     }
