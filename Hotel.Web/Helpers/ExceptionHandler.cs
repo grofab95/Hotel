@@ -1,4 +1,5 @@
-﻿using Radzen;
+﻿using Hotel.Domain.Exceptions;
+using Radzen;
 using System;
 
 namespace Hotel.Web.Helpers
@@ -7,7 +8,7 @@ namespace Hotel.Web.Helpers
     {
         public static NotificationMessage Handle(this Exception ex)
         {
-            if (ex.GetType() == typeof(ApplicationException))
+            if (ex.GetType() == typeof(HotelException) || ex.GetBaseException().GetType() == typeof(HotelException))
             {
                 return new NotificationMessage
                 {

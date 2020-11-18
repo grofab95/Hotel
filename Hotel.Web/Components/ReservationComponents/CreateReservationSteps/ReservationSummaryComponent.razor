@@ -26,13 +26,13 @@
 
         <div class="col-6">
             <p>
-            @if (Reservation.GetGuestsAmount() < Reservation.BookingAmount)
+            @if (Reservation.GetGuestsAmount() < PeopleAmount)
             {
-                <span style="color: red;">@Reservation.GetGuestsAmount()</span><span> / @Reservation.BookingAmount</span>
+                <span style="color: red;">@Reservation.GetGuestsAmount()</span><span> / @PeopleAmount</span>
             }
             else
             {
-                <span> @Reservation.GetGuestsAmount() / @Reservation.BookingAmount </span>
+                <span> @Reservation.GetGuestsAmount() / @PeopleAmount </span>
             }
             </p>
         </div>

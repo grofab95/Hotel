@@ -11,11 +11,8 @@ namespace Hotel.Domain.Validators
                 throw new HotelException("Nazwa gościa jest wymagana.");
         }
 
-        public static void ValidPriceForStay(decimal? priceForStay)
+        public static void ValidPriceForStay(decimal priceForStay)
         {
-            if (priceForStay == null)
-                return;
-
             if (priceForStay < 0)
                 throw new HotelException("Cena za pobyt nie może być ujemna.");
         }

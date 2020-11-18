@@ -2,9 +2,11 @@
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Web.Dtos;
+using Hotel.Web.Helpers;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.ReservationComponents
@@ -30,9 +32,9 @@ namespace Hotel.Web.Components.ReservationComponents
 
                 _searchRoomDto = new SearchRoomDto
                 {
-                    CheckIn = DateTime.Now,
+                    CheckIn = DateTime.Now.AddDays(1),
                     CheckOut = DateTime.Now.AddDays(7),
-                    BookingAmount = 4
+                    BookingAmount = 6
                 };
             }
             catch (Exception ex)
@@ -43,28 +45,31 @@ namespace Hotel.Web.Components.ReservationComponents
 
         private async Task SearchRooms(SearchRoomDto searchRoomDto)
         {
+            await _base.DoSafeAction(async () => await SearchRoomsExecutor(searchRoomDto));
+        }
+
+        private async Task SearchRoomsExecutor(SearchRoomDto searchRoomDto)
+        {
+            _reservation = Reservation.Create(
+                  customer: new Customer("Marta", "Nowak"),
+                  checkIn: searchRoomDto.CheckIn,
+                  checkOut: searchRoomDto.CheckOut);
+
             _isRoomSearching = true;
 
-            try
-            {
-                _rooms = await RoomDao.GetFreeByDateRangeAsync(searchRoomDto.BookingAmount,
-                    new DateRange(searchRoomDto.CheckIn, searchRoomDto.CheckOut));
-
-                _reservation = Reservation.Create(
-                   customer: new Customer("Marta", "Nowak"),
-                   checkIn: searchRoomDto.CheckIn,
-                   checkOut: searchRoomDto.CheckOut);
-
-                //_reservation = new ReservationFactors(reservation, searchRoomDto.BookingAmount);
-            }
-            catch (Exception ex)
-            {
-
-            }
-
+            _rooms = await RoomDao.GetFreeByDateRangeAsync(searchRoomDto.BookingAmount,
+                new DateRange(searchRoomDto.CheckIn, searchRoomDto.CheckOut));
             _isRoomSearching = false;
+
+            OnEvent();
         }
 
         private void OnEvent() => StateHasChanged();
+
+        //private async Task ShowNotification(NotificationMessage message)
+        //{
+        //    notificationService.Notify(message);
+        //    await InvokeAsync(() => { StateHasChanged(); });
+        //}
     }
 }

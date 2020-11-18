@@ -15,8 +15,6 @@ namespace Hotel.Domain.Entities
         public virtual Customer Customer { get; private set; }
         public virtual List<ReservationRoom> ReservationRooms { get; private set; }
 
-        public int BookingAmount => ReservationRooms?.Sum(x => x.BookingAmount) ?? 0;
-
         protected Reservation() 
         {
             ReservationRooms = new List<ReservationRoom>();
@@ -27,8 +25,8 @@ namespace Hotel.Domain.Entities
             if (customer == null)
                 throw new MissingValueException("Klient nie został określony.");
 
-            //if (checkIn < DateTime.Now)
-            //    throw new HotelException("Nie można stworzyć rezerwacji w przeszłości.");
+            if (checkIn < DateTime.Now)
+                throw new HotelException("Nie można stworzyć rezerwacji w przeszłości.");
 
             if (checkIn > checkOut)
                 throw new HotelException("Date zameldowania nie może byc późniejsza od daty wymeldowania.");
@@ -43,8 +41,8 @@ namespace Hotel.Domain.Entities
 
         public void AddRoom(Room room)
         {
-            //if (ReservationRooms.Any(x => x.Room == room))
-                //return Result.Fail($"Pokój {room} już istnieje w tej rezerwacji.");
+            if (ReservationRooms.Any(x => x.Room == room))
+                throw new Exception($"Pokój {room} już istnieje w tej rezerwacji.");
 
             var reservationRoom = new ReservationRoom(this, room);
 
@@ -53,8 +51,8 @@ namespace Hotel.Domain.Entities
 
         public void DeleteRoom(Room room)
         {
-            //if (!ReservationRooms.Contains(reservationRoom))
-            //    throw new HotelException($"{reservationRoom} nie należy do tej rezerwacji.");
+            if (!ReservationRooms.Select(x => x.Room).Contains(room))
+                throw new HotelException($"{room} nie należy do tej rezerwacji.");
 
             var reservationRoom = ReservationRooms.FirstOrDefault(x => x.Room.Id == room.Id)
                 ?? throw new HotelException($"{room} nie należy do tej rezerwacji.");
@@ -72,7 +70,7 @@ namespace Hotel.Domain.Entities
         }
 
         public Guest AddGuestToRoom(ReservationRoom reservationRoom, string name, bool isChild,
-            bool isNewlyweds, bool orderedBreakfest, decimal? priceForStay = null)
+            bool isNewlyweds, bool orderedBreakfest, decimal priceForStay)
         {
             ReservationValidators.ValidIfReservationRoomExistInReservation(this, reservationRoom);
 
@@ -88,8 +86,7 @@ namespace Hotel.Domain.Entities
 
         public bool IsRoomInReservation(Room room) => ReservationRooms.Any(x => x.Room.Id == room.Id);
 
-        public decimal GetCalculatedPrice(PriceCalculator priceCalculator)
-            => priceCalculator.CalculateReservationPrice(this);
+        public decimal GetCalculatedPrice(PriceCalculator priceCalculator) => priceCalculator.CalculateReservationPrice(this);
 
         public int GetGuestsAmount() => ReservationRooms.Sum(x => x.RoomGuests.Count());
     }

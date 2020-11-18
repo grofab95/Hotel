@@ -1,6 +1,11 @@
-﻿using Hotel.Domain.Entities;
+﻿using AutoMapper;
+using Hotel.Domain.Entities;
+using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Environment;
+using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
@@ -8,38 +13,69 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
     public partial class GuestOrderComponent
     {
         [Parameter] public Reservation Reservation { get; set; }
+        [Parameter] public PriceCalculator PriceCalculator { get; set; }
         [Parameter] public EventCallback<bool> OnEvent { get; set; }
+        [Inject] IMapper Mapper { get; set; }
+
+        private decimal _standardPriceForStay;
+        private Dictionary<Guest, bool> _guestStandardPrice;
+
+        public GuestOrderComponent()
+        {
+            _standardPriceForStay = Config.Get.PriceForStay;
+            _guestStandardPrice = new Dictionary<Guest, bool>();
+        }
 
         private async Task AddGuest(ReservationRoom reservationRoom)
         {
-            var standardPriceForStay = Config.Get.PriceForStay;
+            var isDone = await _base.DoSafeAction(
+                () => Reservation.AddGuestToRoom(reservationRoom, "Gość", false, false, false, _standardPriceForStay));
 
-            Reservation.AddGuestToRoom(reservationRoom, "Gość", false, false, false);
+            if (!isDone)
+                return;
+
+            var addedGuest = reservationRoom.RoomGuests.Last();
+            _guestStandardPrice.Add(addedGuest, true);
 
             await CallEvent();
         }
 
         private async Task RemoveGuest(ReservationRoom reservationRoom, Guest guest)
         {
-            Reservation.RemoveGuestFromRoom(reservationRoom, guest);
-
-            await CallEvent();
-        }
-
-        private async Task PriceChanged(decimal? price, Guest guestDto)
-        {
-            if (price is null)
+            var isDone = await _base.DoSafeAction(() => Reservation.RemoveGuestFromRoom(reservationRoom, guest));
+            if (!isDone)
                 return;
 
-            if (price < 0)
-                guestDto.PriceForStay = 0;
-
-            if (price > 999)
-                guestDto.PriceForStay = 999;
+            _guestStandardPrice.Remove(guest);
 
             await CallEvent();
         }
 
+        private async Task PriceChanged(decimal price, Guest guest, GuestDto guestDto)
+        {
+            if (price < 0) price = 0;
+            if (price > 999) price = 999;
+
+            await UpdateGuest(guest, guestDto);
+        }
+
+        private async Task DefaultPriceStateChanged(bool state, Guest guest, GuestDto guestDto)
+        {
+            if (!state)
+                return;
+
+            guestDto.PriceForStay = _standardPriceForStay;
+
+            await UpdateGuest(guest, guestDto);
+        }
+
+        private async Task UpdateGuest(Guest guest, GuestDto guestDto)
+        {
+            await _base.DoSafeAction(() => guest.Update(Mapper.Map<Guest>(guestDto)));
+
+            await CallEvent();
+        }
+        
         private async Task CallEvent(bool state = false) => await OnEvent.InvokeAsync(true);
     }
 }

@@ -6,16 +6,15 @@ namespace Hotel.Domain.Entities
 {
     public class Guest : Entity
     {
-        public string Name { get; set; }
-        public bool IsChild { get; set; }
-        public bool IsNewlyweds { get; set; }
-        public bool OrderedBreakfest { get; set; }
-        public decimal? PriceForStay { get; set; }
+        public string Name { get; private set; }
+        public bool IsChild { get; private set; }
+        public bool IsNewlyweds { get; private set; }
+        public bool OrderedBreakfest { get; private set; }
+        public decimal PriceForStay { get; private set; }
 
         protected Guest() { }
 
-        internal Guest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest,
-            decimal? priceForStay = null)
+        internal Guest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest, decimal priceForStay)
         {
             RoomGuestValidators.ValidIfNameExist(name);
             RoomGuestValidators.ValidPriceForStay(priceForStay);
@@ -27,7 +26,7 @@ namespace Hotel.Domain.Entities
             PriceForStay = priceForStay;
         }
 
-        internal Guest Update(Guest updatedGuest)
+        public void Update(Guest updatedGuest)
         {
             RoomGuestValidators.ValidIfNameExist(updatedGuest.Name);
             RoomGuestValidators.ValidPriceForStay(updatedGuest.PriceForStay);
@@ -35,13 +34,14 @@ namespace Hotel.Domain.Entities
             if (updatedGuest.Id != Id)
                 throw new HotelException("Nie można przypisać gościa do innego pokoju");
 
+            if (updatedGuest.IsChild && updatedGuest.IsNewlyweds)
+                throw new HotelException("Nie można dodać osoby - dziecko nie może być nowożeńcem XD");
+
             Name = updatedGuest.Name;
             IsChild = updatedGuest.IsChild;
             IsNewlyweds = updatedGuest.IsNewlyweds;
             OrderedBreakfest = updatedGuest.OrderedBreakfest;
             PriceForStay = updatedGuest.PriceForStay;
-
-            return this;
         }
 
         public override string ToString() => Name;

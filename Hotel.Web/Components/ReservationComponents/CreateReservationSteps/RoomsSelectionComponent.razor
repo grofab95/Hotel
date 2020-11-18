@@ -1,5 +1,5 @@
 ﻿
-@if (Reservation != null)
+@if (Reservation != null && Rooms != null)
 {
     <table class="table" style="width: 1500px;">
         <thead class="thead-dark">
@@ -23,10 +23,17 @@
                     <td>@room.Name</td>
                     <td>@room.PeopleCapacity</td>
                     <td>@room.Note</td>
-                    <td><RadzenCheckBox TValue="bool" @bind-Value="isSelected" 
-                                        Change="(async (bool args) => await RoomCheckedHandler(args, room))" /></td>
+                    <td>
+                        <RadzenCheckBox TValue="bool" @bind-Value="isSelected"
+                                        Change="(async (bool args) => await RoomCheckedHandler(args, room))" />
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+}
+
+<Base @ref="_base" />
+@code{
+    private Base _base;
 }

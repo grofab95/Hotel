@@ -8,5 +8,6 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
     {
         [Parameter] public Reservation Reservation { get; set; }
         [Parameter] public PriceCalculator PriceCalculator { get; set; }
+        [Parameter] public int PeopleAmount { get; set; }
     }
 }

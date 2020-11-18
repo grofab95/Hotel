@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Radzen;
 using System;
 
 namespace Hotel.Web
@@ -25,6 +26,8 @@ namespace Hotel.Web
             services.AddServerSideBlazor();
             services.AddContextFactory<HotelContext>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<NotificationService>();
+            services.AddScoped<DialogService>();
 
             services.AddDaos();
         }

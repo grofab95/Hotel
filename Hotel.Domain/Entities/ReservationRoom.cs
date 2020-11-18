@@ -29,21 +29,6 @@ namespace Hotel.Domain.Entities
             RoomGuests = new List<Guest>();
         }
 
-        //internal static ReservationRoom CreateReservationRoom(Reservation reservation, Room room)
-        //{
-        //    if (reservation == null)
-        //        throw new MissingValueException($"Rezerwacja jest wymagana.");
-
-        //    if (room == null)
-        //        throw new HotelException("Pokój jest wymagany.");
-
-        //    return new ReservationRoom
-        //    {
-        //        Room = room,
-        //        Reservation = reservation
-        //    };
-        //}
-
         internal ReservationRoom Update(ReservationRoom updatedReservationRoom)
         {
             if (updatedReservationRoom.Room != Room)
@@ -64,8 +49,7 @@ namespace Hotel.Domain.Entities
             return this;            
         }
 
-        internal Guest AddRoomGuest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest,
-            decimal? priceForStay = null)
+        internal Guest AddRoomGuest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest, decimal priceForStay)
         {
             if (BookingAmount == Room.PeopleCapacity)
                 throw new HotelException("Nie można dodać osoby - pokój jest pełny.");
