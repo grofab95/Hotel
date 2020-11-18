@@ -1,9 +1,6 @@
 ﻿using Hotel.Domain.Entities;
 using Hotel.Domain.Environment;
-using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
@@ -19,14 +16,13 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
 
             Reservation.AddGuestToRoom(reservationRoom, "Gość", false, false, false);
 
-            //guestDtos.Add(new GuestDto($"Gość", standardPriceForStay));
             await CallEvent();
         }
 
         private async Task RemoveGuest(ReservationRoom reservationRoom, Guest guest)
         {
             Reservation.RemoveGuestFromRoom(reservationRoom, guest);
-            //ReservationFactors.RoomIdGuests[roomId].Remove(guestDto);
+
             await CallEvent();
         }
 
