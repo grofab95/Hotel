@@ -2,6 +2,7 @@
 {
     public class GuestDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public bool IsChild { get; set; }
         public bool IsNewlyweds { get; set; }

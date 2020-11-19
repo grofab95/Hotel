@@ -1,7 +1,7 @@
 ﻿
-@if (Reservation != null)
+@if (Reservation != null && PriceCalculator != null)
 {
-    <table class="table table-responsive-sm" style="width: 1500px;">
+    <table class="table table-sm" style="width: 1500px;">
         <thead class="thead-dark">
             <tr>
                 <th scope="col"></th>
@@ -75,7 +75,7 @@
                                     <span>Cena: </span>
                                     <RadzenNumeric TValue="decimal" @bind-Value="guestDto.BasePrice"
                                                    Change="(async (decimal price) => await PriceChanged(price, guest, guestDto))"
-                                                   Style="width: 60px;" Min="0" Max="999" /><span> zł</span>
+                                                   Style="width: 85px;" Min="0" Max="999" /><span> zł</span>
                                 }
                             </td>
                             <td>

@@ -20,10 +20,13 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
         private decimal _standardPriceForStay;
         private Dictionary<Guest, bool> _guestStandardPrice;
 
-        public GuestOrderComponent()
+        protected override void OnInitialized()
         {
             _standardPriceForStay = Config.Get.PriceForStay;
-            _guestStandardPrice = new Dictionary<Guest, bool>();
+            //_guestStandardPrice = new Dictionary<Guest, bool>();
+            _guestStandardPrice = Reservation.ReservationRooms.
+                SelectMany(x => x.Guests)
+                .ToDictionary(x => x, x => x.BasePrice == _standardPriceForStay);
         }
 
         private async Task AddGuest(ReservationRoom reservationRoom)

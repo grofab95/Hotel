@@ -66,7 +66,7 @@ namespace Hotel.Web.Components.ReservationComponents
 
         private async Task CreateReservation()
         {
-            var reservationId = await _base.DoSaveFunc(() => ReservationDao.CreateReservationAsync(_reservation)).Result;
+            var reservationId = await _base.DoSaveFunc(() => ReservationDao.SaveReservationAsync(_reservation)).Result;
             if (reservationId == default)
                 return;
 

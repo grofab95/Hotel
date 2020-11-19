@@ -1,5 +1,6 @@
 ﻿using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
+using Hotel.Domain.Entities.Views;
 using Hotel.Sql.Configurations;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,21 +15,20 @@ namespace Hotel.Sql
         public DbSet<ReservationRoom> ReservationRooms { get; set; }
         public DbSet<Guest> Guests { get; set; }
         public DbSet<PriceRule> PriceRules { get; set; }
+        public DbSet<ReservationInfoView> ReservationInfoViews { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=DESKTOP-HV06FGL;Database=HOTEL;User Id=sa; Password=Q1w2e3;");
 
-            //if (Config.Get.IsTestMode())
-            //{
-            //optionsBuilder.UseLazyLoadingProxies();
-                optionsBuilder.EnableSensitiveDataLogging();
-                optionsBuilder.UseLoggerFactory(DbLogger.Factory);
-            //}
+            optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.UseLoggerFactory(DbLogger.Factory);            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyViews();
+
             modelBuilder.ApplyConfiguration(new CustomerConfiguration());
             modelBuilder.ApplyConfiguration(new AreaConfiguration());
             modelBuilder.ApplyConfiguration(new RoomConfiguration());

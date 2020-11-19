@@ -1,10 +1,5 @@
-﻿using Hotel.Domain.Entities;
-using Hotel.Domain.Entities.PriceRuleEntity;
-using Hotel.Sql;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Hotel.Sql;
+using Hotel.Sql.Tools;
 
 namespace ConsoleApp
 {
@@ -14,7 +9,7 @@ namespace ConsoleApp
 
         static void Main()
         {
-            Refiller.Start();
+            var script = TriggersGenerator.GetTriggersScript();
         }
     }
 }

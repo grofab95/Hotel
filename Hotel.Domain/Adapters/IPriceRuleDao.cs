@@ -8,5 +8,6 @@ namespace Hotel.Domain.Adapters
     {
         Task<List<PriceRule>> GetAllAsync();
         Task UpdateAsync(PriceRule priceRule);
+        Task<PriceCalculator> GetPriceCalculator();
     }
 }

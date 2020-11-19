@@ -16,7 +16,7 @@ namespace Hotel.Domain.Entities
 
         protected Guest() { }
 
-        internal Guest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest, decimal basePrice)
+        internal Guest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest, decimal basePrice, ReservationRoom reservationRoom)
         {
             GuestValidators.ValidIfNameExist(name);
             GuestValidators.ValidPrice(basePrice);
@@ -26,6 +26,7 @@ namespace Hotel.Domain.Entities
             IsNewlyweds = isNewlyweds;
             OrderedBreakfest = orderedBreakfest;
             BasePrice = basePrice;
+            ReservationRoom = reservationRoom;
         }
 
         public void Update(Guest updatedGuest)

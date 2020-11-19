@@ -57,7 +57,7 @@ namespace Hotel.Domain.Entities
             if (isChild && isNewlyweds)
                 throw new HotelException("Nie można dodać osoby - dziecko nie może być nowożeńcem XD");
 
-            Guests.Add(new Guest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay));
+            Guests.Add(new Guest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay, this));
 
             return Guests.Last();
         }

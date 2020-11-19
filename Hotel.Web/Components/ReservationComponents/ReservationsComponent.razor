@@ -1,0 +1,60 @@
+﻿@if (_reservations == null)
+{
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+}
+else
+{
+    <RadzenTabs>
+        <Tabs>
+            <RadzenTabsItem Text="Reserwacje">
+                <table class="table table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Klient</th>
+                            <th scope="col">Zameldowanie</th>
+                            <th scope="col">Wymeldowanie</th>
+                            <th scope="col">Ilość dni</th>
+                            <th scope="col">Ilość osób</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var reservation in _reservations)
+                        {
+                            <tr>
+                                <th scope="row">@reservation.ReservationId</th>
+                                <td>@reservation.Customer</td>
+                                <td>@(reservation.CheckIn.ToString("dd.MM.yyyy"))</td>
+                                <td>@(reservation.CheckOut.ToString("dd.MM.yyyy"))</td>
+                                <td>@((int)(reservation.CheckOut - reservation.CheckIn).TotalDays)</td>
+                                <td>@reservation.BookingAmount</td>
+                                <td>
+                                    <RadzenButton Text="Szczegóły" ButtonStyle="ButtonStyle.Info" Size="ButtonSize.Small"
+                                                  Click="(async () => await GetReservation(reservation.ReservationId))" />
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </RadzenTabsItem>
+
+            <RadzenTabsItem Text="@($"Szczegóły rezerwacji {_selectedReservation?.Id}")" 
+                            Visible="(_selectedReservation != null)"
+                            Selected="(_selectedReservation != null)">
+
+                <RadzenButton Text="Zapisz zmiany" ButtonStyle="ButtonStyle.Success" Click="(async() => await SaveChanges())" />"
+                <GuestOrderComponent Reservation="_selectedReservation" PriceCalculator="_priceCalculator" />
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
+}
+
+<Base @ref="_base" />
+@code{
+    private Base _base;
+}
+

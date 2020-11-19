@@ -15,7 +15,8 @@ namespace Hotel.Web.Components.Common
 
         [Parameter] public dynamic Component { get; set; }
 
-        public async Task DoSafeAction(Action action, string onWellMessage, string title = "Informacja")
+        public async Task DoSafeAction(Action action, string onWellMessage, string title = "Informacja",
+            NotificationSeverity severity = NotificationSeverity.Success)
         {
             try
             {
@@ -25,7 +26,8 @@ namespace Hotel.Web.Components.Common
                 {
                     Summary = title,
                     Duration = 6000,
-                    Detail = onWellMessage
+                    Detail = onWellMessage,
+                    Severity = severity
                 });
             }
             catch (Exception ex)
