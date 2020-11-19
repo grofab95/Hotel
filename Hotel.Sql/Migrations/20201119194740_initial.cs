@@ -46,7 +46,10 @@ namespace Hotel.Sql.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RuleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RuleType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FriendlyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Value = table.Column<int>(type: "int", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    ApplyNextRules = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -130,7 +133,7 @@ namespace Hotel.Sql.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoomGuests",
+                name: "Guests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -139,21 +142,27 @@ namespace Hotel.Sql.Migrations
                     IsChild = table.Column<bool>(type: "bit", nullable: false),
                     IsNewlyweds = table.Column<bool>(type: "bit", nullable: false),
                     OrderedBreakfest = table.Column<bool>(type: "bit", nullable: false),
-                    PriceForStay = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    BasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PriceForStay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ReservationRoomId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoomGuests", x => x.Id);
+                    table.PrimaryKey("PK_Guests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoomGuests_ReservationRooms_ReservationRoomId",
+                        name: "FK_Guests_ReservationRooms_ReservationRoomId",
                         column: x => x.ReservationRoomId,
                         principalTable: "ReservationRooms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Guests_ReservationRoomId",
+                table: "Guests",
+                column: "ReservationRoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReservationRooms_ReservationId",
@@ -171,11 +180,6 @@ namespace Hotel.Sql.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoomGuests_ReservationRoomId",
-                table: "RoomGuests",
-                column: "ReservationRoomId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Rooms_AreaId",
                 table: "Rooms",
                 column: "AreaId");
@@ -184,10 +188,10 @@ namespace Hotel.Sql.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PriceRules");
+                name: "Guests");
 
             migrationBuilder.DropTable(
-                name: "RoomGuests");
+                name: "PriceRules");
 
             migrationBuilder.DropTable(
                 name: "ReservationRooms");

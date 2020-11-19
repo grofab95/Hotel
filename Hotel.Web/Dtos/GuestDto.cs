@@ -1,6 +1,4 @@
-﻿using Hotel.Domain.Entities;
-
-namespace Hotel.Web.Dtos
+﻿namespace Hotel.Web.Dtos
 {
     public class GuestDto
     {
@@ -8,6 +6,7 @@ namespace Hotel.Web.Dtos
         public bool IsChild { get; set; }
         public bool IsNewlyweds { get; set; }
         public bool OrderedBreakfest { get; set; }
+        public decimal BasePrice { get; set; }
         public decimal PriceForStay { get; set; }
     }
 }

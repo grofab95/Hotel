@@ -74,20 +74,26 @@ namespace Hotel.Domain.Entities
         {
             ReservationValidators.ValidIfReservationRoomExistInReservation(this, reservationRoom);
 
-            return reservationRoom.AddRoomGuest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay);
+            return reservationRoom.AddGuest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay);
         }
 
-        public void RemoveGuestFromRoom(ReservationRoom reservationRoom, Guest roomGuest)
+        public void RemoveGuestFromRoom(ReservationRoom reservationRoom, Guest guest)
         {
             ReservationValidators.ValidIfReservationRoomExistInReservation(this, reservationRoom);
 
-            reservationRoom.RemoveRoomGuest(roomGuest);
+            reservationRoom.RemoveGuest(guest);
         }
 
         public bool IsRoomInReservation(Room room) => ReservationRooms.Any(x => x.Room.Id == room.Id);
 
-        public decimal GetCalculatedPrice(PriceCalculator priceCalculator) => priceCalculator.CalculateReservationPrice(this);
+        public decimal GetCalculatedPrice(PriceCalculator priceCalculator)
+        {
+            var guest = ReservationRooms.SelectMany(x => x.Guests).ToList();
+            guest.ForEach(x => x.SetPriceForStay(priceCalculator.CalculateGuestPrice(x)));
 
-        public int GetGuestsAmount() => ReservationRooms.Sum(x => x.RoomGuests.Count());
+            return priceCalculator.CalculateReservationPrice(this);
+        }
+
+        public int GetGuestsAmount() => ReservationRooms.Sum(x => x.Guests.Count());
     }
 }

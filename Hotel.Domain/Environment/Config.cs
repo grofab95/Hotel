@@ -9,6 +9,7 @@ namespace Hotel.Domain.Environment
     public class Config
     {
         public decimal PriceForStay => 50;
+        public int FreeRoomHour => 15;
 
         private Config() { }
 

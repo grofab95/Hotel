@@ -74,13 +74,13 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
         private decimal IncreaseValue(decimal price, decimal value) => price + value;
         private decimal DecreaseValue(decimal price, decimal value) => price - value;
 
-        public bool IsRuleObligatoring(Guest roomGuest)
+        public bool IsRuleObligatoring(Guest guest)
         {
             return RuleName switch
             {
-                RuleName.PriceWhenBreakfest => roomGuest.OrderedBreakfest,
-                RuleName.PriceWhenChild => roomGuest.IsChild,
-                RuleName.PriceWhenNewlywed => roomGuest.IsNewlyweds,
+                RuleName.PriceWhenBreakfest => guest.OrderedBreakfest,
+                RuleName.PriceWhenChild => guest.IsChild,
+                RuleName.PriceWhenNewlywed => guest.IsNewlyweds,
 
                 _ => throw new NotImplementedException()
             };

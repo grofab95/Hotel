@@ -1,7 +1,9 @@
 ﻿using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
+using Hotel.Domain.Environment;
 using Hotel.Sql.ContextFactory;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,9 +18,11 @@ namespace Hotel.Sql.Daos
         public async Task<List<Room>> GetFreeByDateRangeAsync(int peopleAmount, DateRange dateRange)
         {
             var reservedRoomsInfos = await context.ReservationRooms.Include(z => z.Room).Include(x => x.Reservation)
-                .Where(x => x.Reservation.CheckIn >= dateRange.From && x.Reservation.CheckOut <= dateRange.To)
+                .Where(x => dateRange.From >= x.Reservation.CheckIn && dateRange.From <= x.Reservation.CheckOut)
                 .Select(x => new { Id = x.Room.Id, ReservedTo = x.Reservation.CheckOut })
                 .ToListAsync();
+
+            var resRooms = await context.ReservationRooms.Include(z => z.Room).Include(x => x.Reservation).ToListAsync();
 
             var reserverdRoomsIds = reservedRoomsInfos.Select(x => x.Id).ToList();
             var freeRooms = await context.Rooms.Include(x => x.Area)
@@ -36,7 +40,12 @@ namespace Hotel.Sql.Daos
                           join info in reservedRoomsInfos on reservedRoom.Id equals info.Id
                           select new { reservedRoom, info }).ToList();
 
-            joined.ForEach(x => x.reservedRoom.SetNote($"Wolny od {x.info.ReservedTo.AddHours(15):dd.MM.yyyy yy:mm}"));
+            joined.ForEach(x =>
+            {
+                var date = x.info.ReservedTo;
+                x.reservedRoom
+                    .SetNote($"Wolny od {new DateTime(date.Year, date.Month, date.Day, Config.Get.FreeRoomHour, 0, 0):dd.MM.yyyy HH:mm}");
+            });
 
             return freeRooms.Concat(reservedRooms).ToList();
         }

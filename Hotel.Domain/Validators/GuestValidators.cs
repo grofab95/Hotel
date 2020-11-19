@@ -3,7 +3,7 @@ using Hotel.Domain.Extensions;
 
 namespace Hotel.Domain.Validators
 {
-    public class RoomGuestValidators
+    public class GuestValidators
     {
         public static void ValidIfNameExist(string name)
         {
@@ -11,10 +11,10 @@ namespace Hotel.Domain.Validators
                 throw new HotelException("Nazwa gościa jest wymagana.");
         }
 
-        public static void ValidPriceForStay(decimal priceForStay)
+        public static void ValidPrice(decimal priceForStay)
         {
             if (priceForStay < 0)
-                throw new HotelException("Cena za pobyt nie może być ujemna.");
+                throw new HotelException("Cena nie może być ujemna.");
         }
     }
 }

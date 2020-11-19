@@ -18,8 +18,8 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
 
         public decimal CalculateGuestPrice(Guest guest)
         {
-            if (guest.PriceForStay != _standartPriceForStay)
-                return guest.PriceForStay;
+            if (guest.BasePrice != _standartPriceForStay)
+                return guest.BasePrice;
 
             var guestPrice = _standartPriceForStay;
 
@@ -39,7 +39,7 @@ namespace Hotel.Domain.Entities.PriceRuleEntity
 
         public decimal CalculateRoomPrice(ReservationRoom reservationRoom)
         {
-            var roomPrice = reservationRoom.RoomGuests.Sum(x => CalculateGuestPrice(x));
+            var roomPrice = reservationRoom.Guests.Sum(x => CalculateGuestPrice(x));
 
             return roomPrice;
         }

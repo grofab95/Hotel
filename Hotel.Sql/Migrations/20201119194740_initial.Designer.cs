@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel.Sql.Migrations
 {
     [DbContext(typeof(HotelContext))]
-    [Migration("20201115213637_add-blocking-rules")]
-    partial class addblockingrules
+    [Migration("20201119194740_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,6 +68,49 @@ namespace Hotel.Sql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Hotel.Domain.Entities.Guest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<decimal>("BasePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<bool>("IsChild")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNewlyweds")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("OrderedBreakfest")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("PriceForStay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("ReservationRoomId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReservationRoomId");
+
+                    b.ToTable("Guests");
                 });
 
             modelBuilder.Entity("Hotel.Domain.Entities.PriceRuleEntity.PriceRule", b =>
@@ -202,44 +245,14 @@ namespace Hotel.Sql.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("Hotel.Domain.Entities.RoomGuest", b =>
+            modelBuilder.Entity("Hotel.Domain.Entities.Guest", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                    b.HasOne("Hotel.Domain.Entities.ReservationRoom", "ReservationRoom")
+                        .WithMany("Guests")
+                        .HasForeignKey("ReservationRoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<bool>("IsChild")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsNewlyweds")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("OrderedBreakfest")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal?>("PriceForStay")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("ReservationRoomId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReservationRoomId");
-
-                    b.ToTable("RoomGuests");
+                    b.Navigation("ReservationRoom");
                 });
 
             modelBuilder.Entity("Hotel.Domain.Entities.Reservation", b =>
@@ -277,13 +290,6 @@ namespace Hotel.Sql.Migrations
                     b.Navigation("Area");
                 });
 
-            modelBuilder.Entity("Hotel.Domain.Entities.RoomGuest", b =>
-                {
-                    b.HasOne("Hotel.Domain.Entities.ReservationRoom", null)
-                        .WithMany("RoomGuests")
-                        .HasForeignKey("ReservationRoomId");
-                });
-
             modelBuilder.Entity("Hotel.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Reservations");
@@ -296,7 +302,7 @@ namespace Hotel.Sql.Migrations
 
             modelBuilder.Entity("Hotel.Domain.Entities.ReservationRoom", b =>
                 {
-                    b.Navigation("RoomGuests");
+                    b.Navigation("Guests");
                 });
 #pragma warning restore 612, 618
         }

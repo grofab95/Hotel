@@ -12,7 +12,7 @@ namespace Hotel.Sql
         public DbSet<Area> Areas { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<ReservationRoom> ReservationRooms { get; set; }
-        public DbSet<Guest> RoomGuests { get; set; }
+        public DbSet<Guest> Guests { get; set; }
         public DbSet<PriceRule> PriceRules { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -35,7 +35,7 @@ namespace Hotel.Sql
             modelBuilder.ApplyConfiguration(new PriceRuleConfiguration());
             modelBuilder.ApplyConfiguration(new ReservationConfiguration());
             modelBuilder.ApplyConfiguration(new ReservationRoomConfiguration());
-            modelBuilder.ApplyConfiguration(new RoomGuestConfiguration());
+            modelBuilder.ApplyConfiguration(new GuestConfiguration());
         }
     }
 }

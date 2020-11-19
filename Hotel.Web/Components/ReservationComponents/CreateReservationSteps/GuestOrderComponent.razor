@@ -17,14 +17,14 @@
         <tbody>
             @foreach (var reservationRoom in Reservation.ReservationRooms)
             {
-                var roomGuests = reservationRoom.RoomGuests;
-                if (!roomGuests.Any())
+                var guests = reservationRoom.Guests;
+                if (!guests.Any())
                 {
                     <tr>
                         <td style="width: 160px;">
                             <p>@reservationRoom.Room.Name</p>
                             <p>(@reservationRoom.Room.Area.Name)</p>
-                            <p>@($"{roomGuests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
+                            <p>@($"{guests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
                             <br />
                             <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę"
                                           Click="(async () => await AddGuest(reservationRoom))" />
@@ -39,21 +39,21 @@
                 }
                 else
                 {
-                    @foreach (var guest in roomGuests)
+                    @foreach (var guest in guests)
                     {
                         var guestDto = Mapper.Map<GuestDto>(guest);
 
                         <tr>
-                            @if (roomGuests.IndexOf(guest) == 0)
+                            @if (guests.IndexOf(guest) == 0)
                             {
-                                <td rowspan="@roomGuests.Count()" style="width: 160px;">
+                                <td rowspan="@guests.Count()" style="width: 160px;">
                                     <p>@reservationRoom.Room.Name</p>
                                     <p>(@reservationRoom.Room.Area.Name)</p>
-                                    <p>@($"{roomGuests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
+                                    <p>@($"{guests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
                                     <br />
                                     <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę"
                                                   Click="(async () => await AddGuest(reservationRoom))"
-                                                  Disabled="(roomGuests.Count == reservationRoom.Room.PeopleCapacity)" />
+                                                  Disabled="(guests.Count == reservationRoom.Room.PeopleCapacity)" />
                                 </td>
                             }
 
@@ -66,14 +66,14 @@
                             <td><RadzenCheckBox @bind-Value="guestDto.OrderedBreakfest" Change="(async (bool args) => await UpdateGuest(guest, guestDto))" /></td>
                             <td>
                                 Standardowa cena: <RadzenCheckBox TValue="bool"
-                                                       Change="(async (bool args) => await DefaultPriceStateChanged(args, guest, guestDto))"
+                                                       Change="(async (bool args) => await BasePriceStateChanged(args, guest, guestDto))"
                                                        @bind-Value="_guestStandardPrice[guest]"  />
 
                                 @if (_guestStandardPrice[guest] == false)
                                 {
                                     <hr />
                                     <span>Cena: </span>
-                                    <RadzenNumeric TValue="decimal" @bind-Value="guestDto.PriceForStay"
+                                    <RadzenNumeric TValue="decimal" @bind-Value="guestDto.BasePrice"
                                                    Change="(async (decimal price) => await PriceChanged(price, guest, guestDto))"
                                                    Style="width: 60px;" Min="0" Max="999" /><span> zł</span>
                                 }

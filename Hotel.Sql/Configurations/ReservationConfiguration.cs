@@ -17,6 +17,8 @@ namespace Hotel.Sql.Configurations
             builder.HasOne(x => x.Customer)
                 .WithMany(x => x.Reservations)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.HasMany(x => x.ReservationRooms).WithOne(x => x.Reservation).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

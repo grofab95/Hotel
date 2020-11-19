@@ -14,9 +14,11 @@ namespace Hotel.Sql.Configurations
             builder.Property(x => x.CreatedAt)
                 .HasDefaultValueSql("getdate()");
 
-            builder.HasOne(x => x.Reservation)
-                .WithMany(x => x.ReservationRooms)
-                .HasForeignKey(x => x.ReservationId);
+            //builder.HasOne(x => x.Reservation)
+            //    .WithMany(x => x.ReservationRooms)
+            //    .HasForeignKey(x => x.ReservationId);
+
+            builder.HasMany(x => x.Guests).WithOne(x => x.ReservationRoom).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

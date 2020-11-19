@@ -62,7 +62,7 @@ namespace Hotel.Web.Components.Common
                 await ShowNotification(ex.Handle());
             }
 
-            return default(T);
+            return default;
         }
 
         public async Task DoSafeActions(List<Action> actions)

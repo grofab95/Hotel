@@ -10,9 +10,9 @@ namespace Hotel.Domain.Entities
         public virtual Room Room { get; private set; }
         public virtual Reservation Reservation { get; private set; }
         public virtual int ReservationId { get; private set; }
-        public virtual List<Guest> RoomGuests { get; set; }
+        public virtual List<Guest> Guests { get; private set; }
 
-        public int BookingAmount => RoomGuests?.Count ?? 0;
+        public int BookingAmount => Guests?.Count ?? 0;
 
         protected ReservationRoom() { }
 
@@ -26,7 +26,7 @@ namespace Hotel.Domain.Entities
 
             Room = room;
             Reservation = reservation;
-            RoomGuests = new List<Guest>();
+            Guests = new List<Guest>();
         }
 
         internal ReservationRoom Update(ReservationRoom updatedReservationRoom)
@@ -37,19 +37,19 @@ namespace Hotel.Domain.Entities
             if (updatedReservationRoom.Reservation != Reservation)
                 throw new HotelException("Nie można zmieniać przypisanej rezerwacji.");
 
-            if (!updatedReservationRoom.RoomGuests?.Any() ?? true)
+            if (!updatedReservationRoom.Guests?.Any() ?? true)
                 throw new HotelException("Należy przypisać gości do pokoju.");
 
-            var joined = (from roomGuest in RoomGuests
-                            join updatedRoomGuest in updatedReservationRoom.RoomGuests on roomGuest.Id equals updatedReservationRoom.Id
-                            select new { roomGuest, updatedRoomGuest }).ToList();
+            var joined = (from guest in Guests
+                            join updatedGuest in updatedReservationRoom.Guests on guest.Id equals updatedReservationRoom.Id
+                            select new { guest, updatedGuest }).ToList();
 
-            joined.ForEach(x => x.roomGuest.Update(x.updatedRoomGuest));
+            joined.ForEach(x => x.guest.Update(x.updatedGuest));
 
             return this;            
         }
 
-        internal Guest AddRoomGuest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest, decimal priceForStay)
+        internal Guest AddGuest(string name, bool isChild, bool isNewlyweds, bool orderedBreakfest, decimal priceForStay)
         {
             if (BookingAmount == Room.PeopleCapacity)
                 throw new HotelException("Nie można dodać osoby - pokój jest pełny.");
@@ -57,19 +57,17 @@ namespace Hotel.Domain.Entities
             if (isChild && isNewlyweds)
                 throw new HotelException("Nie można dodać osoby - dziecko nie może być nowożeńcem XD");
 
-            var roomGuest = new Guest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay);
-            RoomGuests.Add(roomGuest);
+            Guests.Add(new Guest(name, isChild, isNewlyweds, orderedBreakfest, priceForStay));
 
-            return roomGuest;
+            return Guests.Last();
         }
 
-        internal void RemoveRoomGuest(Guest roomGuest)
+        internal void RemoveGuest(Guest guest)
         {
-            //if (!RoomGuests.Any(x => x.Id == roomGuest.Id))
-            if (!RoomGuests.Contains(roomGuest))
-                throw new HotelException($"Gość {roomGuest} nie jest przypisany do pokoju {Room}.");
+            if (!Guests.Contains(guest))
+                throw new HotelException($"Gość {guest} nie jest przypisany do pokoju {Room}.");
 
-            RoomGuests.Remove(roomGuest);
+            Guests.Remove(guest);
         }
     }
 }

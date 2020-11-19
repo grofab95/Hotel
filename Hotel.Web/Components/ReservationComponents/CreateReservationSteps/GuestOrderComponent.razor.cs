@@ -34,7 +34,7 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
             if (!isDone)
                 return;
 
-            var addedGuest = reservationRoom.RoomGuests.Last();
+            var addedGuest = reservationRoom.Guests.Last();
             _guestStandardPrice.Add(addedGuest, true);
 
             await CallEvent();
@@ -59,12 +59,12 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
             await UpdateGuest(guest, guestDto);
         }
 
-        private async Task DefaultPriceStateChanged(bool state, Guest guest, GuestDto guestDto)
+        private async Task BasePriceStateChanged(bool state, Guest guest, GuestDto guestDto)
         {
             if (!state)
                 return;
 
-            guestDto.PriceForStay = _standardPriceForStay;
+            guestDto.BasePrice = _standardPriceForStay;
 
             await UpdateGuest(guest, guestDto);
         }
