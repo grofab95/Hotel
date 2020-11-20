@@ -9,5 +9,6 @@ namespace Hotel.Domain.Entities.Views
         public DateTime CheckOut { get; set; }
         public string Customer { get; set; }
         public int BookingAmount { get; set; }
+        public int RoomsAmount { get; set; }
     }
 }

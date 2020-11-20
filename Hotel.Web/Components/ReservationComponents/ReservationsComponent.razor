@@ -17,6 +17,7 @@ else
                             <th scope="col">Zameldowanie</th>
                             <th scope="col">Wymeldowanie</th>
                             <th scope="col">Ilość dni</th>
+                            <th scope="col">Ilość pokoi</th>
                             <th scope="col">Ilość osób</th>
                             <th scope="col"></th>
                         </tr>
@@ -30,6 +31,7 @@ else
                                 <td>@(reservation.CheckIn.ToString("dd.MM.yyyy"))</td>
                                 <td>@(reservation.CheckOut.ToString("dd.MM.yyyy"))</td>
                                 <td>@((int)(reservation.CheckOut - reservation.CheckIn).TotalDays)</td>
+                                <td>@reservation.RoomsAmount</td>
                                 <td>@reservation.BookingAmount</td>
                                 <td>
                                     <RadzenButton Text="Szczegóły" ButtonStyle="ButtonStyle.Info" Size="ButtonSize.Small"
@@ -42,12 +44,25 @@ else
                 </table>
             </RadzenTabsItem>
 
-            <RadzenTabsItem Text="@($"Szczegóły rezerwacji {_selectedReservation?.Id}")" 
+            <RadzenTabsItem Text="@($"Szczegóły rezerwacji {_selectedReservation?.Id}")"
                             Visible="(_selectedReservation != null)"
                             Selected="(_selectedReservation != null)">
 
                 <RadzenButton Text="Zapisz zmiany" ButtonStyle="ButtonStyle.Success" Click="(async() => await SaveChanges())" />"
-                <GuestOrderComponent Reservation="_selectedReservation" PriceCalculator="_priceCalculator" />
+                @*<GuestOrderComponent Reservation="_selectedReservation" PriceCalculator="_priceCalculator" />*@
+                <RadzenCard Style="width: fit-content">
+                    <RadzenSteps>
+                        <Steps>
+                            <RadzenStepsItem Text="Wybierz pokoje">
+                                <RoomsSelectionComponent Reservation="_selectedReservation" />
+                            </RadzenStepsItem>
+
+                            <RadzenStepsItem Text="Rozmieść gości" Disabled="(!_selectedReservation.ReservationRooms.Any())">
+                                <GuestOrderComponent Reservation="_selectedReservation" PriceCalculator="_priceCalculator" />
+                            </RadzenStepsItem>
+                        </Steps>
+                    </RadzenSteps>
+                </RadzenCard>
             </RadzenTabsItem>
         </Tabs>
     </RadzenTabs>
