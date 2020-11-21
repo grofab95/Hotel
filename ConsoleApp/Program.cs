@@ -14,15 +14,36 @@ namespace ConsoleApp
         {
             try
             {
+                var res = Run(() => 
+                {
+                    Console.WriteLine("Test");
+                    throw new Exception("Błąd !");
+                    return 2;
+                });
+
                 var list1 = new List<int> { 1, 2, 3, 4, 5 };
                 var list2 = new List<int> { 3, 4 };
 
-                var res = list1.GetDistinct(list2, x => x, x => x);
+                var result = list1.GetDistinct(list2, x => x, x => x);
             }
             catch (System.Exception ex)
             {
 
             }
+        }
+
+        static int Run(Func<int> func)
+        {
+            try
+            {
+                return func();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return default;
         }
 
         //private static IEnumerable<T1> GetDistinct<T1, T, T2>(IEnumerable<T1> setA, IEnumerable<T2> setB, Func<T1, T> a, Func<T2, T> b)

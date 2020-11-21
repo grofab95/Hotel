@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Radzen;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,19 +40,25 @@ namespace Hotel.Web.Components.ReservationComponents
             }       
         }
 
-        private void OnFindedRooms(FindedRoomsFactors findedRoomsFactors)
+        private async Task OnFindedRooms(FindedRoomsFactors findedRoomsFactors)
         {
             _findedAmount = findedRoomsFactors.FindRoomFactors.FindingAmount;
             _findedRooms = findedRoomsFactors.FindedRooms;
-            _reservation = Reservation.Create(
-                customer: new Customer("Ewa", "Blazor"), 
-                checkIn: findedRoomsFactors.FindRoomFactors.CheckIn, 
-                checkOut: findedRoomsFactors.FindRoomFactors.CheckOut);
+
+            await _base.DoSafeAction(() =>
+            {
+                _reservation = Reservation.Create(
+                    customer: new Customer("Ewa", "Blazor"),
+                    checkIn: findedRoomsFactors.FindRoomFactors.CheckIn,
+                    checkOut: findedRoomsFactors.FindRoomFactors.CheckOut);
+            });
         }
 
-        private async Task CreateReservation()
+        private async Task SaveReservation()
         {
-            var reservationId = await _base.DoSaveFunc(() => ReservationDao.SaveReservationAsync(_reservation)).Result;
+            var reservationId = await _base.DoSafeFunc(
+                () => ReservationDao.SaveReservationAsync(_reservation));
+
             if (reservationId == default)
                 return;
 

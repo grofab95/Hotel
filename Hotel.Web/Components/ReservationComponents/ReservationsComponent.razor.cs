@@ -6,7 +6,6 @@ using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.ReservationComponents
@@ -40,16 +39,15 @@ namespace Hotel.Web.Components.ReservationComponents
             _selectedReservation = null;
             StateHasChanged();
 
-            _selectedReservation = await _base.DoSaveFunc(() => ReservationDao.GetReservationByIdAsync(id))?.Result;
+            _selectedReservation = await _base.DoSafeFunc(() => ReservationDao.GetReservationByIdAsync(id));
         }
 
         private async Task SaveChanges()
-        { 
-
-            await _base.DoSafeAction(() =>
+        {
+            await _base.DoSafeFunc(() =>
             {
                 _selectedReservation.GetCalculatedPrice(_priceCalculator);
-                ReservationDao.SaveReservationAsync(_selectedReservation);
+                return ReservationDao.SaveReservationAsync(_selectedReservation);
             }, "Zmiany zostały zapisane.");
         }
 

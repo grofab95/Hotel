@@ -15,8 +15,6 @@
         <tbody>
             @foreach (var room in _rooms)
             {
-                var isSelected = Reservation.IsRoomInReservation(room);
-
                 <tr>
                     <th scope="row">@(_rooms.IndexOf(room)+1).</th>
                     <td>@room.Area.Name</td>
@@ -24,7 +22,7 @@
                     <td>@room.PeopleCapacity</td>
                     <td>@room.Note</td>
                     <td>
-                        <RadzenCheckBox TValue="bool" @bind-Value="isSelected"
+                        <RadzenCheckBox TValue="bool" Value="Reservation.IsRoomInReservation(room)"
                                         Change="(async (bool args) => await RoomCheckedHandler(args, room))" />
                     </td>
                 </tr>

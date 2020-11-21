@@ -33,7 +33,7 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
 
             if (Reservation != null)
             {
-                var roomsInReservation = Reservation.ReservationRooms.Select(x => x.Room).ToList();
+                var roomsInReservation = Reservation.GetRooms();
                 roomsInReservation.ForEach(x => x.SetNote("W rezerwacji"));
 
                 rooms.AddRange(roomsInReservation);

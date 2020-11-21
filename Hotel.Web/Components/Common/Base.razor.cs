@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.Common
@@ -20,7 +21,9 @@ namespace Hotel.Web.Components.Common
         {
             try
             {
-                action();
+                //await Task.Run(() => action());
+
+                //await DoSafeFunc<Task>(() => { action(); return default; });
 
                 await ShowNotification(new NotificationMessage
                 {
@@ -42,7 +45,6 @@ namespace Hotel.Web.Components.Common
             {
                 action();
 
-                //await Component.RefreshState();
                 return true;
             }
             catch (Exception ex)
@@ -53,11 +55,37 @@ namespace Hotel.Web.Components.Common
             return false;
         }
 
-        public async Task<T> DoSaveFunc<T>(Func<T> func)
+        public async Task<T> DoSafeFunc<T>(Func<Task<T>> func)
         {
             try
             {
-                return func();
+                return await func();
+            }
+            catch (Exception ex)
+            {
+                await ShowNotification(ex.Handle());
+            }
+
+            return default;
+        }
+
+        public async Task<T> DoSafeFunc<T>(Func<Task<T>> func, string onWellMessage, string title = "Informacja",
+            NotificationSeverity severity = NotificationSeverity.Success)
+        {
+            try
+            {
+                var result = await func();
+
+                await ShowNotification(new NotificationMessage
+                {
+                    Summary = title,
+                    Duration = 6000,
+                    Detail = onWellMessage,
+                    Severity = severity
+                });
+
+                return result;
+
             }
             catch (Exception ex)
             {
