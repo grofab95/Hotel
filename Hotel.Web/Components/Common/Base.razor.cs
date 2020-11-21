@@ -78,5 +78,12 @@ namespace Hotel.Web.Components.Common
             notificationService.Notify(message);
             await InvokeAsync(() => { StateHasChanged(); });
         }
+
+        public async Task ShowWindow(WindowConfiguration windowConfiguration)
+        {
+            await window.Show(windowConfiguration);
+        }
+
+        public void CloseWindow() => window.Close();
     }
 }

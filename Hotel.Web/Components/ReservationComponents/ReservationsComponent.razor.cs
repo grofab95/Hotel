@@ -2,6 +2,7 @@
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Entities.Views;
+using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace Hotel.Web.Components.ReservationComponents
         private List<ReservationInfoView> _reservations;
         private PriceCalculator _priceCalculator;
         private Reservation _selectedReservation;
+
+        private List<Room> _findedRooms;
 
         protected override async Task OnInitializedAsync()
         {
@@ -48,6 +51,15 @@ namespace Hotel.Web.Components.ReservationComponents
                 _selectedReservation.GetCalculatedPrice(_priceCalculator);
                 ReservationDao.SaveReservationAsync(_selectedReservation);
             }, "Zmiany zostały zapisane.");
+        }
+
+        private void OnFindedRooms(FindedRoomsFactors findedRoomsFactors)
+        {
+            _findedRooms = findedRoomsFactors.FindedRooms;
+
+            _base.CloseWindow();
+
+            StateHasChanged();
         }
     }
 }

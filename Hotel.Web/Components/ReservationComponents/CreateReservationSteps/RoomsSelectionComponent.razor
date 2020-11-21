@@ -1,5 +1,5 @@
 ﻿
-@if (Reservation != null && Rooms != null)
+@if (_isLoaded && Reservation != null)
 {
     <table class="table" style="width: 1500px;">
         <thead class="thead-dark">
@@ -13,12 +13,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var room in Rooms)
+            @foreach (var room in _rooms)
             {
                 var isSelected = Reservation.IsRoomInReservation(room);
 
                 <tr>
-                    <th scope="row">@(Rooms.IndexOf(room)+1).</th>
+                    <th scope="row">@(_rooms.IndexOf(room)+1).</th>
                     <td>@room.Area.Name</td>
                     <td>@room.Name</td>
                     <td>@room.PeopleCapacity</td>

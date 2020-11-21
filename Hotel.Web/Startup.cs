@@ -1,6 +1,7 @@
 using AutoMapper;
 using Hotel.Sql;
 using Hotel.Sql.ContextFactory;
+using Hotel.Web.Components.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,7 @@ namespace Hotel.Web
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<NotificationService>();
             services.AddScoped<DialogService>();
+            services.AddScoped<Window>();
 
             services.AddDaos();
         }

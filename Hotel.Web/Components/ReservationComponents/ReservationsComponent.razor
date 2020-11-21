@@ -6,6 +6,10 @@
 }
 else
 {
+    @if (_selectedReservation != null)
+    {
+        <RadzenButton Text="Dodaj pokoje" Click="(async () => await ShowRooms())" />
+    }
     <RadzenTabs>
         <Tabs>
             <RadzenTabsItem Text="Reserwacje">
@@ -54,7 +58,7 @@ else
                     <RadzenSteps>
                         <Steps>
                             <RadzenStepsItem Text="Wybierz pokoje">
-                                <RoomsSelectionComponent Reservation="_selectedReservation" />
+                                <RoomsSelectionComponent Rooms="_findedRooms" Reservation="_selectedReservation" />
                             </RadzenStepsItem>
 
                             <RadzenStepsItem Text="Rozmieść gości" Disabled="(!_selectedReservation.ReservationRooms.Any())">
@@ -66,6 +70,17 @@ else
             </RadzenTabsItem>
         </Tabs>
     </RadzenTabs>
+}
+
+@code {
+    private async Task ShowRooms()
+    {
+        await _base.ShowWindow(new WindowConfiguration 
+        {
+            Content = @<FindRoomsComponent OnFindedRooms="OnFindedRooms" />,
+            Title = "Dodaj pokoje"
+        });
+    }
 }
 
 <Base @ref="_base" />

@@ -1,0 +1,53 @@
+﻿@if (_searchRoomDto != null)
+{
+    <RadzenCard Style="width: 430px;">
+        <RadzenTemplateForm Data="_searchRoomDto" Submit="(async (FindRoomFactors args) => await SearchRooms(args))">
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-5">
+                    <p>Data zameldowania:</p>
+                </div>
+
+                <div class="col-7">
+                    <RadzenDatePicker @bind-Value="_searchRoomDto.CheckIn" TValue="DateTime" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-5">
+                    <p>Data wymeldowania:</p>
+                </div>
+
+                <div class="col-7">
+                    <RadzenDatePicker @bind-Value="_searchRoomDto.CheckOut" TValue="DateTime" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-5">
+                    <p>Ilość osób:</p>
+                </div>
+
+                <div class="col-7">
+                    <RadzenNumeric @bind-Value="_searchRoomDto.FindingAmount" Min="1" TValue="int" />
+                </div>
+            </div>
+
+            <div class="row" style="text-align: right; margin-top: 20px;">
+                <div class="col">
+                    <RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Text="Znajdź pokoje" ButtonType="ButtonType.Submit" />
+                </div>
+            </div>
+        </RadzenTemplateForm>
+    </RadzenCard>
+    <div style="width: 430px; margin-bottom: 20px; float: left">
+        @if (_isRoomSearching)
+        {
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+        }
+    </div>
+}
+
+<Base @ref="_base" />
+@code{
+    private Base _base;
+}

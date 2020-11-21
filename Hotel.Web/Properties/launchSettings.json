@@ -18,7 +18,7 @@
     "Hotel.Web": {
       "commandName": "Project",
       "launchBrowser": false,
-      "applicationUrl": "https://192.168.0.16:8090;http://192.168.0.16:4000",
+      "applicationUrl": "http://localhost:8080;https://localhost:8090",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

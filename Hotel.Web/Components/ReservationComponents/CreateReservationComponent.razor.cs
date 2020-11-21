@@ -14,15 +14,15 @@ namespace Hotel.Web.Components.ReservationComponents
 {
     public partial class CreateReservationComponent
     {
-        [Inject] IRoomDao RoomDao { get; set; }  
         [Inject] IPriceRuleDao PriceRuleDao { get; set; }
         [Inject] IReservationDao ReservationDao { get; set; }
 
-        private SearchRoomDto _searchRoomDto;        
-        private List<Room> _rooms;
         private Reservation _reservation;
         private PriceCalculator _priceCalculator;
 
+        private List<Room> _findedRooms;
+
+        private int _findedAmount;
         private bool _isRoomSearching;
 
         protected override async Task OnInitializedAsync()
@@ -30,14 +30,8 @@ namespace Hotel.Web.Components.ReservationComponents
             try
             {
                 var priceRules = await PriceRuleDao.GetAllAsync();
-                _priceCalculator = new PriceCalculator(priceRules);
 
-                _searchRoomDto = new SearchRoomDto
-                {
-                    CheckIn = DateTime.Now.AddDays(1),
-                    CheckOut = DateTime.Now.AddDays(7),
-                    BookingAmount = 6
-                };
+                _priceCalculator = new PriceCalculator(priceRules);
             }
             catch (Exception ex)
             {
@@ -45,23 +39,14 @@ namespace Hotel.Web.Components.ReservationComponents
             }       
         }
 
-        private async Task SearchRooms(SearchRoomDto searchRoomDto)
+        private void OnFindedRooms(FindedRoomsFactors findedRoomsFactors)
         {
-            await _base.DoSafeAction(async () =>  
-            {
-                _reservation = Reservation.Create(
-                  customer: new Customer("Marta", "Nowak"),
-                  checkIn: searchRoomDto.CheckIn,
-                  checkOut: searchRoomDto.CheckOut);
-
-                _isRoomSearching = true;
-
-                _rooms = await RoomDao.GetFreeByDateRangeAsync(searchRoomDto.BookingAmount,
-                    new DateRange(searchRoomDto.CheckIn, searchRoomDto.CheckOut));
-                _isRoomSearching = false;
-
-                OnEvent();
-            });     
+            _findedAmount = findedRoomsFactors.FindRoomFactors.FindingAmount;
+            _findedRooms = findedRoomsFactors.FindedRooms;
+            _reservation = Reservation.Create(
+                customer: new Customer("Ewa", "Blazor"), 
+                checkIn: findedRoomsFactors.FindRoomFactors.CheckIn, 
+                checkOut: findedRoomsFactors.FindRoomFactors.CheckOut);
         }
 
         private async Task CreateReservation()

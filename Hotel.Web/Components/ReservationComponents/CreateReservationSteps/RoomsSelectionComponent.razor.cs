@@ -12,13 +12,41 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
         [Parameter] public Reservation Reservation { get; set; }
         [Parameter] public EventCallback<bool> OnEvent { get; set; }
 
-        protected override void OnInitialized()
+        private List<Room> _rooms;
+        private bool _isLoaded;
+
+        //protected override void OnInitialized()
+        //{
+        //    _rooms = new List<Room>();
+
+        //    SetRooms();
+        //}
+
+        private void SetRooms()
         {
-            if (Rooms == null && Reservation != null)
+            _isLoaded = false;
+
+            var rooms = new List<Room>();
+
+            if (Rooms != null)
+                rooms.AddRange(Rooms);
+
+            if (Reservation != null)
             {
-                Rooms = Reservation.ReservationRooms.Select(x => x.Room).ToList();
-                Rooms.ForEach(x => x.SetNote($"W rezerwacji"));
+                var roomsInReservation = Reservation.ReservationRooms.Select(x => x.Room).ToList();
+                roomsInReservation.ForEach(x => x.SetNote("W rezerwacji"));
+
+                rooms.AddRange(roomsInReservation);
             }
+
+            _rooms = rooms.GroupBy(x => x.Id).Select(x => x.First()).ToList();
+
+            _isLoaded = true;
+        }
+
+        protected override void OnParametersSet()
+        {
+            SetRooms();
         }
 
         private async Task RoomCheckedHandler(bool isChecked, Room room)
