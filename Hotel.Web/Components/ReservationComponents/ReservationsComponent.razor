@@ -48,14 +48,23 @@ else
                             Visible="(_selectedReservation != null)"
                             Selected="(_selectedReservation != null)">
 
+                <ReservationSummaryComponent Reservation="_selectedReservation"
+                                             PriceCalculator="_priceCalculator"
+                                             PeopleAmount="_peopleAmount" />
+
+                <hr />
+
                 <ControlComponent OnSave="(async () => await SaveChanges())"
                                   OnCancel="(async () => await CancelChanges())"
-                                  LeftContent="GetLeftContent()"/>
+                                  LeftContent="GetLeftContent()" />
+
+                <hr />
 
                 <ReservationComponent Reservation="_selectedReservation"
                                       PriceCalculator="_priceCalculator"
-                                      Rooms="_findedRooms" 
-                                      ActiveRoomSelection="_roomSelectionActive" />                                      
+                                      Rooms="_findedRooms"
+                                      ActiveRoomSelection="_roomSelectionActive"
+                                      OnEvent="OnEvent" />
 
             </RadzenTabsItem>
         </Tabs>

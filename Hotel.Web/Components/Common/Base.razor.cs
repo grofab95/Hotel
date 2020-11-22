@@ -1,5 +1,6 @@
 ﻿using Hotel.Web.Helpers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Radzen;
 using System;
 using System.Collections;
@@ -13,6 +14,7 @@ namespace Hotel.Web.Components.Common
     public partial class Base
     {
         [Inject] NotificationService notificationService { get; set; }
+        [Inject] IJSRuntime JsRuntime { get; set; }
 
         [Parameter] public dynamic Component { get; set; }
 
@@ -113,5 +115,8 @@ namespace Hotel.Web.Components.Common
         }
 
         public void CloseWindow() => window.Close();
+
+        public async Task<bool> ShowConfirm(string message) => await JsRuntime.InvokeAsync<bool>("confirm", message);
+        public void ShowWaitingWindow(string waitingText) => window.ShowWaiting(waitingText);
     }
 }

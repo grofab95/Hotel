@@ -1,5 +1,6 @@
 ﻿using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,10 +52,9 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
 
         private async Task RoomCheckedHandler(bool isChecked, Room room)
         {
-            if (isChecked)            
-                await _base.DoSafeAction(() => Reservation.AddRoom(room));
-            else
-                await _base.DoSafeAction(() => Reservation.DeleteRoom(room));
+            await _base.DoSafeAction(Reservation.IsRoomInReservation(room)
+                ? () => Reservation.DeleteRoom(room)
+                : () => Reservation.AddRoom(room));     
 
             await OnEvent.InvokeAsync(true);
         }

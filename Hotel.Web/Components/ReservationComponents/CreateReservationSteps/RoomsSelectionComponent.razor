@@ -21,7 +21,7 @@
                     style += "background-color: cornsilk;";
                 }
 
-                <tr style=@style>
+                <tr style=@style @onclick="@(async () => await RoomCheckedHandler(true, room))">
                     <th scope="row">@(_rooms.IndexOf(room)+1).</th>
                     <td>@room.Area.Name</td>
                     <td>@room.Name</td>
@@ -36,6 +36,13 @@
         </tbody>
     </table>
 }
+
+@code {
+    async Task Dupa(Hotel.Domain.Entities.Room room)
+    {
+
+    }
+} 
 
 <Base @ref="_base" />
 @code{

@@ -22,7 +22,7 @@
                 var index = Reservation.ReservationRooms.IndexOf(reservationRoom);
                 if (index % 2 == 0 || index == 0)
                 {
-                    style += "background-color: ghostwhite;";
+                    style += "background-color: lemonchiffon;";
                 }
 
                 var guests = reservationRoom.Guests;
@@ -30,12 +30,14 @@
                 {
                     <tr style=@style>
                         <td style="width: 160px;">
-                            <p>@reservationRoom.Room.Name</p>
-                            <p>(@reservationRoom.Room.Area.Name)</p>
-                            <p>@($"{guests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
-                            <br />
-                            <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę"
-                                          Click="(async () => await AddGuest(reservationRoom))" />
+                            <div>
+                                <p>@reservationRoom.Room.Name</p>
+                                <p>(@reservationRoom.Room.Area.Name)</p>
+                                <p>@($"{guests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
+                                <br />
+                                <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę"
+                                              Click="(async () => await AddGuest(reservationRoom))" />
+                            </div>
                         </td>
                         <td></td>
                         <td></td>
@@ -55,13 +57,15 @@
                             @if (guests.IndexOf(guest) == 0)
                             {
                                 <td rowspan="@guests.Count()" style="width: 160px;">
-                                    <p>@reservationRoom.Room.Name</p>
-                                    <p>(@reservationRoom.Room.Area.Name)</p>
-                                    <p>@($"{guests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
-                                    <br />
-                                    <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę"
-                                                  Click="(async () => await AddGuest(reservationRoom))"
-                                                  Disabled="(guests.Count == reservationRoom.Room.PeopleCapacity)" />
+                                    <div>
+                                        <p>@reservationRoom.Room.Name</p>
+                                        <p>(@reservationRoom.Room.Area.Name)</p>
+                                        <p>@($"{guests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
+                                        <br />
+                                        <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę"
+                                                      Click="(async () => await AddGuest(reservationRoom))"
+                                                      Disabled="(guests.Count == reservationRoom.Room.PeopleCapacity)" />
+                                    </div>
                                 </td>
                             }
 

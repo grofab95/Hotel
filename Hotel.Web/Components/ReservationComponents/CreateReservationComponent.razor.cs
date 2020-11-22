@@ -1,6 +1,7 @@
 ﻿using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
+using Hotel.Web.Components.Common;
 using Hotel.Web.Dtos;
 using Hotel.Web.Helpers;
 using Microsoft.AspNetCore.Components;
@@ -24,7 +25,7 @@ namespace Hotel.Web.Components.ReservationComponents
         private List<Room> _findedRooms;
 
         private int _findedAmount;
-        private bool _isRoomSearching;
+        private bool _isRoomSearching;        
 
         protected override async Task OnInitializedAsync()
         {
@@ -56,8 +57,19 @@ namespace Hotel.Web.Components.ReservationComponents
 
         private async Task SaveReservation()
         {
+            if (_reservation.GetGuestsAmount() < _findedAmount)
+            {
+                var isConfirmed = await _base.ShowConfirm("Nie wszyscy goście zostali przydzieleni do pokoi, czy chcesz kontynuować?");
+                if (!isConfirmed)
+                    return;
+            }
+
+            _base.ShowWaitingWindow("Trwa tworzenie rezerwacji ...");
+
             var reservationId = await _base.DoSafeFunc(
                 () => ReservationDao.AddReservationAsync(_reservation));
+
+            _base.CloseWindow();
 
             if (reservationId == default)
                 return;

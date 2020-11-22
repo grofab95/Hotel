@@ -21,6 +21,7 @@ namespace Hotel.Web.Components.ReservationComponents
         private List<Room> _findedRooms;
 
         private bool _roomSelectionActive = false;
+        private int _peopleAmount;
 
         protected override async Task OnInitializedAsync()
         {
@@ -41,6 +42,8 @@ namespace Hotel.Web.Components.ReservationComponents
             StateHasChanged();
 
             _selectedReservation = await _base.DoSafeFunc(() => ReservationDao.GetReservationByIdAsync(id));
+
+            _peopleAmount = _selectedReservation.GetGuestsAmount();
         }
 
         private async Task SaveChanges()
@@ -74,5 +77,7 @@ namespace Hotel.Web.Components.ReservationComponents
 
             StateHasChanged();
         }
+
+        private void OnEvent(bool state) => StateHasChanged();
     }
 }
