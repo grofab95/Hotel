@@ -1,8 +1,14 @@
 ﻿using Hotel.Domain.Entities;
+using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Entities.Views;
 using Hotel.Sql.Configurations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Hotel.Sql
 {
@@ -36,6 +42,21 @@ namespace Hotel.Sql
             modelBuilder.ApplyConfiguration(new ReservationConfiguration());
             modelBuilder.ApplyConfiguration(new ReservationRoomConfiguration());
             modelBuilder.ApplyConfiguration(new GuestConfiguration());
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var res = await base.SaveChangesAsync(cancellationToken);
+
+            if (res > 0)
+            {
+                var trackedEntries = ChangeTracker.Entries()
+                    .ToList();
+
+                trackedEntries.ForEach(x => x.State = EntityState.Detached);
+            }
+
+            return res;
         }
     }
 }

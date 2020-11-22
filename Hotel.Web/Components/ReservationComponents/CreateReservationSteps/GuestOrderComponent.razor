@@ -1,9 +1,9 @@
 ﻿
 @if (Reservation != null && PriceCalculator != null)
 {
-    <table class="table table-sm" style="width: 1500px;">
+    <table class="table table-sm" style="width: 1100px;">
         <thead class="thead-dark">
-            <tr>
+            <tr style="text-align: center;">
                 <th scope="col"></th>
                 <th scope="col">Gość</th>
                 <th scope="col">Dziecko</th>
@@ -17,10 +17,18 @@
         <tbody>
             @foreach (var reservationRoom in Reservation.ReservationRooms)
             {
+                var style = "text-align: center;";
+
+                var index = Reservation.ReservationRooms.IndexOf(reservationRoom);
+                if (index % 2 == 0 || index == 0)
+                {
+                    style += "background-color: ghostwhite;";
+                }
+
                 var guests = reservationRoom.Guests;
                 if (!guests.Any())
                 {
-                    <tr>
+                    <tr style=@style>
                         <td style="width: 160px;">
                             <p>@reservationRoom.Room.Name</p>
                             <p>(@reservationRoom.Room.Area.Name)</p>
@@ -43,7 +51,7 @@
                     {
                         var guestDto = Mapper.Map<GuestDto>(guest);
 
-                        <tr>
+                        <tr style=@style>
                             @if (guests.IndexOf(guest) == 0)
                             {
                                 <td rowspan="@guests.Count()" style="width: 160px;">

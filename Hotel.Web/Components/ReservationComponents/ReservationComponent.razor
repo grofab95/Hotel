@@ -1,1 +1,11 @@
-﻿
+﻿<RadzenSteps>
+    <Steps>
+        <RadzenStepsItem Text="Wybierz pokoje" Selected="ActiveRoomSelection">
+            <RoomsSelectionComponent Rooms="Rooms" Reservation="Reservation" OnEvent="CallEvent" />
+        </RadzenStepsItem>
+
+        <RadzenStepsItem Text="Rozmieść gości" Disabled="(!Reservation.ReservationRooms.Any())">
+            <GuestOrderComponent Reservation="Reservation" PriceCalculator="PriceCalculator" OnEvent="CallEvent" />
+        </RadzenStepsItem>
+    </Steps>
+</RadzenSteps>

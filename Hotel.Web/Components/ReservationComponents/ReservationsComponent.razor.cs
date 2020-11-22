@@ -18,8 +18,9 @@ namespace Hotel.Web.Components.ReservationComponents
         private List<ReservationInfoView> _reservations;
         private PriceCalculator _priceCalculator;
         private Reservation _selectedReservation;
-
         private List<Room> _findedRooms;
+
+        private bool _roomSelectionActive = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -34,7 +35,7 @@ namespace Hotel.Web.Components.ReservationComponents
             }
         }
 
-        private async Task GetReservation(int id)
+        private async Task LoadReservation(int id)
         {
             _selectedReservation = null;
             StateHasChanged();
@@ -44,17 +45,31 @@ namespace Hotel.Web.Components.ReservationComponents
 
         private async Task SaveChanges()
         {
-            await _base.DoSafeFunc(() =>
+            var isUpdated = await _base.DoSafeFunc(() =>
             {
                 _selectedReservation.GetCalculatedPrice(_priceCalculator);
-                return ReservationDao.SaveReservationAsync(_selectedReservation);
+                return ReservationDao.UpdateReservationAsync(_selectedReservation);
             }, "Zmiany zostały zapisane.");
+
+            if (!isUpdated)
+            {
+                await LoadReservation(_selectedReservation.Id);
+                StateHasChanged();
+            }
+        }
+
+        private async Task CancelChanges()
+        {
+            if (_selectedReservation == null)
+                return;
+
+            await LoadReservation(_selectedReservation.Id);
         }
 
         private void OnFindedRooms(FindedRoomsFactors findedRoomsFactors)
         {
             _findedRooms = findedRoomsFactors.FindedRooms;
-
+            _roomSelectionActive = true;
             _base.CloseWindow();
 
             StateHasChanged();

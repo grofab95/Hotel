@@ -1,21 +1,27 @@
 ﻿
 @if (_isLoaded && Reservation != null)
 {
-    <table class="table" style="width: 1500px;">
+    <table class="table" style="width: 1100px;">
         <thead class="thead-dark">
-            <tr>
+            <tr style="text-align: center;">
                 <th scope="col"></th>
                 <th scope="col">Budynek</th>
                 <th scope="col">Pokój</th>
                 <th scope="col">Ilość osób</th>
                 <th scope="col">Stan pokoju</th>
-                <th scope="col"></th>
+                <th scope="col">W rezerwacji</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var room in _rooms)
             {
-                <tr>
+                var style = "text-align: center;";
+                if (Reservation.IsRoomInReservation(room))
+                {
+                    style += "background-color: cornsilk;";
+                }
+
+                <tr style=@style>
                     <th scope="row">@(_rooms.IndexOf(room)+1).</th>
                     <td>@room.Area.Name</td>
                     <td>@room.Name</td>

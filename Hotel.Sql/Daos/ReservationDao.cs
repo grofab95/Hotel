@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
+using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Entities.Views;
 using Hotel.Domain.Exceptions;
+using Hotel.Domain.Extensions;
 using Hotel.Domain.Validators;
 using Hotel.Sql.ContextFactory;
 using Microsoft.EntityFrameworkCore;
@@ -21,83 +23,77 @@ namespace Hotel.Sql.Daos
             _mapper = mapper;
         }
 
-        public async Task<int> SaveReservationAsync(Reservation reservation)
+        public async Task<int> AddReservationAsync(Reservation reservation)
+        {            
+            AttachAggregate(reservation);
+
+            await context.AddAsync(reservation);
+            await context.SaveChangesAsync();
+
+            return reservation.Id;
+        }
+
+        private void AttachAggregate(Reservation reservation)
         {
-            try
-            {
-                ReservationValidator.Check(reservation);
+            ReservationValidator.Check(reservation);
 
-                var areas = reservation.ReservationRooms.Select(x => x.Room.Area).ToList();
-                var rooms = reservation.ReservationRooms.Select(x => x.Room).ToList();
-                var reservationRooms = reservation.ReservationRooms.ToList();
-                var guests = reservation.ReservationRooms.SelectMany(x => x.Guests).ToList();
+            var areas = reservation.ReservationRooms.Select(x => x.Room.Area).ToList();
+            var rooms = reservation.ReservationRooms.Select(x => x.Room).ToList();
+            var reservationRooms = reservation.ReservationRooms.ToList();
+            var guests = reservation.ReservationRooms.SelectMany(x => x.Guests).ToList();
 
-                AttachEntries(areas);
-                AttachEntries(rooms);
-                AttachEntries(reservationRooms);
-                AttachEntries(guests);
-                AttachEntry(reservation);
+            AttachEntries(areas);
+            AttachEntries(rooms);
+            AttachEntries(reservationRooms);
+            AttachEntries(guests);
+            AttachEntry(reservation.Customer);
+            AttachEntry(reservation);
+        }
 
-                if (reservation.Id == 0)
-                {
-                    await context.AddAsync(reservation);
-                    await context.SaveChangesAsync();
-                }
-                else
-                {
-                    var reservationsRoomsDb = await context.ReservationRooms.Include(x => x.Guests).Where(x => x.ReservationId == reservation.Id).ToListAsync();
+        public async Task<bool> UpdateReservationAsync(Reservation reservation)
+        {
+            AttachAggregate(reservation);
 
-                    var toDelete = (from newEntry in reservationsRoomsDb
-                                    join noInsert in reservation.ReservationRooms on newEntry.Id equals noInsert.Id
-                                    into du
-                                    from ud in du.DefaultIfEmpty()
-                                    where ud == null
-                                    select newEntry).ToList();
+            var guests = reservation.ReservationRooms.SelectMany(x => x.Guests).ToList();
+            var reservationsRoomsDb = await context.ReservationRooms.Include(x => x.Guests)
+                .Where(x => x.ReservationId == reservation.Id)
+                .ToListAsync();
 
-                    var toAdd = (from newEntry in reservation.ReservationRooms
-                                 join noInsert in reservationsRoomsDb on newEntry.Id equals noInsert.Id
-                                 into du
-                                 from ud in du.DefaultIfEmpty()
-                                 where ud == null
-                                 select newEntry).ToList();
+            var toDelete = reservationsRoomsDb.GetUnique(reservation.ReservationRooms, x => x.Id, x => x.Id).ToList();
+            var toAdd = reservation.ReservationRooms.GetUnique(reservationsRoomsDb, x => x.Id, x => x.Id).ToList();
 
-                    context.RemoveRange(toDelete);
-                    await context.AddRangeAsync(toAdd);
+            var tsdft = context
+                   .Set<Area>().Local
+                   //.Where(x => x.GetType() == typeof(T) && x.Id.Equals(entry.Id))
+                   .ToList();
 
-                    var guestsId = reservationsRoomsDb.SelectMany(x => x.Guests).Select(x => x.Id).ToList();
-                    var guestsDb = await context.Guests.Where(x => guestsId.Contains(x.Id)).ToListAsync();
+            var trackedEntries = context.ChangeTracker.Entries<Entity>()
+                   //.GroupBy(x => new { x.Entity.GetType().Name, x.Entity.Id })
+                   //.Select(x => x.First())
+                   .ToList();
 
-                    var guestToDelete = (from newEntry in guestsDb
-                                         join noInsert in guests on newEntry.Id equals noInsert.Id
-                                         into du
-                                         from ud in du.DefaultIfEmpty()
-                                         where ud == null
-                                         select newEntry).ToList();
+            var tracke56346ies = context.ChangeTracker.Entries<Entity>()
+                    //.GroupBy(x => new { x.Entity.GetType().Name, x.Entity.Id })
+                    //.Select(x => x.First())
+                    .ToList();
 
-                    var guestToAdd = (from newEntry in guests
-                                      join noInsert in guestsDb on newEntry.Id equals noInsert.Id
-                                      into du
-                                      from ud in du.DefaultIfEmpty()
-                                      where ud == null
-                                      select newEntry).ToList();
 
-                    context.RemoveRange(guestToDelete);
-                    await context.AddRangeAsync(guestToAdd);
 
-                    await context.SaveChangesAsync();
-                }
+            context.RemoveRange(toDelete);
+            await context.AddRangeAsync(toAdd);
 
-                return reservation.Id;
-            }
-            catch (System.Exception ex)
-            {
-                if (reservation.Id != 0)
-                {
-                    reservation = await GetReservationByIdAsync(reservation.Id);
-                }
+            var guestsId = reservationsRoomsDb.SelectMany(x => x.Guests).Select(x => x.Id).ToList();
+            var guestsDb = await context.Guests.Where(x => guestsId.Contains(x.Id)).ToListAsync();
 
-                throw ex;
-            }            
+            var guestToDelete = guestsDb.GetUnique(guests, x => x.Id, x => x.Id).ToList();
+            var guestToAdd = guests.GetUnique(guestsDb, x => x.Id, x => x.Id).ToList();
+
+            context.RemoveRange(guestToDelete);
+            await context.AddRangeAsync(guestToAdd);
+
+            await context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<List<ReservationInfoView>> GetReservationBasicInfosAsync()

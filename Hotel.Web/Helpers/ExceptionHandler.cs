@@ -1,5 +1,6 @@
 ﻿using Hotel.Domain.Exceptions;
 using Radzen;
+using Serilog;
 using System;
 using System.Linq;
 
@@ -20,7 +21,7 @@ namespace Hotel.Web.Helpers
                 };
             }
 
-            //Logger.Log(ex, true);
+            Log.Error(ex.ToString());
 
             return new NotificationMessage
             {

@@ -57,7 +57,7 @@ namespace Hotel.Web.Components.ReservationComponents
         private async Task SaveReservation()
         {
             var reservationId = await _base.DoSafeFunc(
-                () => ReservationDao.SaveReservationAsync(_reservation));
+                () => ReservationDao.AddReservationAsync(_reservation));
 
             if (reservationId == default)
                 return;
@@ -72,6 +72,6 @@ namespace Hotel.Web.Components.ReservationComponents
             });
         }
 
-        private void OnEvent() => StateHasChanged();
+        private void OnEvent(bool state) => StateHasChanged();
     }
 }

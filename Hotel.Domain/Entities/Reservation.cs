@@ -51,7 +51,7 @@ namespace Hotel.Domain.Entities
 
         public void DeleteRoom(Room room)
         {
-            if (!ReservationRooms.Select(x => x.Room).Contains(room))
+            if (!ReservationRooms.Any(x => x.Room.Id == room.Id))
                 throw new HotelException($"{room} nie należy do tej rezerwacji.");
 
             var reservationRoom = ReservationRooms.FirstOrDefault(x => x.Room.Id == room.Id)

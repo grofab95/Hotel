@@ -17,7 +17,7 @@ namespace Hotel.Sql.ContextFactory
         public static IServiceCollection AddContextFactory<TContext>(
             this IServiceCollection collection,
             Action<DbContextOptionsBuilder> optionsAction = null,
-            ServiceLifetime contextAndOptionsLifetime = ServiceLifetime.Singleton)
+            ServiceLifetime contextAndOptionsLifetime = ServiceLifetime.Scoped)
             where TContext : DbContext
         {
             // instantiate with the correctly scoped provider

@@ -1,4 +1,5 @@
-﻿using Hotel.Sql;
+﻿using Hotel.Domain.Extensions;
+using Hotel.Sql;
 using Hotel.Sql.Tools;
 using System;
 using System.Collections.Generic;
@@ -14,17 +15,12 @@ namespace ConsoleApp
         {
             try
             {
-                var res = Run(() => 
-                {
-                    Console.WriteLine("Test");
-                    throw new Exception("Błąd !");
-                    return 2;
-                });
 
                 var list1 = new List<int> { 1, 2, 3, 4, 5 };
                 var list2 = new List<int> { 3, 4 };
 
-                var result = list1.GetDistinct(list2, x => x, x => x);
+                var unique = list1.GetUnique(list2, x => x, x => x).ToList();
+                var same = list1.GetSame(list2, x => x, x => x).ToList();
             }
             catch (System.Exception ex)
             {

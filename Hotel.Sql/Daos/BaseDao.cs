@@ -18,47 +18,25 @@ namespace Hotel.Sql.Daos
 
         protected async Task UpdateEntry<T>(T entry) where T : Entity
         {
-            AttachEntry(entry);
-
             await context.SaveChangesAsync();
         }
 
         protected void AttachEntry<T>(T entry) where T : Entity
         {
-            if (context.Entry(entry).State != EntityState.Detached || entry.Id == 0)
+            if (entry.Id == 0)
                 return;
-
             context.Entry(entry).State = EntityState.Modified;
         }
 
         protected void AttachEntries<T>(List<T> entries) where T : Entity
         {
             var groupped = entries
-                .Where(x => context.Entry(x).State == EntityState.Detached && x.Id != 0)
+                .Where(x => /*context.Entry(x).State == EntityState.Detached &&*/ x.Id != 0)
                 .GroupBy(x => x.Id)
                 .Select(x => x.FirstOrDefault(/*y => context.Entry(y).State == EntityState.Detached)*/))
                 .ToList();
 
             groupped.ForEach(x => AttachEntry(x));
         }
-
-        //protected async Task<int> SaveChanges() => await context.SaveChangesAsync();
-
-        //protected async Task<int> AddEntry<T>(T entry) where T : Entity
-        //{
-        //    await context.AddAsync(entry);
-
-        //    return entry.Id;
-        //}
-
-        //protected async Task AddEntries<T>(List<T> entries) where T : Entity
-        //{
-        //    await context.AddRangeAsync(entries);
-        //}
-
-        //protected void RemoveEntry<T>(T entry)
-        //{
-        //    context.Remove(entry);
-        //}
     }
 }

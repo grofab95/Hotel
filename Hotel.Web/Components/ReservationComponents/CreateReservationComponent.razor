@@ -21,17 +21,7 @@
 @if (_reservation != null)
 {
     <RadzenCard Style="width: fit-content">
-        <RadzenSteps>
-            <Steps>
-                <RadzenStepsItem Text="Wybierz pokoje">
-                    <RoomsSelectionComponent Rooms="_findedRooms" Reservation="_reservation" OnEvent="OnEvent" />
-                </RadzenStepsItem>
-
-                <RadzenStepsItem Text="Rozmieść gości" Disabled="(!_reservation.ReservationRooms.Any())">
-                    <GuestOrderComponent Reservation="_reservation" PriceCalculator="_priceCalculator" OnEvent="OnEvent" />
-                </RadzenStepsItem>
-            </Steps>
-        </RadzenSteps>
+        <ReservationComponent Reservation="_reservation" PriceCalculator="_priceCalculator" Rooms="_findedRooms" OnEvent="OnEvent" />
     </RadzenCard>
 }
 

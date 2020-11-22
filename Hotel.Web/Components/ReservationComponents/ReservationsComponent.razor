@@ -6,16 +6,12 @@
 }
 else
 {
-    @if (_selectedReservation != null)
-    {
-        <RadzenButton Text="Dodaj pokoje" Click="(async () => await ShowRooms())" />
-    }
-    <RadzenTabs>
+    <RadzenTabs Style="width: fit-content;">
         <Tabs>
             <RadzenTabsItem Text="Reserwacje">
-                <table class="table table-sm">
+                <table class="table table-sm" style="width: 1100px;">
                     <thead class="thead-dark">
-                        <tr>
+                        <tr style="text-align: center;">
                             <th scope="col">Id</th>
                             <th scope="col">Klient</th>
                             <th scope="col">Zameldowanie</th>
@@ -29,7 +25,7 @@ else
                     <tbody>
                         @foreach (var reservation in _reservations)
                         {
-                            <tr>
+                            <tr style="text-align: center;">
                                 <th scope="row">@reservation.ReservationId</th>
                                 <td>@reservation.Customer</td>
                                 <td>@(reservation.CheckIn.ToString("dd.MM.yyyy"))</td>
@@ -39,7 +35,7 @@ else
                                 <td>@reservation.BookingAmount</td>
                                 <td>
                                     <RadzenButton Text="Szczegóły" ButtonStyle="ButtonStyle.Info" Size="ButtonSize.Small"
-                                                  Click="(async () => await GetReservation(reservation.ReservationId))" />
+                                                  Click="(async () => await LoadReservation(reservation.ReservationId))" />
                                 </td>
                             </tr>
 
@@ -52,21 +48,15 @@ else
                             Visible="(_selectedReservation != null)"
                             Selected="(_selectedReservation != null)">
 
-                <RadzenButton Text="Zapisz zmiany" ButtonStyle="ButtonStyle.Success" Click="(async() => await SaveChanges())" />"
-                @*<GuestOrderComponent Reservation="_selectedReservation" PriceCalculator="_priceCalculator" />*@
-                <RadzenCard Style="width: fit-content">
-                    <RadzenSteps>
-                        <Steps>
-                            <RadzenStepsItem Text="Wybierz pokoje">
-                                <RoomsSelectionComponent Rooms="_findedRooms" Reservation="_selectedReservation" />
-                            </RadzenStepsItem>
+                <ControlComponent OnSave="(async () => await SaveChanges())"
+                                  OnCancel="(async () => await CancelChanges())"
+                                  LeftContent="GetLeftContent()"/>
 
-                            <RadzenStepsItem Text="Rozmieść gości" Disabled="(!_selectedReservation.ReservationRooms.Any())">
-                                <GuestOrderComponent Reservation="_selectedReservation" PriceCalculator="_priceCalculator" />
-                            </RadzenStepsItem>
-                        </Steps>
-                    </RadzenSteps>
-                </RadzenCard>
+                <ReservationComponent Reservation="_selectedReservation"
+                                      PriceCalculator="_priceCalculator"
+                                      Rooms="_findedRooms" 
+                                      ActiveRoomSelection="_roomSelectionActive" />                                      
+
             </RadzenTabsItem>
         </Tabs>
     </RadzenTabs>
@@ -75,11 +65,26 @@ else
 @code {
     private async Task ShowRooms()
     {
-        await _base.ShowWindow(new WindowConfiguration 
+        _roomSelectionActive = false;
+
+        await _base.ShowWindow(new WindowConfiguration
         {
             Content = @<FindRoomsComponent OnFindedRooms="OnFindedRooms" />,
             Title = "Dodaj pokoje"
         });
+    }
+
+    private RenderFragment GetLeftContent()
+    {
+        @if (_selectedReservation != null)
+        {
+            return @<RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary"
+                                  Text="Dodaj pokoje" Click="(async () => await ShowRooms())" />;
+        }
+        else
+        {
+            return @<div></div>;
+        }
     }
 }
 
