@@ -11,18 +11,29 @@ using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.Common
 {
-    public partial class Base
+    public partial class Base : ComponentBase
     {
         [Inject] NotificationService notificationService { get; set; }
+        [Inject] NavigationManager NavigationManager { get; set; }
         [Inject] IJSRuntime JsRuntime { get; set; }
 
         [Parameter] public dynamic Component { get; set; }
 
-        public async Task DoSafeAction(Action action, string onWellMessage, string title = "Informacja",
+        public async Task DoSafeAction<T>(Action<Task<T>> action, string onWellMessage, string title = "Informacja",
             NotificationSeverity severity = NotificationSeverity.Success)
         {
             try
             {
+                //var task = Task.Factory.StartNew(action);
+
+
+                //task.Wait();
+
+                //if (task.IsFaulted)
+                //{
+                    
+                //}
+
                 //await Task.Run(() => action());
 
                 //await DoSafeFunc<Task>(() => { action(); return default; });
@@ -113,6 +124,8 @@ namespace Hotel.Web.Components.Common
         {
             await window.Show(windowConfiguration);
         }
+
+        public NavigationManager Navigator => NavigationManager;
 
         public void CloseWindow() => window.Close();
 

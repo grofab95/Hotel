@@ -41,14 +41,14 @@ namespace Hotel.Web.Components.ReservationComponents
             _selectedReservation = null;
             StateHasChanged();
 
-            _selectedReservation = await _base.DoSafeFunc(() => ReservationDao.GetReservationByIdAsync(id));
+            _selectedReservation = await DoSafeFunc(() => ReservationDao.GetReservationByIdAsync(id));
 
             _peopleAmount = _selectedReservation.GetGuestsAmount();
         }
 
         private async Task SaveChanges()
         {
-            var isUpdated = await _base.DoSafeFunc(() =>
+            var isUpdated = await DoSafeFunc(() =>
             {
                 _selectedReservation.GetCalculatedPrice(_priceCalculator);
                 return ReservationDao.UpdateReservationAsync(_selectedReservation);
@@ -73,7 +73,7 @@ namespace Hotel.Web.Components.ReservationComponents
         {
             _findedRooms = findedRoomsFactors.FindedRooms;
             _roomSelectionActive = true;
-            _base.CloseWindow();
+            CloseWindow();
 
             StateHasChanged();
         }

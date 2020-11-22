@@ -1,4 +1,6 @@
-﻿@if (_searchRoomDto != null)
+﻿@inherits Base
+
+@if (_searchRoomDto != null)
 {
     <RadzenCard Style="width: 430px;">
         <RadzenTemplateForm Data="_searchRoomDto" Submit="(async (FindRoomFactors args) => await SearchRooms(args))">
@@ -45,9 +47,4 @@
             <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
         }
     </div>
-}
-
-<Base @ref="_base" />
-@code{
-    private Base _base;
 }

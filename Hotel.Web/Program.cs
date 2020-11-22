@@ -27,7 +27,7 @@ namespace Hotel.Web
                        )
                    .CreateLogger();
 
-                Log.Error("Test loggera");
+                //Log.Error("Test loggera");
 
                 CreateHostBuilder(args).Build().Run();
             }
@@ -49,7 +49,9 @@ namespace Hotel.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseUrls("http://192.168.0.10:2000");
                     webBuilder.UseStartup<Startup>();
+                    
                 });
     }
 }

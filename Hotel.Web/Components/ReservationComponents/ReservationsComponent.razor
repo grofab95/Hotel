@@ -1,4 +1,6 @@
-﻿@if (_reservations == null)
+﻿@inherits Base
+
+@if (_reservations == null)
 {
     <div class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>
@@ -76,9 +78,9 @@ else
     {
         _roomSelectionActive = false;
 
-        await _base.ShowWindow(new WindowConfiguration
+        await ShowWindow(new WindowConfiguration
         {
-            Content = @<FindRoomsComponent OnFindedRooms="OnFindedRooms" />,
+            Content =@<FindRoomsComponent OnFindedRooms="OnFindedRooms" />,
             Title = "Dodaj pokoje"
         });
     }
@@ -87,18 +89,13 @@ else
     {
         @if (_selectedReservation != null)
         {
-            return @<RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary"
-                                  Text="Dodaj pokoje" Click="(async () => await ShowRooms())" />;
+            return@<RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary"
+                                 Text="Dodaj pokoje" Click="(async () => await ShowRooms())" />;
         }
         else
         {
             return @<div></div>;
         }
     }
-}
-
-<Base @ref="_base" />
-@code{
-    private Base _base;
 }
 

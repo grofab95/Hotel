@@ -25,7 +25,8 @@ namespace Hotel.Sql
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-HV06FGL;Database=HOTEL;User Id=sa; Password=Q1w2e3;");
+            //optionsBuilder.UseSqlServer("Server=DESKTOP-HV06FGL;Database=HOTEL;User Id=sa; Password=Q1w2e3;");
+            optionsBuilder.UseSqlServer("Server=192.168.0.10\\SQL2019;Database=HOTEL;User Id=sa; Password=Q1w2e3;");
 
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseLoggerFactory(DbLogger.Factory);            

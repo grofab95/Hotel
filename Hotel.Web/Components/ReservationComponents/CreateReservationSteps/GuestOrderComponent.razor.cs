@@ -30,7 +30,7 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
 
         private async Task AddGuest(ReservationRoom reservationRoom)
         {
-            var isDone = await _base.DoSafeAction(
+            var isDone = await DoSafeAction(
                 () => Reservation.AddGuestToRoom(reservationRoom, "Gość", false, false, false, _standardPriceForStay));
 
             if (!isDone)
@@ -44,7 +44,7 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
 
         private async Task RemoveGuest(ReservationRoom reservationRoom, Guest guest)
         {
-            var isDone = await _base.DoSafeAction(() => Reservation.RemoveGuestFromRoom(reservationRoom, guest));
+            var isDone = await DoSafeAction(() => Reservation.RemoveGuestFromRoom(reservationRoom, guest));
             if (!isDone)
                 return;
 
@@ -73,7 +73,7 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
 
         private async Task UpdateGuest(Guest guest, GuestDto guestDto)
         {
-            await _base.DoSafeAction(() => guest.Update(Mapper.Map<Guest>(guestDto)));
+            await DoSafeAction(() => guest.Update(Mapper.Map<Guest>(guestDto)));
 
             await CallEvent();
         }

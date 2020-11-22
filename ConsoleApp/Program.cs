@@ -13,6 +13,8 @@ namespace ConsoleApp
 
         static void Main()
         {
+            Refiller.Start();
+
             try
             {
 

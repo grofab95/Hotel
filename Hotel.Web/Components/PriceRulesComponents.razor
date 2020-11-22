@@ -1,4 +1,6 @@
-﻿@if (_priceRulesDtos == null)
+﻿@inherits Base
+
+@if (_priceRulesDtos == null)
 {
     <div class="spinner-bPriceRule" role="status">
         <span class="sr-only">Loading...</span>
@@ -29,6 +31,9 @@ else
             </RadzenGridColumn>
 
             <RadzenGridColumn Width="50px" TItem="PriceRuleDto" Property="Value" Title="Wartość">
+                <Template Context="priceRule">
+                    <p>@priceRule.Value @(priceRule.RuleType.ToString().Contains("Value") ? " zł" : " %")</p>
+                </Template>
                 <EditTemplate Context="priceRule">
                     <RadzenNumeric @bind-Value="priceRule.Value" Style="width:100%" Min="1" />
                 </EditTemplate>

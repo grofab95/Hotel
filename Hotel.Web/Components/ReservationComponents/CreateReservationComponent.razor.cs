@@ -1,15 +1,11 @@
 ﻿using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
-using Hotel.Web.Components.Common;
 using Hotel.Web.Dtos;
-using Hotel.Web.Helpers;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.ReservationComponents
@@ -46,7 +42,7 @@ namespace Hotel.Web.Components.ReservationComponents
             _findedAmount = findedRoomsFactors.FindRoomFactors.FindingAmount;
             _findedRooms = findedRoomsFactors.FindedRooms;
 
-            await _base.DoSafeAction(() =>
+            await DoSafeAction(() =>
             {
                 _reservation = Reservation.Create(
                     customer: new Customer("Ewa", "Blazor"),
@@ -59,22 +55,24 @@ namespace Hotel.Web.Components.ReservationComponents
         {
             if (_reservation.GetGuestsAmount() < _findedAmount)
             {
-                var isConfirmed = await _base.ShowConfirm("Nie wszyscy goście zostali przydzieleni do pokoi, czy chcesz kontynuować?");
+                var isConfirmed = await ShowConfirm("Nie wszyscy goście zostali przydzieleni do pokoi, czy chcesz kontynuować?");
                 if (!isConfirmed)
                     return;
             }
 
-            _base.ShowWaitingWindow("Trwa tworzenie rezerwacji ...");
+            ShowWaitingWindow("Trwa tworzenie rezerwacji ...");
 
-            var reservationId = await _base.DoSafeFunc(
+            var reservationId = await DoSafeFunc(
                 () => ReservationDao.AddReservationAsync(_reservation));
 
-            _base.CloseWindow();
+            CloseWindow();
 
             if (reservationId == default)
                 return;
 
-            await _base.ShowNotification(new NotificationMessage
+            Navigator.NavigateTo("reservations");
+
+            await ShowNotification(new NotificationMessage
             {
                 Summary = "Informacja",
                 Duration = 6000,

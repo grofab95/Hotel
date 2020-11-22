@@ -1,4 +1,5 @@
-﻿
+﻿@inherits Base
+
 @if (Reservation != null && PriceCalculator != null)
 {
     <table class="table table-sm" style="width: 1100px;">
@@ -78,8 +79,8 @@
                             <td><RadzenCheckBox @bind-Value="guestDto.OrderedBreakfest" Change="(async (bool args) => await UpdateGuest(guest, guestDto))" /></td>
                             <td>
                                 Standardowa cena: <RadzenCheckBox TValue="bool"
-                                                       Change="(async (bool args) => await BasePriceStateChanged(args, guest, guestDto))"
-                                                       @bind-Value="_guestStandardPrice[guest]"  />
+                                                                  Change="(async (bool args) => await BasePriceStateChanged(args, guest, guestDto))"
+                                                                  @bind-Value="_guestStandardPrice[guest]" />
 
                                 @if (_guestStandardPrice[guest] == false)
                                 {
@@ -100,9 +101,4 @@
             }
         </tbody>
     </table>
-}
-
-<Base @ref="_base" />
-@code{
-    private Base _base;
 }

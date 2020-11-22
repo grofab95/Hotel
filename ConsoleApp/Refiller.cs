@@ -47,6 +47,9 @@ namespace ConsoleApp
                 new Room(areas[1], "P6", 5)
             };
 
+            context.Areas.AddRange(areas);
+            context.Rooms.AddRange(rooms);
+
             var customers = new List<Customer>
             {
                 new Customer("Monika", "Olejnik"),

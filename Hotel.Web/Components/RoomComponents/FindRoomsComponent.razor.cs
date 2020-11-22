@@ -37,7 +37,7 @@ namespace Hotel.Web.Components.RoomComponents
 
         private async Task SearchRooms(FindRoomFactors findRoomFactors)
         {            
-            await _base.DoSafeAction(async () =>
+            await DoSafeAction(async () =>
             {
                 _isRoomSearching = true;
 

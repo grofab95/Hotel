@@ -63,6 +63,16 @@ namespace Hotel.Web.Components
             {
 
             }
+
+            //await DoSafeAction<bool>(async () => 
+            //{
+            //    var priceRule = _priceRules.Find(x => x.Id == priceRuleDto.Id);
+
+            //    var updated = priceRule.Update(Mapper.Map<PriceRule>(priceRuleDto));
+            //    await PriceRuleDao.UpdateAsync(updated);
+
+            //    await _grid.UpdateRow(priceRuleDto);
+            //}, "Zapisano zmiany");
         }
 
         private void CancelEdit(PriceRuleDto priceRule)

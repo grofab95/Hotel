@@ -18,13 +18,16 @@ namespace Hotel.Sql.Daos
 
         protected async Task UpdateEntry<T>(T entry) where T : Entity
         {
-            await context.SaveChangesAsync();
+            AttachEntry(entry);
+
+           await context.SaveChangesAsync();
         }
 
         protected void AttachEntry<T>(T entry) where T : Entity
         {
             if (entry.Id == 0)
                 return;
+
             context.Entry(entry).State = EntityState.Modified;
         }
 
