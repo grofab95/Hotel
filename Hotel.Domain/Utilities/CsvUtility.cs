@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System.Collections.Generic;
 
-namespace Hotel.Application.Utilities
+namespace Hotel.Domain.Utilities
 {
     public class CsvUtility
     {

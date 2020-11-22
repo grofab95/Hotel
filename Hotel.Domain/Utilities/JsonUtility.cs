@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Hotel.Application.Utilities
+namespace Hotel.Domain.Utilities
 {
     public class JsonUtility
     {

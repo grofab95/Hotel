@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hotel.Application.Utilities
+namespace Hotel.Domain.Utilities
 {
     public static class PasswordHashUtility
     {

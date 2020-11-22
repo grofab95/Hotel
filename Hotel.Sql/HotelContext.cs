@@ -1,11 +1,10 @@
 ﻿using Hotel.Domain.Entities;
-using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Entities.Views;
+using Hotel.Domain.Environment;
 using Hotel.Sql.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,8 +24,7 @@ namespace Hotel.Sql
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Server=DESKTOP-HV06FGL;Database=HOTEL;User Id=sa; Password=Q1w2e3;");
-            optionsBuilder.UseSqlServer("Server=192.168.0.10\\SQL2019;Database=HOTEL;User Id=sa; Password=Q1w2e3;");
+            optionsBuilder.UseSqlServer(Config.Get.SqlConnection);
 
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseLoggerFactory(DbLogger.Factory);            
