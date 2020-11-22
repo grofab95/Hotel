@@ -42,7 +42,7 @@ namespace Hotel.Domain.Entities
         public void AddRoom(Room room)
         {
             if (ReservationRooms.Any(x => x.Room == room))
-                throw new Exception($"Pokój {room} już istnieje w tej rezerwacji.");
+                throw new HotelException($"Pokój {room} już istnieje w tej rezerwacji.");
 
             var reservationRoom = new ReservationRoom(this, room);
 
