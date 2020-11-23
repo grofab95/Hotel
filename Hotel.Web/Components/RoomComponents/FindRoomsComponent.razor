@@ -1,16 +1,16 @@
 ﻿@inherits Base
 
-@if (_searchRoomDto != null)
+@if (_reservationFactors != null)
 {
     <RadzenCard Style="width: 430px;">
-        <RadzenTemplateForm Data="_searchRoomDto" Submit="(async (FindRoomFactors args) => await SearchRooms(args))">
+        <RadzenTemplateForm Data="_reservationFactors" Submit="(async (ReservationFactors args) => await SearchRooms(args))">
             <div class="row" style="margin-bottom: 5px;">
                 <div class="col-5">
                     <p>Data zameldowania:</p>
                 </div>
 
                 <div class="col-7">
-                    <RadzenDatePicker @bind-Value="_searchRoomDto.CheckIn" TValue="DateTime" />
+                    <RadzenDatePicker @bind-Value="_reservationFactors.CheckIn" TValue="DateTime" Change="DataChanged" />
                 </div>
             </div>
 
@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="col-7">
-                    <RadzenDatePicker @bind-Value="_searchRoomDto.CheckOut" TValue="DateTime" />
+                    <RadzenDatePicker @bind-Value="_reservationFactors.CheckOut" TValue="DateTime" Change="DataChanged"  />
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="col-7">
-                    <RadzenNumeric @bind-Value="_searchRoomDto.FindingAmount" Min="1" TValue="int" />
+                    <RadzenNumeric @bind-Value="_reservationFactors.BookingAmount" Min="1" TValue="int" Change="DataChanged"  />
                 </div>
             </div>
 

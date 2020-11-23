@@ -32,9 +32,10 @@
                     <tr style=@style>
                         <td style="width: 160px;">
                             <div>
+                                <p>@reservationRoom.Room.Area.Name</p>
                                 <p>@reservationRoom.Room.Name</p>
-                                <p>(@reservationRoom.Room.Area.Name)</p>
                                 <p>@($"{guests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
+                                <p>Cena: @PriceCalculator.CalculateRoomPrice(reservationRoom) zł</p>
                                 <br />
                                 <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę"
                                               Click="(async () => await AddGuest(reservationRoom))" />
@@ -59,13 +60,15 @@
                             {
                                 <td rowspan="@guests.Count()" style="width: 160px;">
                                     <div>
+                                        <p>@reservationRoom.Room.Area.Name</p>
                                         <p>@reservationRoom.Room.Name</p>
-                                        <p>(@reservationRoom.Room.Area.Name)</p>
                                         <p>@($"{guests.Count}/{reservationRoom.Room.PeopleCapacity}")</p>
+                                        <p>Cena: @PriceCalculator.CalculateRoomPrice(reservationRoom) zł</p>
                                         <br />
                                         <RadzenButton ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small" Text="Dodaj osobę"
                                                       Click="(async () => await AddGuest(reservationRoom))"
-                                                      Disabled="(guests.Count == reservationRoom.Room.PeopleCapacity)" />
+                                                      Disabled="(guests.Count == reservationRoom.Room.PeopleCapacity ||
+                                                                 Reservation.GetGuestsAmount() == ReservationFactors.BookingAmount)" />
                                     </div>
                                 </td>
                             }

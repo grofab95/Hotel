@@ -86,7 +86,10 @@ namespace Hotel.Domain.Entities
 
         public bool IsRoomInReservation(Room room) => ReservationRooms.Any(x => x.Room.Id == room.Id);
 
-        public decimal GetCalculatedPrice(PriceCalculator priceCalculator)
+        public decimal GetReservationPrice(PriceCalculator priceCalculator)
+            => GetReservationPriceForDay(priceCalculator) * GetDaysAmount();
+     
+        public decimal GetReservationPriceForDay(PriceCalculator priceCalculator)
         {
             var guest = ReservationRooms.SelectMany(x => x.Guests).ToList();
             guest.ForEach(x => x.SetPriceForStay(priceCalculator.CalculateGuestPrice(x)));
@@ -98,5 +101,6 @@ namespace Hotel.Domain.Entities
         public List<Guest> GetGuests() => ReservationRooms.SelectMany(x => x.Guests).ToList();
         public int GetGuestsAmount() => ReservationRooms.Sum(x => x.Guests.Count);
         public int GetRoomsAmount() => ReservationRooms.Count;
+        public int GetDaysAmount() => (int)Math.Max(1, (CheckOut - CheckIn).TotalDays);
     }
 }

@@ -51,7 +51,7 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
             SetRooms();
         }
 
-        private async Task RoomCheckedHandler(bool isChecked, Room room)
+        private async Task RoomCheckedHandler(Room room)
         {
             await DoSafeAction(Reservation.IsRoomInReservation(room)
                 ? () => Reservation.DeleteRoom(room)

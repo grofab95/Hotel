@@ -50,7 +50,7 @@ namespace Hotel.Web.Components.ReservationComponents
         {
             var isUpdated = await DoSafeFunc(() =>
             {
-                _selectedReservation.GetCalculatedPrice(_priceCalculator);
+                _selectedReservation.GetReservationPrice(_priceCalculator);
                 return ReservationDao.UpdateReservationAsync(_selectedReservation);
             }, "Zmiany zostały zapisane.");
 

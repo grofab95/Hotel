@@ -32,7 +32,7 @@ else
                                 <td>@reservation.Customer</td>
                                 <td>@(reservation.CheckIn.ToString("dd.MM.yyyy"))</td>
                                 <td>@(reservation.CheckOut.ToString("dd.MM.yyyy"))</td>
-                                <td>@((int)(reservation.CheckOut - reservation.CheckIn).TotalDays)</td>
+                                <td>@((int)Math.Max(1, (reservation.CheckOut - reservation.CheckIn).TotalDays))</td>
                                 <td>@reservation.RoomsAmount</td>
                                 <td>@reservation.BookingAmount</td>
                                 <td>

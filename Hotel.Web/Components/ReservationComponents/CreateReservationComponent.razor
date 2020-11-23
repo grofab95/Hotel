@@ -4,13 +4,13 @@
 {
     <div class="row" style="width: 940px;">
         <div class="col-6">
-            <FindRoomsComponent OnFindedRooms="OnFindedRooms" />
+            <FindRoomsComponent OnFindedRooms="OnFindedRooms" OnChange="OnInitialDataChanged" />
         </div>
 
         <div class="col-6">
             @if (_reservation != null)
             {
-                <ReservationSummaryComponent Reservation="_reservation" PeopleAmount="_findedAmount"
+                <ReservationSummaryComponent Reservation="_reservation" ReservationFactors="_reservationFactors"
                                              PriceCalculator="_priceCalculator" />
                 <div style="width: 410px; text-align: center;">
                     <RadzenButton Text="Utwórz rezerwację" ButtonStyle="ButtonStyle.Success" Click="SaveReservation" />
@@ -23,6 +23,10 @@
 @if (_reservation != null)
 {
     <RadzenCard Style="width: fit-content">
-        <ReservationComponent Reservation="_reservation" PriceCalculator="_priceCalculator" Rooms="_findedRooms" OnEvent="OnEvent" />
+        <ReservationComponent Reservation="_reservation" 
+                              PriceCalculator="_priceCalculator" 
+                              ReservationFactors="_reservationFactors"
+                              Rooms="_findedRooms" 
+                              OnEvent="OnEvent" />
     </RadzenCard>
 }

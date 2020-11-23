@@ -5,12 +5,12 @@ namespace Hotel.Web.Dtos
 {
     public class FindedRoomsFactors
     {
-        public FindRoomFactors FindRoomFactors { get; set; }
+        public ReservationFactors ReservationFactors { get; set; }
         public List<Room> FindedRooms { get; set; }
 
-        public FindedRoomsFactors(FindRoomFactors findRoomDto, List<Room> findedRooms)
+        public FindedRoomsFactors(ReservationFactors reservationFactors, List<Room> findedRooms)
         {
-            FindRoomFactors = findRoomDto;
+            ReservationFactors = reservationFactors;
             FindedRooms = findedRooms;
         }
     }

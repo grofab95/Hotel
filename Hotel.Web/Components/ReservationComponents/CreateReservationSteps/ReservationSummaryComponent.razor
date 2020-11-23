@@ -26,25 +26,45 @@
 
         <div class="col-6">
             <p>
-            @if (Reservation.GetGuestsAmount() < PeopleAmount)
-            {
-                <span style="color: red;">@Reservation.GetGuestsAmount()</span><span> / @PeopleAmount</span>
-            }
-            else
-            {
-                <span> @Reservation.GetGuestsAmount() / @PeopleAmount </span>
-            }
+                @if (Reservation.GetGuestsAmount() < ReservationFactors.BookingAmount)
+                {
+                    <span style="color: red;">@Reservation.GetGuestsAmount()</span><span> / @ReservationFactors.BookingAmount</span>
+                }
+                else
+                {
+                    <span> @Reservation.GetGuestsAmount() / @ReservationFactors.BookingAmount </span>
+                }
             </p>
         </div>
     </div>
 
     <div class="row">
         <div class="col-6">
-            <p>Suma:</p>
+            <p>Cena za dzień:</p>
         </div>
 
         <div class="col-6">
-            <p>@Reservation.GetCalculatedPrice(PriceCalculator) zł</p>
+            <p>@Reservation.GetReservationPriceForDay(PriceCalculator) zł</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <p>Ilość dni:</p>
+        </div>
+
+        <div class="col-6">
+            <p>@Reservation.GetDaysAmount()</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <p>Cena rezerwacji:</p>
+        </div>
+
+        <div class="col-6">
+            <p>@Reservation.GetReservationPrice(PriceCalculator) zł</p>
         </div>
     </div>
 

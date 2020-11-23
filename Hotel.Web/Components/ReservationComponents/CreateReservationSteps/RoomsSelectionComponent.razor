@@ -22,15 +22,14 @@
                     style += "background-color: cornsilk;";
                 }
 
-                <tr style=@style @onclick="@(async () => await RoomCheckedHandler(true, room))">
+                <tr style=@style @onclick="@(async () => await RoomCheckedHandler(room))">
                     <th scope="row">@(_rooms.IndexOf(room)+1).</th>
                     <td>@room.Area.Name</td>
                     <td>@room.Name</td>
                     <td>@room.PeopleCapacity</td>
                     <td>@room.Note</td>
                     <td>
-                        <RadzenCheckBox TValue="bool" Value="Reservation.IsRoomInReservation(room)"
-                                        Change="(async (bool args) => await RoomCheckedHandler(args, room))" />
+                        <RadzenCheckBox TValue="bool" Value="Reservation.IsRoomInReservation(room)" />
                     </td>
                 </tr>
             }

@@ -13,20 +13,21 @@ namespace Hotel.Web.Components.RoomComponents
     {
         [Inject] IRoomDao RoomDao { get; set; }
         [Parameter] public EventCallback<FindedRoomsFactors> OnFindedRooms { get; set; }
+        [Parameter] public EventCallback<ReservationFactors> OnChange { get; set; }
 
         private List<Room> _findedRooms;
-        private FindRoomFactors _searchRoomDto;
+        private ReservationFactors _reservationFactors;
         private bool _isRoomSearching;
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
-                _searchRoomDto = new FindRoomFactors
+                _reservationFactors = new ReservationFactors
                 {
                     CheckIn = DateTime.Now.AddDays(1),
                     CheckOut = DateTime.Now.AddDays(7),
-                    FindingAmount = 6
+                    BookingAmount = 6
                 };
             }
             catch (Exception ex)
@@ -35,18 +36,20 @@ namespace Hotel.Web.Components.RoomComponents
             }
         }
 
-        private async Task SearchRooms(FindRoomFactors findRoomFactors)
+        private async Task DataChanged() => await OnChange.InvokeAsync(_reservationFactors);
+
+        private async Task SearchRooms(ReservationFactors reservationFactors)
         {            
             await DoSafeAction(async () =>
             {
                 _isRoomSearching = true;
 
-                var findedRooms = await RoomDao.GetFreeByDateRangeAsync(findRoomFactors.FindingAmount,
-                    new DateRange(findRoomFactors.CheckIn, findRoomFactors.CheckOut));
+                var findedRooms = await RoomDao.GetFreeByDateRangeAsync(reservationFactors.BookingAmount,
+                    new DateRange(reservationFactors.CheckIn, reservationFactors.CheckOut));
 
                 _isRoomSearching = false;
 
-                await OnFindedRooms.InvokeAsync(new FindedRoomsFactors(findRoomFactors, findedRooms));
+                await OnFindedRooms.InvokeAsync(new FindedRoomsFactors(reservationFactors, findedRooms));
             });
         }
     }

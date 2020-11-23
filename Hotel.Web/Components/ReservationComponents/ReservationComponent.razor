@@ -5,7 +5,7 @@
         </RadzenStepsItem>
 
         <RadzenStepsItem Text="Rozmieść gości" Disabled="(!Reservation.ReservationRooms.Any())">
-            <GuestOrderComponent Reservation="Reservation" PriceCalculator="PriceCalculator" OnEvent="CallEvent" />
+            <GuestOrderComponent Reservation="Reservation" PriceCalculator="PriceCalculator" OnEvent="CallEvent" ReservationFactors="ReservationFactors" />
         </RadzenStepsItem>
     </Steps>
 </RadzenSteps>

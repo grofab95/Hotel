@@ -1,5 +1,6 @@
 ﻿using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
+using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace Hotel.Web.Components.ReservationComponents
     {
         [Parameter] public Reservation Reservation { get; set; }
         [Parameter] public PriceCalculator PriceCalculator { get; set; }
+        [Parameter] public ReservationFactors ReservationFactors { get; set; }
         [Parameter] public List<Room> Rooms { get; set; }
         [Parameter] public bool ActiveRoomSelection { get; set; }
         [Parameter] public EventCallback<bool> OnEvent { get; set; }

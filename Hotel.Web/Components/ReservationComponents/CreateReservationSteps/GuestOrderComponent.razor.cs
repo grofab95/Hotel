@@ -14,6 +14,7 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
     {
         [Parameter] public Reservation Reservation { get; set; }
         [Parameter] public PriceCalculator PriceCalculator { get; set; }
+        [Parameter] public ReservationFactors ReservationFactors { get; set; }
         [Parameter] public EventCallback<bool> OnEvent { get; set; }
         [Inject] IMapper Mapper { get; set; }
 

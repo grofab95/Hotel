@@ -2,10 +2,10 @@
 
 namespace Hotel.Web.Dtos
 {
-    public class FindRoomFactors
+    public class ReservationFactors
     {
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
-        public int FindingAmount { get; set; }
+        public int BookingAmount { get; set; }
     }
 }
