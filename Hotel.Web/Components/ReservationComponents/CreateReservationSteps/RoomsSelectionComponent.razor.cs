@@ -1,7 +1,6 @@
 ﻿using Hotel.Domain.Entities;
 using Hotel.Web.Components.Common;
 using Microsoft.AspNetCore.Components;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,13 +15,6 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
 
         private List<Room> _rooms;
         private bool _isLoaded;
-
-        //protected override void OnInitialized()
-        //{
-        //    _rooms = new List<Room>();
-
-        //    SetRooms();
-        //}
 
         private void SetRooms()
         {

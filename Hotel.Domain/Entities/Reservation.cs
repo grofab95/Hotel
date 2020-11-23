@@ -25,11 +25,7 @@ namespace Hotel.Domain.Entities
             if (customer == null)
                 throw new MissingValueException("Klient nie został określony.");
 
-            if (checkIn < DateTime.Now)
-                throw new HotelException("Nie można stworzyć rezerwacji w przeszłości.");
-
-            if (checkIn > checkOut)
-                throw new HotelException("Date zameldowania nie może byc późniejsza od daty wymeldowania.");
+            ReservationValidators.ValidDates(checkIn, checkOut);
 
             return new Reservation 
             {
@@ -37,6 +33,20 @@ namespace Hotel.Domain.Entities
                 CheckIn = checkIn,
                 CheckOut = checkOut
             };
+        }
+
+        public void ChangeCheckIn(DateTime checkIn)
+        {
+            ReservationValidators.ValidDates(checkIn, CheckOut);
+
+            CheckIn = checkIn;
+        }
+
+        public void ChangeCheckOut(DateTime checkOut)
+        {
+            ReservationValidators.ValidDates(CheckIn, checkOut);
+
+            CheckOut = checkOut;
         }
 
         public void AddRoom(Room room)
