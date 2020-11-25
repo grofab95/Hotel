@@ -62,26 +62,29 @@ namespace Hotel.Web.Components.ReservationComponents
                     return;
             }
 
-            ShowWaitingWindow("Trwa tworzenie rezerwacji ...");
-
-            var reservationId = await DoSafeFunc(
-                () => ReservationDao.AddReservationAsync(_reservation));
-
-            CloseWindow();
-
-            if (reservationId == default)
-                return;
-
-            Navigator.NavigateTo("reservations");
-
-            await ShowNotification(new NotificationMessage
+            try
             {
-                Summary = "Informacja",
-                Duration = 6000,
-                Style = "width: auto;",
-                Severity = NotificationSeverity.Success,
-                Detail = $"Rezerwacja id {reservationId} została utworzona."
-            });
+                ShowWaitingWindow("Trwa tworzenie rezerwacji ...");
+
+                var reservationId = await ReservationDao.AddReservationAsync(_reservation);
+
+                CloseWindow();
+
+                Navigator.NavigateTo("reservations");
+
+                await ShowNotification(new NotificationMessage
+                {
+                    Summary = "Informacja",
+                    Duration = 6000,
+                    Style = "width: auto;",
+                    Severity = NotificationSeverity.Success,
+                    Detail = $"Rezerwacja id {reservationId} została utworzona."
+                });
+            }
+            catch (Exception ex)
+            {
+                await HandleException(ex);
+            }           
         }
 
         private void OnInitialDataChanged(ReservationFactors reservationFactors)

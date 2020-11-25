@@ -18,10 +18,10 @@ namespace Hotel.Web.Components.ReservationComponents
         private List<ReservationInfoView> _reservations;
         private PriceCalculator _priceCalculator;
         private Reservation _selectedReservation;
+        private ReservationFactors _reservationFactors;
         private List<Room> _findedRooms;
 
         private bool _roomSelectionActive = false;
-        private int _peopleAmount;
 
         protected override async Task OnInitializedAsync()
         {
@@ -32,30 +32,45 @@ namespace Hotel.Web.Components.ReservationComponents
             }
             catch (Exception ex)
             {
-
+                await HandleException(ex);
             }
         }
 
         private async Task LoadReservation(int id)
         {
-            _selectedReservation = null;
-            StateHasChanged();
+            try
+            {
+                _selectedReservation = null;
+                StateHasChanged();
 
-            _selectedReservation = await DoSafeFunc(() => ReservationDao.GetReservationByIdAsync(id));
-
-            _peopleAmount = _selectedReservation.GetGuestsAmount();
+                _selectedReservation = await ReservationDao.GetReservationByIdAsync(id);
+                _reservationFactors = new ReservationFactors
+                {
+                    BookingAmount = _selectedReservation.GetGuestsAmount(),
+                    CheckIn = _selectedReservation.CheckIn,
+                    CheckOut = _selectedReservation.CheckOut
+                };
+            }
+            catch (Exception ex)
+            {
+                await HandleException(ex);
+            }
         }
 
         private async Task SaveChanges()
         {
-            var isUpdated = await DoSafeFunc(() =>
+            try
             {
                 _selectedReservation.GetReservationPrice(_priceCalculator);
-                return ReservationDao.UpdateReservationAsync(_selectedReservation);
-            }, "Zmiany zostały zapisane.");
 
-            if (!isUpdated)
+                await ReservationDao.UpdateReservationAsync(_selectedReservation);
+
+                await ShowNotification("Zmiany został zapisane", Radzen.NotificationSeverity.Success);
+            }
+            catch (Exception ex)
             {
+                await HandleException(ex);
+
                 await LoadReservation(_selectedReservation.Id);
                 StateHasChanged();
             }
@@ -72,6 +87,8 @@ namespace Hotel.Web.Components.ReservationComponents
         private void OnFindedRooms(FindedRoomsFactors findedRoomsFactors)
         {
             _findedRooms = findedRoomsFactors.FindedRooms;
+            //_reservationFactors = findedRoomsFactors.ReservationFactors;
+
             _roomSelectionActive = true;
             CloseWindow();
 

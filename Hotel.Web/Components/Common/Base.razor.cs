@@ -3,10 +3,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Radzen;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.Common
@@ -19,38 +15,6 @@ namespace Hotel.Web.Components.Common
 
         [Parameter] public dynamic Component { get; set; }
 
-        public async Task DoSafeAction<T>(Action<Task<T>> action, string onWellMessage, string title = "Informacja",
-            NotificationSeverity severity = NotificationSeverity.Success)
-        {
-            try
-            {
-                //var task = Task.Factory.StartNew(action);
-
-
-                //task.Wait();
-
-                //if (task.IsFaulted)
-                //{
-                    
-                //}
-
-                //await Task.Run(() => action());
-
-                //await DoSafeFunc<Task>(() => { action(); return default; });
-
-                await ShowNotification(new NotificationMessage
-                {
-                    Summary = title,
-                    Duration = 6000,
-                    Detail = onWellMessage,
-                    Severity = severity
-                });
-            }
-            catch (Exception ex)
-            {
-                await ShowNotification(ex.Handle());
-            }
-        }
 
         public async Task<bool> DoSafeAction(Action action)
         {
@@ -68,51 +32,16 @@ namespace Hotel.Web.Components.Common
             return false;
         }
 
-        public async Task<T> DoSafeFunc<T>(Func<Task<T>> func)
-        {
-            try
+        protected async Task HandleException(Exception exception) => await ShowNotification(exception.Handle());
+
+        protected async Task ShowNotification(string detail, NotificationSeverity severity, string summary = "Info", double duration = 6000)
+            => await ShowNotification(new NotificationMessage 
             {
-                return await func();
-            }
-            catch (Exception ex)
-            {
-                await ShowNotification(ex.Handle());
-            }
-
-            return default;
-        }
-
-        public async Task<T> DoSafeFunc<T>(Func<Task<T>> func, string onWellMessage, string title = "Informacja",
-            NotificationSeverity severity = NotificationSeverity.Success)
-        {
-            try
-            {
-                var result = await func();
-
-                await ShowNotification(new NotificationMessage
-                {
-                    Summary = title,
-                    Duration = 6000,
-                    Detail = onWellMessage,
-                    Severity = severity
-                });
-
-                return result;
-
-            }
-            catch (Exception ex)
-            {
-                await ShowNotification(ex.Handle());
-            }
-
-            return default;
-        }
-
-        public async Task DoSafeActions(List<Action> actions)
-        {
-            foreach (var action in actions)           
-                await DoSafeAction(action);            
-        }
+                Summary = summary,
+                Severity = severity,
+                Detail = detail,
+                Duration = duration
+            });
 
         public async Task ShowNotification(NotificationMessage message)
         {
