@@ -21,7 +21,6 @@ namespace Hotel.Web.Components.ReservationComponents
 
         private List<Room> _findedRooms;
 
-        //private int _findedAmount;
         private bool _isRoomSearching;        
 
         protected override async Task OnInitializedAsync()
@@ -34,13 +33,12 @@ namespace Hotel.Web.Components.ReservationComponents
             }
             catch (Exception ex)
             {
-
+                await HandleException(ex);
             }       
         }
 
         private async Task OnFindedRooms(FindedRoomsFactors findedRoomsFactors)
         {
-            //_findedAmount = findedRoomsFactors.ReservationFactors.BookingAmount;
             _reservationFactors = findedRoomsFactors.ReservationFactors;
             _findedRooms = findedRoomsFactors.FindedRooms;
 
@@ -87,14 +85,23 @@ namespace Hotel.Web.Components.ReservationComponents
             }           
         }
 
-        private void OnInitialDataChanged(ReservationFactors reservationFactors)
+        private async Task OnInitialDataChanged(ReservationFactors reservationFactors)
         {
             if (_reservation == null)
                 return;
 
-            _reservationFactors = reservationFactors;
+            var isSuccess = await DoSafeAction(() => 
+            {
+                _reservationFactors = reservationFactors;
+                _reservation.ChangeCheckIn(reservationFactors.CheckIn);
+                _reservation.ChangeCheckOut(reservationFactors.CheckOut);
+                OnEvent(true);
+            });
 
-            OnEvent(true);
+            reservationFactors.CheckIn = _reservation.CheckIn;
+            reservationFactors.CheckOut = _reservation.CheckOut;
+
+            StateHasChanged();
         }
 
         private void OnEvent(bool state) => StateHasChanged();

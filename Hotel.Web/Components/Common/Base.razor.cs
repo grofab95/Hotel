@@ -13,10 +13,7 @@ namespace Hotel.Web.Components.Common
         [Inject] NavigationManager NavigationManager { get; set; }
         [Inject] IJSRuntime JsRuntime { get; set; }
 
-        [Parameter] public dynamic Component { get; set; }
-
-
-        public async Task<bool> DoSafeAction(Action action)
+        protected async Task<bool> DoSafeAction(Action action)
         {
             try
             {
@@ -43,22 +40,22 @@ namespace Hotel.Web.Components.Common
                 Duration = duration
             });
 
-        public async Task ShowNotification(NotificationMessage message)
+        protected async Task ShowNotification(NotificationMessage message)
         {
             notificationService.Notify(message);
             await InvokeAsync(() => { StateHasChanged(); });
         }
 
-        public async Task ShowWindow(WindowConfiguration windowConfiguration)
+        protected async Task ShowWindow(WindowConfiguration windowConfiguration)
         {
             await window.Show(windowConfiguration);
         }
 
-        public NavigationManager Navigator => NavigationManager;
+        protected NavigationManager Navigator => NavigationManager;
 
-        public void CloseWindow() => window.Close();
+        protected void CloseWindow() => window.Close();
 
-        public async Task<bool> ShowConfirm(string message) => await JsRuntime.InvokeAsync<bool>("confirm", message);
-        public void ShowWaitingWindow(string waitingText) => window.ShowWaiting(waitingText);
+        protected async Task<bool> ShowConfirm(string message) => await JsRuntime.InvokeAsync<bool>("confirm", message);
+        protected void ShowWaitingWindow(string waitingText) => window.ShowWaiting(waitingText);
     }
 }

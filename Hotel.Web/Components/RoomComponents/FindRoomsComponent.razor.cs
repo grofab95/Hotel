@@ -23,16 +23,18 @@ namespace Hotel.Web.Components.RoomComponents
         {
             try
             {
+                var actualDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+
                 _reservationFactors = new ReservationFactors
                 {
-                    CheckIn = DateTime.Now.AddDays(1),
-                    CheckOut = DateTime.Now.AddDays(7),
-                    BookingAmount = 6
+                    CheckIn = actualDate.AddDays(1),
+                    CheckOut = actualDate.AddDays(2),
+                    BookingAmount = 4
                 };
             }
             catch (Exception ex)
             {
-
+                await HandleException(ex);
             }
         }
 
