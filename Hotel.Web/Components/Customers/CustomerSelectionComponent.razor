@@ -1,0 +1,46 @@
+﻿@inherits Base
+
+@*<RadzenFieldset Text="Dodaj klienta" Style="width: fit-content;">
+    <CreateCustomerComponent />
+</RadzenFieldset>*@
+
+
+<div class="row" style="width: 580px;">
+    <div class="col-3">
+        <p style="margin-top: 5px;">Wyszukaj klienta:</p>
+    </div>
+    <div class="col-5">
+        <RadzenTextBox Style="width: 100%" @bind-Value="_searchedValues" />
+    </div>
+    <div class="col-4">
+        <RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Info" Click="SearchCustomers"
+                      Text="Szukaj" Style="margin-top: 2px;" />
+    </div>
+</div>
+
+<div style="margin-bottom: 20px;">
+    @if (_findedCustomers != null)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Imię</th>
+                    <th scope="col">Nazwisko</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in _findedCustomers)
+                {
+                    <tr>
+                        <th scope="row">@(_findedCustomers.IndexOf(customer)+1).</th>
+                        <td>@customer.FirstName</td>
+                        <td>@customer.LastName</td>
+                        <td><RadzenCheckBox TValue="bool" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

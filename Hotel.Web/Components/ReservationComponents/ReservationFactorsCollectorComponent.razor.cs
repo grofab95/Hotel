@@ -4,12 +4,11 @@ using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hotel.Web.Components.RoomComponents
+namespace Hotel.Web.Components.ReservationComponents
 {
-    public partial class FindRoomsComponent
+    public partial class ReservationFactorsCollectorComponent
     {
         [Inject] IRoomDao RoomDao { get; set; }
         [Parameter] public EventCallback<FindedRoomsFactors> OnFindedRooms { get; set; }
@@ -41,7 +40,7 @@ namespace Hotel.Web.Components.RoomComponents
         private async Task DataChanged() => await OnChange.InvokeAsync(_reservationFactors);
 
         private async Task SearchRooms(ReservationFactors reservationFactors)
-        {            
+        {
             await DoSafeAction(async () =>
             {
                 _isRoomSearching = true;

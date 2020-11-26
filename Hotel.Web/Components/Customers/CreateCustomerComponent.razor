@@ -1,0 +1,29 @@
+﻿@inherits Base
+
+<RadzenTemplateForm Data="_newCustomer" Submit="((CustomerDto args) => Create(args))" Style="width: 300px;">
+    <div class="row">
+        <div class="col-3" style="text-align: right; padding-right: 0px;">
+            <p>Imię: </p>
+        </div>
+
+        <div class="col-9">
+            <RadzenTextBox @bind-Value="_newCustomer.FirstName" Name="FirstName" Style="width: 100%;" />
+            <RadzenRequiredValidator Component="FirstName" Text="Imię jest wymagane" Style="position: inherit;" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3" style="text-align: right; padding-right: 0px;">
+            <p>Nazwisko: </p>
+        </div>
+
+        <div class="col-9">
+            <RadzenTextBox @bind-Value="_newCustomer.LastName" Name="LastName" Style="width: 100%;" />
+            <RadzenRequiredValidator Component="LastName" Text="Nazwisko jest wymagane" Style="position: inherit;" />
+        </div>
+    </div>
+    <div class="row" style="text-align: right; margin-top: 20px;">
+        <div class="col">
+            <RadzenButton Size="ButtonSize.Small" ButtonType="ButtonType.Submit" Text="Dodaj" />
+        </div>
+    </div>
+</RadzenTemplateForm>

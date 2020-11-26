@@ -11,6 +11,7 @@ namespace Hotel.Web
             services.AddScoped<IPriceRuleDao, PriceRuleDao>();
             services.AddScoped<IReservationDao, ReservationDao>();
             services.AddScoped<IRoomDao, RoomDao>();
+            services.AddScoped<ICustomerDao, CustomerDao>();
         }
     }
 }

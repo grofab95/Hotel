@@ -46,7 +46,7 @@ namespace Hotel.Web.Components.Common
             await InvokeAsync(() => { StateHasChanged(); });
         }
 
-        protected async Task ShowWindow(WindowConfiguration windowConfiguration)
+        public async Task ShowWindow(WindowConfiguration windowConfiguration)
         {
             await window.Show(windowConfiguration);
         }

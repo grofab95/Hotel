@@ -1,8 +1,11 @@
-﻿@inherits Base
+﻿@inherits Base;
+@inject Window window
 
 @if (_reservationFactors != null)
 {
     <RadzenCard Style="width: 430px;">
+        <RadzenButton Click="ShowCustomerSelection" />
+
         <RadzenTemplateForm Data="_reservationFactors" Submit="(async (ReservationFactors args) => await SearchRooms(args))">
             <div class="row" style="margin-bottom: 5px;">
                 <div class="col-5">
@@ -20,7 +23,7 @@
                 </div>
 
                 <div class="col-7">
-                    <RadzenDatePicker @bind-Value="_reservationFactors.CheckOut" TValue="DateTime" DateFormat="d" Change="DataChanged"  />
+                    <RadzenDatePicker @bind-Value="_reservationFactors.CheckOut" TValue="DateTime" DateFormat="d" Change="DataChanged" />
                 </div>
             </div>
 
@@ -30,7 +33,7 @@
                 </div>
 
                 <div class="col-7">
-                    <RadzenNumeric @bind-Value="_reservationFactors.BookingAmount" Min="1" TValue="int" Change="DataChanged"  />
+                    <RadzenNumeric @bind-Value="_reservationFactors.BookingAmount" Min="1" TValue="int" Change="DataChanged" />
                 </div>
             </div>
 
@@ -47,4 +50,19 @@
             <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
         }
     </div>
+}
+
+@code {
+    private async Task ShowCustomerSelection()
+    {
+        await window.Show(new WindowConfiguration 
+        {
+            Title = "Wybierz klienta",
+            Content = @<CustomerSelectionComponent />,
+            DialogOptions = new DialogOptions 
+            {
+                Width = "585px;"
+            }
+        });
+    }
 }
