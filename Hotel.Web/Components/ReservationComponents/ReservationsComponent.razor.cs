@@ -29,6 +29,7 @@ namespace Hotel.Web.Components.ReservationComponents
             {
                 _priceCalculator = await PriceRuleDao.GetPriceCalculator();
                 _reservations = await ReservationDao.GetReservationBasicInfosAsync();
+                _findedRooms = new List<Room>();
             }
             catch (Exception ex)
             {
@@ -50,6 +51,8 @@ namespace Hotel.Web.Components.ReservationComponents
                     CheckIn = _selectedReservation.CheckIn,
                     CheckOut = _selectedReservation.CheckOut
                 };
+
+                _findedRooms.AddRange(_selectedReservation.GetRooms());
             }
             catch (Exception ex)
             {

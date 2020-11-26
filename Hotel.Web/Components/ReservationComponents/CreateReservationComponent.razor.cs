@@ -82,6 +82,8 @@ namespace Hotel.Web.Components.ReservationComponents
             catch (Exception ex)
             {
                 await HandleException(ex);
+
+                CloseWindow();
             }           
         }
 
