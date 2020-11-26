@@ -62,23 +62,6 @@ namespace Hotel.Sql.Daos
             var toDelete = reservationsRoomsDb.GetUnique(reservation.ReservationRooms, x => x.Id, x => x.Id).ToList();
             var toAdd = reservation.ReservationRooms.GetUnique(reservationsRoomsDb, x => x.Id, x => x.Id).ToList();
 
-            var tsdft = context
-                   .Set<Area>().Local
-                   //.Where(x => x.GetType() == typeof(T) && x.Id.Equals(entry.Id))
-                   .ToList();
-
-            var trackedEntries = context.ChangeTracker.Entries<Entity>()
-                   //.GroupBy(x => new { x.Entity.GetType().Name, x.Entity.Id })
-                   //.Select(x => x.First())
-                   .ToList();
-
-            var tracke56346ies = context.ChangeTracker.Entries<Entity>()
-                    //.GroupBy(x => new { x.Entity.GetType().Name, x.Entity.Id })
-                    //.Select(x => x.First())
-                    .ToList();
-
-
-
             context.RemoveRange(toDelete);
             await context.AddRangeAsync(toAdd);
 
@@ -121,6 +104,15 @@ namespace Hotel.Sql.Daos
         public IQueryable<ReservationInfoView> SearchReservations()
         {
             return context.ReservationInfoViews;
+        }
+
+        public async Task DeleteReservation(int reservationId)
+        {
+            var reservation = await context.Reservations.FirstOrDefaultAsync(x => x.Id == reservationId)
+                ?? throw new HotelException($"Rezerwacja o id {reservationId} nie została odnaleziona.");
+
+            context.Reservations.Remove(reservation);
+            await context.SaveChangesAsync();
         }
     }
 }

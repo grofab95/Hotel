@@ -6,6 +6,7 @@ using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.ReservationComponents
@@ -53,6 +54,26 @@ namespace Hotel.Web.Components.ReservationComponents
                 };
 
                 _findedRooms.AddRange(_selectedReservation.GetRooms());
+            }
+            catch (Exception ex)
+            {
+                await HandleException(ex);
+            }
+        }
+
+        private async Task DeleteReservation(int reservationId)
+        {
+            if (!(await ShowConfirm($"Czy napewno chcesz usunać rezerwację o id {reservationId} ?")))
+                return;
+
+            try
+            {
+                await ReservationDao.DeleteReservation(reservationId);
+
+                _reservations.Remove(_reservations.First(x => x.ReservationId == reservationId));
+                StateHasChanged();
+
+                await ShowNotification("Rezerwacja została usunięta.", Radzen.NotificationSeverity.Success);
             }
             catch (Exception ex)
             {
