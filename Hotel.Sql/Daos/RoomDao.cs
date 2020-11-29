@@ -1,7 +1,7 @@
 ﻿using Hotel.Domain.Adapters;
-using Hotel.Domain.Adapters.Common;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Environment;
+using Hotel.Domain.Exceptions;
 using Hotel.Sql.ContextFactory;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -52,34 +52,44 @@ namespace Hotel.Sql.Daos
             return freeRooms.Concat(reservedRooms).ToList();
         }
 
-        public async Task<Room> AddAsync(Room room)
+        public async Task<Room> AddAsync(Room entity)
         {
-            await context.Rooms.AddAsync(room);
+            if (await context.Rooms.AnyAsync(x => x.Name.ToLower().Trim() == entity.Name.ToLower().Trim()))
+                throw new HotelException($"Pokój o takiej nazwie już istnieje");
+
+            await context.Rooms.AddAsync(entity);
             await context.SaveChangesAsync();
 
-            return room;
+            return entity;
         }
 
-        public async Task UpdateAsync(Room room) => await UpdateEntry(room);
-
-        public Task<List<Room>> GetManyAsync(Expression<Func<Room, bool>> predicate)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var area = await context.Rooms.FirstOrDefaultAsync(x => x.Id == id)
+                ?? throw new HotelException("Pokój nie został odnaleziony.");
+
+            context.Remove(area);
+            await context.SaveChangesAsync();
         }
 
-        public Task<Room> GetAsync(Expression<Func<Room, bool>> predicate)
+        public async Task<Room> GetAsync(Expression<Func<Room, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await context.Rooms.FirstOrDefaultAsync(predicate)
+                ?? throw new HotelException("Obszar nie został odnaleziony.");
         }
 
-        Task<Room> IDao<Room>.UpdateAsync(Room entity)
+        public async Task<List<Room>> GetManyAsync(Expression<Func<Room, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await context.Rooms.Where(predicate).ToListAsync();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task<Room> UpdateAsync(Room entity)
         {
-            throw new NotImplementedException();
+            if (!(await context.Rooms.AnyAsync(x => x.Id == entity.Id)))
+                throw new HotelException($"Pokój {entity.Name} nie istnieje.");
+
+            await UpdateEntry(entity);
+            return entity;
         }
     }
 }

@@ -1,0 +1,19 @@
+﻿@inherits Base
+
+<RadzenTemplateForm Data="_newArea" Submit="((AreaDto args) => AddArea(args))" Style="width: 300px;">
+    <div class="row">
+        <div class="col-3" style="text-align: right; padding-right: 0px;">
+            <p>Nazwa: </p>
+        </div>
+
+        <div class="col-9">
+            <RadzenTextBox @bind-Value="_newArea.Name" Name="Name" Style="width: 100%;" />
+            <RadzenRequiredValidator Component="Name" Text="Nazwa jest wymagana" Style="position: inherit;" />
+        </div>
+    </div>
+    <div class="row" style="text-align: right; margin-top: 20px;">
+        <div class="col">
+            <RadzenButton Size="ButtonSize.Small" ButtonType="ButtonType.Submit" Text="Dodaj" />
+        </div>
+    </div>
+</RadzenTemplateForm>

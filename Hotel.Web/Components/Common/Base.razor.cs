@@ -1,4 +1,6 @@
-﻿using Hotel.Web.Helpers;
+﻿using AutoMapper;
+using Hotel.Domain.Adapters;
+using Hotel.Web.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Radzen;
@@ -12,6 +14,7 @@ namespace Hotel.Web.Components.Common
         [Inject] NotificationService notificationService { get; set; }
         [Inject] NavigationManager NavigationManager { get; set; }
         [Inject] IJSRuntime JsRuntime { get; set; }
+        [Inject] public IMapper Mapper { get; set; }
 
         protected async Task<bool> DoSafeAction(Action action)
         {

@@ -3,7 +3,7 @@ using Hotel.Domain.Entities;
 
 namespace Hotel.Domain.Adapters
 {
-    public interface IDao : IDao<Area>
+    public interface IAreaDao : IDao<Area>
     {
     }
 }

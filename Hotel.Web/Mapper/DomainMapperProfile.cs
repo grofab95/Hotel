@@ -15,6 +15,12 @@ namespace Hotel.Web.Mapper
             CreateMap<Guest, GuestDto>();
             CreateMap<GuestDto, Guest>();
 
+            CreateMap<Room, RoomDto>();
+            CreateMap<RoomDto, Room>();
+
+            CreateMap<Area, AreaDto>();
+            CreateMap<AreaDto, Area>();
+
             CreateMap<Customer, CustomerDto>();
             CreateMap<CustomerDto, Customer>();
         }

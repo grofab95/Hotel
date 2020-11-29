@@ -1,0 +1,28 @@
+﻿@inherits Base
+
+@if (_areas == null)
+{
+
+}
+else
+{
+    <table class="table items">
+        <thead class="items">
+            <tr class="items">
+                <th scope="col"></th>
+                <th scope="col">Nazwa</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody class="items">
+            @foreach (var area in _areas)
+            {
+                <tr class="items">
+                    <th scope="row">@((_areas.IndexOf(area)+1)).</th>
+                    <td><RadzenTextBox @bind-Value="area.Name" Style="width: 100%" /></td>
+                    <td><RadzenButton Size="ButtonSize.Small" Text="Usuń" Icon="Remove" ButtonStyle="ButtonStyle.Danger" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

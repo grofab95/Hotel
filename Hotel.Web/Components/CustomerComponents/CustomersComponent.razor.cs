@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Hotel.Domain.Adapters;
+﻿using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
@@ -9,12 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hotel.Web.Components.Customers
+namespace Hotel.Web.Components.CustomerComponents
 {
     public partial class CustomersComponent
     {
         [Inject] ICustomerDao CustomerDao { get; set; }
-        [Inject] IMapper Mapper { get; set; }
 
         private List<CustomerDto> _customers;
         private RadzenGrid<CustomerDto> _grid;

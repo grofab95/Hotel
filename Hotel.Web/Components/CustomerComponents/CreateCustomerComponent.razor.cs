@@ -6,13 +6,12 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
 
-namespace Hotel.Web.Components.Customers
+namespace Hotel.Web.Components.CustomerComponents
 {
     public partial class CreateCustomerComponent
     {
         [Parameter] public EventCallback<Customer> OnCreated { get; set; }
         [Inject] ICustomerDao CustomerDao { get; set; }
-        [Inject] IMapper Mapper { get; set; }
 
         private CustomerDto _newCustomer = new CustomerDto();
 

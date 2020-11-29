@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Hotel.Web.Components.Customers
+namespace Hotel.Web.Components.CustomerComponents
 {
     public partial class CustomerSelectionComponent
     {
