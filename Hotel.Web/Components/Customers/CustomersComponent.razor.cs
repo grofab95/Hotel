@@ -25,7 +25,7 @@ namespace Hotel.Web.Components.Customers
         {
             try
             {
-                var customers = await CustomerDao.GetAsync(x => x.Id > 0);
+                var customers = await CustomerDao.GetManyAsync(x => x.Id > 0);
                 _customers = Mapper.Map<List<CustomerDto>>(customers);
             }
             catch (Exception ex)
@@ -38,7 +38,7 @@ namespace Hotel.Web.Components.Customers
         {
             try
             {
-                await CustomerDao.UpdateCustomerAsync(Mapper.Map<Customer>(customer));
+                await CustomerDao.UpdateAsync(Mapper.Map<Customer>(customer));
                 _grid.CancelEditRow(customer);
 
                 await ShowNotification("Zmiany zostały zapisane", Radzen.NotificationSeverity.Success);
@@ -56,7 +56,7 @@ namespace Hotel.Web.Components.Customers
             try
             {
                 
-                var customerDb = (await CustomerDao.GetAsync(x => x.Id == customer.Id)).FirstOrDefault();
+                var customerDb = (await CustomerDao.GetManyAsync(x => x.Id == customer.Id)).FirstOrDefault();
                 customer.FirstName = customerDb.FirstName;
                 customer.LastName = customerDb.LastName;
 
@@ -78,7 +78,7 @@ namespace Hotel.Web.Components.Customers
                 if (!isConfirm)
                     return;
 
-                await CustomerDao.DeleteCustomerAsync(Mapper.Map<Customer>(customer));
+                await CustomerDao.DeleteAsync(customer.Id);
 
                 _customers.Remove(customer);
 

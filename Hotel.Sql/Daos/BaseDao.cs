@@ -16,11 +16,13 @@ namespace Hotel.Sql.Daos
             context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        protected async Task UpdateEntry<T>(T entry) where T : Entity
+        protected async Task<T> UpdateEntry<T>(T entry) where T : Entity
         {
             AttachEntry(entry);
 
-           await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
+
+            return entry;
         }
 
         protected void AttachEntry<T>(T entry) where T : Entity

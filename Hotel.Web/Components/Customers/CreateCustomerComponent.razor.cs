@@ -20,7 +20,7 @@ namespace Hotel.Web.Components.Customers
         {
             try
             {
-                var customer = await CustomerDao.AddCustomerAsync(Mapper.Map<Customer>(newCustomer));
+                var customer = await CustomerDao.AddAsync(Mapper.Map<Customer>(newCustomer));
 
                 await ShowNotification("Dodano pomyślnie", Radzen.NotificationSeverity.Success);
                 await OnCreated.InvokeAsync(customer);

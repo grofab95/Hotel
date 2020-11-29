@@ -1,4 +1,5 @@
 ﻿using Hotel.Domain.Adapters;
+using Hotel.Domain.Adapters.Common;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Environment;
 using Hotel.Sql.ContextFactory;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Hotel.Sql.Daos
@@ -50,16 +52,34 @@ namespace Hotel.Sql.Daos
             return freeRooms.Concat(reservedRooms).ToList();
         }
 
-        public async Task<List<Room>> GetAllAsync() => await context.Rooms.ToListAsync();
-
-        public async Task<int> AddAsync(Room room)
+        public async Task<Room> AddAsync(Room room)
         {
             await context.Rooms.AddAsync(room);
             await context.SaveChangesAsync();
 
-            return room.Id;
+            return room;
         }
 
         public async Task UpdateAsync(Room room) => await UpdateEntry(room);
+
+        public Task<List<Room>> GetManyAsync(Expression<Func<Room, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Room> GetAsync(Expression<Func<Room, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Room> IDao<Room>.UpdateAsync(Room entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

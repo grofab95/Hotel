@@ -28,7 +28,7 @@ namespace Hotel.Web.Components
         {
             try
             {
-                var priceRules = await PriceRuleDao.GetAllAsync();
+                var priceRules = await PriceRuleDao.GetManyAsync(x => x.Id > 0);
                 _priceRuleManager = new PriceRuleManager(priceRules);
                 _priceRules = _priceRuleManager.GetOrderedRules();
 

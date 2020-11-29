@@ -34,7 +34,7 @@ namespace Hotel.Web.Components.Customers
                     return;
 
                 _findedCustomers = await CustomerDao
-                    .GetAsync(x => x.FirstName.Contains(_searchedValues) || x.LastName.Contains(_searchedValues));
+                    .GetManyAsync(x => x.FirstName.Contains(_searchedValues) || x.LastName.Contains(_searchedValues));
 
                 StateHasChanged();
             }

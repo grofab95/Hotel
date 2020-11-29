@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
-using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Entities.Views;
 using Hotel.Domain.Exceptions;
 using Hotel.Domain.Extensions;
 using Hotel.Domain.Validators;
 using Hotel.Sql.ContextFactory;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Hotel.Sql.Daos
@@ -23,14 +24,14 @@ namespace Hotel.Sql.Daos
             _mapper = mapper;
         }
 
-        public async Task<int> AddReservationAsync(Reservation reservation)
+        public async Task<Reservation> AddAsync(Reservation reservation)
         {            
             AttachAggregate(reservation);
 
             await context.AddAsync(reservation);
             await context.SaveChangesAsync();
 
-            return reservation.Id;
+            return reservation;
         }
 
         private void AttachAggregate(Reservation reservation)
@@ -50,7 +51,7 @@ namespace Hotel.Sql.Daos
             AttachEntry(reservation);
         }
 
-        public async Task<bool> UpdateReservationAsync(Reservation reservation)
+        public async Task<Reservation> UpdateAsync(Reservation reservation)
         {
             AttachAggregate(reservation);
 
@@ -76,29 +77,12 @@ namespace Hotel.Sql.Daos
 
             await context.SaveChangesAsync();
 
-            return true;
+            return reservation;
         }
 
         public async Task<List<ReservationInfoView>> GetReservationBasicInfosAsync()
         {
             return await context.ReservationInfoViews.ToListAsync();
-        }
-
-        public async Task<Reservation> GetReservationByIdAsync(int reservationId)
-        {
-            //var reservationDto = await context.Reservations
-            //    .ProjectTo<ReservationDto>(_mapper.ConfigurationProvider)
-            //    .FirstOrDefaultAsync()
-            //        ?? throw new HotelException($"Reserwacja o id {reservationId} nie istnieje.");
-
-            //return _mapper.Map<Reservation>(reservationDto);
-
-            return await context.Reservations
-                .Include(x => x.Customer)
-                .Include(x => x.ReservationRooms).ThenInclude(x => x.Room).ThenInclude(x => x.Area)
-                .Include(x => x.ReservationRooms).ThenInclude(x => x.Guests)
-                .FirstOrDefaultAsync(x => x.Id == reservationId)
-                    ?? throw new HotelException($"Reserwacja o id {reservationId} nie istnieje.");
         }
 
         public IQueryable<ReservationInfoView> SearchReservations()
@@ -113,6 +97,26 @@ namespace Hotel.Sql.Daos
 
             context.Reservations.Remove(reservation);
             await context.SaveChangesAsync();
+        }
+
+        public Task<List<Reservation>> GetManyAsync(Expression<Func<Reservation, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Reservation> GetAsync(Expression<Func<Reservation, bool>> predicate)
+        {
+            return await context.Reservations
+                .Include(x => x.Customer)
+                .Include(x => x.ReservationRooms).ThenInclude(x => x.Room).ThenInclude(x => x.Area)
+                .Include(x => x.ReservationRooms).ThenInclude(x => x.Guests)
+                .FirstOrDefaultAsync(predicate)
+                    ?? throw new HotelException($"Reserwacja nie istnieje.");
         }
     }
 }

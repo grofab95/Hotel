@@ -27,7 +27,7 @@ namespace Hotel.Web.Components.ReservationComponents
         {
             try
             {
-                var priceRules = await PriceRuleDao.GetAllAsync();
+                var priceRules = await PriceRuleDao.GetManyAsync(x => x.Id > 0);
 
                 _priceCalculator = new PriceCalculator(priceRules);
             }
@@ -64,7 +64,7 @@ namespace Hotel.Web.Components.ReservationComponents
             {
                 ShowWaitingWindow("Trwa tworzenie rezerwacji ...");
 
-                var reservationId = await ReservationDao.AddReservationAsync(_reservation);
+                var reservationId = (await ReservationDao.AddAsync(_reservation)).Id;
 
                 CloseWindow();
 

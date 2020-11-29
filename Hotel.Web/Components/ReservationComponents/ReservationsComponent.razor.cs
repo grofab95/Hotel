@@ -45,7 +45,7 @@ namespace Hotel.Web.Components.ReservationComponents
                 _selectedReservation = null;
                 StateHasChanged();
 
-                _selectedReservation = await ReservationDao.GetReservationByIdAsync(id);
+                _selectedReservation = await ReservationDao.GetAsync(x => x.Id == id);
                 _reservationFactors = new ReservationFactors
                 {
                     BookingAmount = _selectedReservation.GetGuestsAmount(),
@@ -68,7 +68,7 @@ namespace Hotel.Web.Components.ReservationComponents
 
             try
             {
-                await ReservationDao.DeleteReservation(reservationId);
+                await ReservationDao.DeleteAsync(reservationId);
 
                 _reservations.Remove(_reservations.First(x => x.ReservationId == reservationId));
                 StateHasChanged();
@@ -87,7 +87,7 @@ namespace Hotel.Web.Components.ReservationComponents
             {
                 _selectedReservation.GetReservationPrice(_priceCalculator);
 
-                await ReservationDao.UpdateReservationAsync(_selectedReservation);
+                await ReservationDao.UpdateAsync(_selectedReservation);
 
                 await ShowNotification("Zmiany został zapisane", Radzen.NotificationSeverity.Success);
             }

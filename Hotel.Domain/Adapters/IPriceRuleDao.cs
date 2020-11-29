@@ -1,13 +1,11 @@
-﻿using Hotel.Domain.Entities.PriceRuleEntity;
-using System.Collections.Generic;
+﻿using Hotel.Domain.Adapters.Common;
+using Hotel.Domain.Entities.PriceRuleEntity;
 using System.Threading.Tasks;
 
 namespace Hotel.Domain.Adapters
 {
-    public interface IPriceRuleDao
+    public interface IPriceRuleDao : IDao<PriceRule>
     {
-        Task<List<PriceRule>> GetAllAsync();
-        Task UpdateAsync(PriceRule priceRule);
         Task<PriceCalculator> GetPriceCalculator();
     }
 }

@@ -1,13 +1,12 @@
-﻿using Hotel.Domain.Entities;
+﻿using Hotel.Domain.Adapters.Common;
+using Hotel.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Hotel.Domain.Adapters
 {
-    public interface IRoomDao
+    public interface IRoomDao : IDao<Room>
     {
         Task<List<Room>> GetFreeByDateRangeAsync(int peopleAmount, DateRange dateRange);
-        Task<int> AddAsync(Room room);
-        Task UpdateAsync(Room room);
     }
 }

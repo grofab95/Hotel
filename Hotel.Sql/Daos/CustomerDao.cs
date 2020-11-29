@@ -16,13 +16,13 @@ namespace Hotel.Sql.Daos
         public CustomerDao(IContextFactory<HotelContext> contextFactory) : base(contextFactory)
         { }
 
-        public async Task<List<Customer>> GetAsync(Expression<Func<Customer, bool>> expression)
+        public async Task<List<Customer>> GetManyAsync(Expression<Func<Customer, bool>> expression)
             => await context.Customers
                 .Where(expression)
                 .OrderBy(x => x.FirstName)
                 .ToListAsync();
 
-        public async Task<Customer> AddCustomerAsync(Customer customer)
+        public async Task<Customer> AddAsync(Customer customer)
         {
             if (await context.Customers.AnyAsync(x => x.FirstName.ToLower().Trim() == customer.FirstName.ToLower().Trim() &&
                                                       x.LastName.ToLower().Trim() == customer.LastName.ToLower().Trim()))
@@ -34,15 +34,15 @@ namespace Hotel.Sql.Daos
             return customer;
         }
 
-        private async Task<bool> CheckIfExist(Customer customer)
+        private async Task<bool> CheckIfExist(int id)
         {
-            return await context.Customers.AnyAsync(x => x.Id == customer.Id);
+            return await context.Customers.AnyAsync(x => x.Id == id);
         }
 
 
-        public async Task<Customer> UpdateCustomerAsync(Customer customer)
+        public async Task<Customer> UpdateAsync(Customer customer)
         {
-            if (!(await CheckIfExist(customer)))
+            if (!(await CheckIfExist(customer.Id)))
                 throw new HotelException($"Klient {customer} nie istnieje.");
 
             AttachEntry(customer);
@@ -52,18 +52,24 @@ namespace Hotel.Sql.Daos
             return customer;
         }
 
-        public async Task DeleteCustomerAsync(Customer customer)
+        public async Task DeleteAsync(int id)
         {
-            if (!(await CheckIfExist(customer)))
-                throw new HotelException($"Klient {customer} nie istnieje.");
+            var customer = await context.Customers.FirstOrDefaultAsync(x => x.Id == id)
+                ?? throw new HotelException($"Klient o id {id} nie istnieje.");
 
-            if (await context.Reservations.AnyAsync(x => x.Customer.Id == customer.Id))
+            if (await context.Reservations.AnyAsync(x => x.Customer.Id == id))
                 throw new HotelException($"Klient ma przypisane rezerwacje.");
 
             AttachEntry(customer);
             context.Remove(customer);
 
             await context.SaveChangesAsync();
+        }
+
+        public async Task<Customer> GetAsync(Expression<Func<Customer, bool>> predicate)
+        {
+            return await context.Customers.FirstOrDefaultAsync(predicate)
+                ?? throw new HotelException($"Klient nie został odnaleziony");
         }
     }
 }
