@@ -1,16 +1,34 @@
 ﻿@inherits Base
 
-@*<RadzenFieldset Text="Dodaj klienta" Style="width: fit-content;">
-    <CreateCustomerComponent />
-</RadzenFieldset>*@
+@inject Window window
 
+<div class="row">
+    <div class="col-6">
+        <p style="font-size: large;">Wybrany klient: <b>@_selectedCustomer</b></p>
+    </div>
+
+    <div class="col-6" style="text-align: right;">
+        <RadzenButton Text="Zatwierdź" Size="ButtonSize.Small" 
+                      Disabled="(_selectedCustomer == null)"
+                      Click="CustomerAccepted" ButtonStyle="ButtonStyle.Success" />
+    </div>
+</div>
+
+<hr />
+
+<div style="text-align: left;">
+    <RadzenButton Text="Dodaj nowego klienta" Click="ShowAddingCustomer"
+                  ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" />
+</div>
+
+<hr />
 
 <div class="row" style="width: 580px;">
     <div class="col-3">
         <p style="margin-top: 5px;">Wyszukaj klienta:</p>
     </div>
     <div class="col-5">
-        <RadzenTextBox Style="width: 100%" @bind-Value="_searchedValues" />
+        <RadzenTextBox Style="width: 100%" @bind-Value="_searchedValues" @onkeypress="OnSearchedValueTyped" />
     </div>
     <div class="col-4">
         <RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Info" Click="SearchCustomers"
@@ -18,29 +36,54 @@
     </div>
 </div>
 
-<div style="margin-bottom: 20px;">
+<div style="margin-bottom: 20px; margin-top: 20px;">
     @if (_findedCustomers != null)
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Imię</th>
-                    <th scope="col">Nazwisko</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var customer in _findedCustomers)
-                {
+        @if (!_findedCustomers.Any())
+        {
+            <p style="text-align: center;">Brak wyników ...</p>
+        }
+        else
+        { 
+            <table class="table">
+                <thead>
                     <tr>
-                        <th scope="row">@(_findedCustomers.IndexOf(customer)+1).</th>
-                        <td>@customer.FirstName</td>
-                        <td>@customer.LastName</td>
-                        <td><RadzenCheckBox TValue="bool" /></td>
+                        <th scope="col"></th>
+                        <th scope="col">Imię</th>
+                        <th scope="col">Nazwisko</th>
+                        <th scope="col"></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    }
+                </thead>
+                <tbody>
+                    @foreach (var customer in _findedCustomers)
+                    {
+                        var isSelected = (_selectedCustomer?.Id ?? 0) == customer.Id;
+                        var style = isSelected ? "background-color: bisque;" : "";
+
+                        <tr @onclick="@(() => HandleFindedCustomerCheck(customer))" style="@style">
+                            <th scope="row">@(_findedCustomers.IndexOf(customer)+1).</th>
+                            <td>@customer.FirstName</td>
+                            <td>@customer.LastName</td>
+                            <td><RadzenCheckBox TValue="bool" Value="isSelected" Change="(() => HandleFindedCustomerCheck(customer))" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+     }    
 </div>
+
+@code {
+    private async Task ShowAddingCustomer()
+    {
+        await window.Show(new WindowConfiguration
+        {
+            Title = "Utwórz klienta",
+            Content =@<CreateCustomerComponent OnCreated="OnCustomerCreated" />,
+            DialogOptions = new DialogOptions
+            {
+                Width = "350px;"
+            }
+            });
+        }
+} 

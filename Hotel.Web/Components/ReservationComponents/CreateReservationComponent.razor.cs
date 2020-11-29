@@ -45,7 +45,7 @@ namespace Hotel.Web.Components.ReservationComponents
             await DoSafeAction(() =>
             {
                 _reservation = Reservation.Create(
-                    customer: new Customer("Ewa", "Blazor"),
+                    customer: _reservationFactors.Customer,
                     checkIn: findedRoomsFactors.ReservationFactors.CheckIn,
                     checkOut: findedRoomsFactors.ReservationFactors.CheckOut);
             });

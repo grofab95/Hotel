@@ -1,12 +1,21 @@
-﻿@inherits Base;
+﻿@inherits Base
 @inject Window window
 
 @if (_reservationFactors != null)
 {
     <RadzenCard Style="width: 430px;">
-        <RadzenButton Click="ShowCustomerSelection" />
-
         <RadzenTemplateForm Data="_reservationFactors" Submit="(async (ReservationFactors args) => await SearchRooms(args))">
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-5">
+                    <p>Klient:</p>
+                </div>
+
+                <div class="col-7">
+                    <p><a href="" @onclick:preventDefault @onclick="(async () => await ShowCustomerSelection())">
+                        @(_reservationFactors?.Customer?.ToString() ?? "Wybierz klienta")</a></p>
+                </div>
+            </div>
+
             <div class="row" style="margin-bottom: 5px;">
                 <div class="col-5">
                     <p>Data zameldowania:</p>
@@ -58,7 +67,7 @@
         await window.Show(new WindowConfiguration 
         {
             Title = "Wybierz klienta",
-            Content = @<CustomerSelectionComponent />,
+            Content = @<CustomerSelectionComponent AlreadySlectedCustomer="_reservationFactors.Customer" OnAccepted="OnCustomerSelected" />,
             DialogOptions = new DialogOptions 
             {
                 Width = "585px;"

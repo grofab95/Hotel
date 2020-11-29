@@ -22,7 +22,7 @@ namespace Hotel.Sql.Daos
                 .OrderBy(x => x.FirstName)
                 .ToListAsync();
 
-        public async Task<int> AddCustomer(Customer customer)
+        public async Task<Customer> AddCustomer(Customer customer)
         {
             var isExist = await context.Customers
                 .AnyAsync(x => x.FirstName.ToLower() == customer.FirstName.ToLower() &&
@@ -31,10 +31,10 @@ namespace Hotel.Sql.Daos
             if (isExist)
                 throw new HotelException($"Klient {customer} już istnieje.");
 
-            AttachEntry(customer);
+            await context.AddAsync(customer);
             await context.SaveChangesAsync();
 
-            return customer.Id;
+            return customer;
         }
     }
 }

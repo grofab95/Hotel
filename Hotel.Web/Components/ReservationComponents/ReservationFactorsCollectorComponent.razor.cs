@@ -53,5 +53,12 @@ namespace Hotel.Web.Components.ReservationComponents
                 await OnFindedRooms.InvokeAsync(new FindedRoomsFactors(reservationFactors, findedRooms));
             });
         }
+
+        private void OnCustomerSelected(Customer customer)
+        {
+            _reservationFactors.Customer = customer;
+
+            window.Close();
+        }
     }
 }

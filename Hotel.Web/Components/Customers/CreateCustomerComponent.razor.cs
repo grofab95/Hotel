@@ -1,20 +1,34 @@
-﻿using Hotel.Web.Dtos;
+﻿using AutoMapper;
+using Hotel.Domain.Adapters;
+using Hotel.Domain.Entities;
+using Hotel.Web.Dtos;
+using Microsoft.AspNetCore.Components;
+using System;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.Customers
 {
     public partial class CreateCustomerComponent
     {
-        private CustomerDto _newCustomer = new CustomerDto();
+        [Parameter] public EventCallback<Customer> OnCreated { get; set; }
+        [Inject] ICustomerDao CustomerDao { get; set; }
+        [Inject] IMapper Mapper { get; set; }
 
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-        }
+        private CustomerDto _newCustomer = new CustomerDto();
 
         private async Task Create(CustomerDto newCustomer)
         {
+            try
+            {
+                var customer = await CustomerDao.AddCustomer(Mapper.Map<Customer>(newCustomer));
 
+                await ShowNotification("Dodano pomyślnie", Radzen.NotificationSeverity.Success);
+                await OnCreated.InvokeAsync(customer);
+            }
+            catch (Exception ex)
+            {
+                await HandleException(ex);
+            }
         }
     }
 }

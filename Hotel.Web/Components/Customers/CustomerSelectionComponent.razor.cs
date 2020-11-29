@@ -2,9 +2,9 @@
 using Hotel.Domain.Entities;
 using Hotel.Domain.Extensions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.Customers
@@ -12,11 +12,19 @@ namespace Hotel.Web.Components.Customers
     public partial class CustomerSelectionComponent
     {
         [Inject] ICustomerDao CustomerDao { get; set; }
+        [Parameter] public Customer AlreadySlectedCustomer { get; set; }
+        [Parameter] public EventCallback<Customer> OnAccepted { get; set; }
 
         private List<Customer> _findedCustomers;
         private Customer _selectedCustomer;
 
         private string _searchedValues;
+
+        protected override void OnParametersSet()
+        {
+            if (AlreadySlectedCustomer != null)
+                _selectedCustomer = AlreadySlectedCustomer;
+        }
 
         private async Task SearchCustomers()
         {
@@ -34,6 +42,31 @@ namespace Hotel.Web.Components.Customers
             {
                 await HandleException(ex);
             }
+        }
+
+        private void HandleFindedCustomerCheck(Customer customer)
+        {
+            _selectedCustomer = customer;
+        }
+
+        private async Task OnSearchedValueTyped(KeyboardEventArgs args)
+        {
+            if (args.Code == "Enter")
+                await SearchCustomers();
+        }
+
+        private void OnCustomerCreated(Customer customer)
+        {
+            _selectedCustomer = customer;
+
+            window.Close();
+
+            StateHasChanged();
+        }
+
+        private async Task CustomerAccepted()
+        {
+            await OnAccepted.InvokeAsync(_selectedCustomer);
         }
     }
 }
