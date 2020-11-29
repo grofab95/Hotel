@@ -1,0 +1,28 @@
+﻿table.items {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+thead.items {
+    flex: 0 0 auto;
+}
+
+tbody.items {
+    flex: 1 1 auto;
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 505px;
+}
+
+tr.items {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+}
+
+tbody#tbody-stany-przedmiotow tr th,
+tbody#tbody-stany-przedmiotow tr td {
+    width: 222px;
+}

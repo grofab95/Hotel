@@ -22,19 +22,48 @@ namespace Hotel.Sql.Daos
                 .OrderBy(x => x.FirstName)
                 .ToListAsync();
 
-        public async Task<Customer> AddCustomer(Customer customer)
+        public async Task<Customer> AddCustomerAsync(Customer customer)
         {
-            var isExist = await context.Customers
-                .AnyAsync(x => x.FirstName.ToLower() == customer.FirstName.ToLower() &&
-                          x.LastName.ToLower() == customer.LastName.ToLower());
-
-            if (isExist)
+            if (await context.Customers.AnyAsync(x => x.FirstName.ToLower().Trim() == customer.FirstName.ToLower().Trim() &&
+                                                      x.LastName.ToLower().Trim() == customer.LastName.ToLower().Trim()))
                 throw new HotelException($"Klient {customer} już istnieje.");
 
             await context.AddAsync(customer);
             await context.SaveChangesAsync();
 
             return customer;
+        }
+
+        private async Task<bool> CheckIfExist(Customer customer)
+        {
+            return await context.Customers.AnyAsync(x => x.Id == customer.Id);
+        }
+
+
+        public async Task<Customer> UpdateCustomerAsync(Customer customer)
+        {
+            if (!(await CheckIfExist(customer)))
+                throw new HotelException($"Klient {customer} nie istnieje.");
+
+            AttachEntry(customer);
+
+            await context.SaveChangesAsync();
+
+            return customer;
+        }
+
+        public async Task DeleteCustomerAsync(Customer customer)
+        {
+            if (!(await CheckIfExist(customer)))
+                throw new HotelException($"Klient {customer} nie istnieje.");
+
+            if (await context.Reservations.AnyAsync(x => x.Customer.Id == customer.Id))
+                throw new HotelException($"Klient ma przypisane rezerwacje.");
+
+            AttachEntry(customer);
+            context.Remove(customer);
+
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Hotel.Web.Components.Common
 
         protected async Task HandleException(Exception exception) => await ShowNotification(exception.Handle());
 
-        protected async Task ShowNotification(string detail, NotificationSeverity severity, string summary = "Info", double duration = 6000)
+        protected async Task ShowNotification(string detail, NotificationSeverity severity, string summary = "Informacja", double duration = 6000)
             => await ShowNotification(new NotificationMessage 
             {
                 Summary = summary,

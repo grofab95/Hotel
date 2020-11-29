@@ -1,0 +1,76 @@
+﻿@inherits Base
+@inject Window window
+
+@if (_customers == null)
+{
+    ShowWaitingWindow("Trwa wczytywanie ...");
+}
+else
+{
+    if (_firstLoad)
+    {
+        CloseWindow();
+        _firstLoad = false;
+    }
+
+    <RadzenButton Text="Dodaj klienta" Size="ButtonSize.Small" Click="ShowCustomerCreatorWindow" ButtonStyle="ButtonStyle.Success" />
+
+    <RadzenGrid @ref="_grid" AllowFiltering="true" AllowPaging="true" PageSize="17" AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data="@_customers" TItem="CustomerDto" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" >
+        <Columns>
+
+            <RadzenGridColumn Width="100px" TItem="CustomerDto" Property="Id" Title="Id" />
+            <RadzenGridColumn Width="200px" TItem="CustomerDto" Property="FirstName" Title="Imię">
+                <EditTemplate Context="_customer">
+                    <RadzenTextBox @bind-Value="_customer.FirstName" Name="FirstName" />
+                    <RadzenRequiredValidator Component="FirstName" Text="Imię jest wymagane" />
+                </EditTemplate>
+            </RadzenGridColumn>
+
+            <RadzenGridColumn Width="200px" TItem="CustomerDto" Property="LastName" Title="Nazwisko">
+                <EditTemplate Context="_customer">
+                    <RadzenTextBox @bind-Value="_customer.LastName" Name="LastName" />
+                    <RadzenRequiredValidator Component="LastName" Text="Imię jest wymagane" />
+                </EditTemplate>
+            </RadzenGridColumn>
+
+            <RadzenGridColumn TItem="CustomerDto" Context="_customer" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                <Template Context="_customer">
+                    <RadzenButton Icon="edit" Size="ButtonSize.Small" Text="Edytuj" Click="@(args => EditCustomer(_customer))">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="_customer">
+                    <RadzenButton Icon="save" Size="ButtonSize.Small" Text="Zapisz" Click="@((args) => SaveCustomer(_customer))">
+                    </RadzenButton>
+                    <RadzenButton Icon="cancel" Size="ButtonSize.Small" Text="Anuluj" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => CancelEditCustomer(_customer))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="CustomerDto" Context="Customer" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+                <Template Context="_customer">
+                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Usuń" Icon="close" Size="ButtonSize.Small" Click="@(args => DeleteCustomer(_customer))">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="_customer">
+                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Usuń" Icon="close" Size="ButtonSize.Small" Click="@(args => DeleteCustomer(_customer))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}
+
+@code {
+    private async Task ShowCustomerCreatorWindow()
+    {
+        await window.Show(new WindowConfiguration 
+        {
+            Title = "Utwórz klienta",
+            Content =@<CreateCustomerComponent OnCreated="OnCustomerCreated" />,
+            DialogOptions = new DialogOptions
+            {
+                Width = "350px;"
+            }
+        });
+    }
+} 

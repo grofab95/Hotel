@@ -3,11 +3,11 @@
 @inject Window window
 
 <div class="row">
-    <div class="col-6">
+    <div class="col-8">
         <p style="font-size: large;">Wybrany klient: <b>@_selectedCustomer</b></p>
     </div>
 
-    <div class="col-6" style="text-align: right;">
+    <div class="col-4" style="text-align: right;">
         <RadzenButton Text="Zatwierdź" Size="ButtonSize.Small" 
                       Disabled="(_selectedCustomer == null)"
                       Click="CustomerAccepted" ButtonStyle="ButtonStyle.Success" />
@@ -45,22 +45,22 @@
         }
         else
         { 
-            <table class="table">
-                <thead>
-                    <tr>
+            <table class="table items">
+                <thead class="items">
+                    <tr class="items">
                         <th scope="col"></th>
                         <th scope="col">Imię</th>
                         <th scope="col">Nazwisko</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="items">
                     @foreach (var customer in _findedCustomers)
                     {
                         var isSelected = (_selectedCustomer?.Id ?? 0) == customer.Id;
                         var style = isSelected ? "background-color: bisque;" : "";
 
-                        <tr @onclick="@(() => HandleFindedCustomerCheck(customer))" style="@style">
+                        <tr class="items" @onclick="@(() => HandleFindedCustomerCheck(customer))" style="@style">
                             <th scope="row">@(_findedCustomers.IndexOf(customer)+1).</th>
                             <td>@customer.FirstName</td>
                             <td>@customer.LastName</td>

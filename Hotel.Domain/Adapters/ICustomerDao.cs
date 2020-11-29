@@ -9,6 +9,8 @@ namespace Hotel.Domain.Adapters
     public interface ICustomerDao
     {
         Task<List<Customer>> GetAsync(Expression<Func<Customer, bool>> expression);
-        Task<Customer> AddCustomer(Customer customer);
+        Task<Customer> AddCustomerAsync(Customer customer);
+        Task<Customer> UpdateCustomerAsync(Customer customer);
+        Task DeleteCustomerAsync(Customer customer);
     }
 }
