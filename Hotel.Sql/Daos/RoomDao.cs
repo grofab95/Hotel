@@ -57,6 +57,8 @@ namespace Hotel.Sql.Daos
             if (await context.Rooms.AnyAsync(x => x.Name.ToLower().Trim() == entity.Name.ToLower().Trim()))
                 throw new HotelException($"Pokój o takiej nazwie już istnieje");
 
+            AttachEntry(entity.Area);
+
             await context.Rooms.AddAsync(entity);
             await context.SaveChangesAsync();
 
@@ -74,19 +76,21 @@ namespace Hotel.Sql.Daos
 
         public async Task<Room> GetAsync(Expression<Func<Room, bool>> predicate)
         {
-            return await context.Rooms.FirstOrDefaultAsync(predicate)
+            return await context.Rooms.Include(x => x.Area).FirstOrDefaultAsync(predicate)
                 ?? throw new HotelException("Obszar nie został odnaleziony.");
         }
 
         public async Task<List<Room>> GetManyAsync(Expression<Func<Room, bool>> predicate)
         {
-            return await context.Rooms.Where(predicate).ToListAsync();
+            return await context.Rooms.Include(x => x.Area).Where(predicate).ToListAsync();
         }
 
         public async Task<Room> UpdateAsync(Room entity)
         {
             if (!(await context.Rooms.AnyAsync(x => x.Id == entity.Id)))
                 throw new HotelException($"Pokój {entity.Name} nie istnieje.");
+
+            AttachEntry(entity.Area);
 
             await UpdateEntry(entity);
             return entity;

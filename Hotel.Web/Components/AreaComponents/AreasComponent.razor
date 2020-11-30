@@ -2,25 +2,41 @@
 
 @if (_areas == null)
 {
-
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
 }
 else
 {
-    <table class="table items">
-        <thead class="items">
-            <tr class="items">
-                <th scope="col"></th>
-                <th scope="col">Nazwa</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
+    <div class="row">
+        <div class="col-2" style="text-align: right;">
+            <p>Nazwa:</p>
+        </div>
+
+        <div class="col-7">
+            <RadzenTextBox @bind-Value="_newArea.Name" Style="width: 100%;" />
+        </div>
+
+        <div class="col-3">
+            <RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Warning" Text="Dodaj" Click="AddArea" />
+        </div>
+    </div>
+
+    <hr />
+
+    <ControlComponent OnSave="Save" OnCancel="Cancel" />
+
+    <table class="table items" style="margin-top: 16px;">
         <tbody class="items">
             @foreach (var area in _areas)
             {
                 <tr class="items">
-                    <th scope="row">@((_areas.IndexOf(area)+1)).</th>
+                    <th style="width: 80px;" scope="row">@((_areas.IndexOf(area)+1)).</th>
                     <td><RadzenTextBox @bind-Value="area.Name" Style="width: 100%" /></td>
-                    <td><RadzenButton Size="ButtonSize.Small" Text="Usuń" Icon="Remove" ButtonStyle="ButtonStyle.Danger" /></td>
+                    <td>
+                        <RadzenButton Size="ButtonSize.Small" Text="Usuń" Icon="delete_forever"
+                                      ButtonStyle="ButtonStyle.Danger" Click="(async () => await Delete(area))" />
+                    </td>
                 </tr>
             }
         </tbody>

@@ -1,2 +1,17 @@
-﻿@page "/areasRooms"  
+﻿@page "/areasRooms" 
+@inject Window window 
 
+<RadzenButton Text="Zarządzaj obszarami" ButtonStyle="ButtonStyle.Info" Size="ButtonSize.Small" Click="ShowAreaComponent" />
+
+<RoomsComponent />
+
+@code {
+    private async Task ShowAreaComponent()
+    {
+        await window.Show(new WindowConfiguration
+        {
+            Title = "Obaszary",
+            Content = @<AreasComponent />
+        });
+    }
+}

@@ -1,1 +1,56 @@
 ﻿@inherits Base
+
+@if (_rooms == null || _areas == null)
+{
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+}
+else
+{
+    <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@InsertRow" />
+    <RadzenGrid @ref="_grid" AllowFiltering="true" AllowPaging="true" PageSize="3" AllowSorting="true" 
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EditMode="DataGridEditMode.Single"
+                Data="@_rooms" TItem="RoomDto" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+        <Columns>
+            <RadzenGridColumn Width="100px" TItem="RoomDto" Property="Id" Title="Id" />
+            <RadzenGridColumn Width="200px" TItem="RoomDto" Property="Area.Name" Title="Obszar">
+                <EditTemplate Context="_room">
+                    <RadzenDropDown @bind-Value="_room.Area" Data="@_areas" TextProperty="Name" Style="width:100%" />
+                </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RoomDto" Property="Name" Title="Nazwa">
+                <EditTemplate Context="_room">
+                    <RadzenTextBox @bind-Value="_room.Name" Style="width: 100%;" />
+                </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RoomDto" Property="PeopleCapacity" Title="Ilość osób">
+                <EditTemplate Context="_room">
+                    <RadzenNumeric @bind-Value="_room.PeopleCapacity" Style="width:100%" Min="1" />
+                </EditTemplate>
+            </RadzenGridColumn>           
+            <RadzenGridColumn TItem="RoomDto" Context="_room" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                <Template Context="_room">
+                    <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(_room))" Text="Edytuj">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="_room">
+                    <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(_room))" Text="Zapisz">
+                    </RadzenButton>
+                    <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Text="Anuluj" Click="@((args) => CancelEdit(_room))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RoomDto" Context="_room" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+                <Template Context="_room">
+                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Text="Usuń" Click="@(args => DeleteRow(_room))">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="_room">
+                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Text="Usuń" Click="@(args => DeleteRow(_room))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}
