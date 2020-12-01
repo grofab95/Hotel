@@ -57,7 +57,7 @@ namespace Hotel.Web.Components.AreaComponents
 
         private async Task Delete(AreaDto area)
         {
-            if (!(await ShowConfirm($"Czy napewno chcesz usunać {area}?")))
+            if (!(await ShowConfirm($"Czy napewno chcesz usunać {area.Name}?")))
                 return;
 
             try

@@ -3,9 +3,17 @@
 
 <RadzenButton Text="Zarządzaj obszarami" ButtonStyle="ButtonStyle.Info" Size="ButtonSize.Small" Click="ShowAreaComponent" />
 
-<RoomsComponent />
+<RoomsComponent @ref="_roomsComponent" />
 
-@code {
+@code {  
+
+    private RoomsComponent _roomsComponent;
+
+    protected override void OnInitialized()
+    {
+        window.Service.OnClose += OnUpdate;
+    }
+
     private async Task ShowAreaComponent()
     {
         await window.Show(new WindowConfiguration
@@ -13,5 +21,10 @@
             Title = "Obaszary",
             Content = @<AreasComponent />
         });
+    }
+
+    private void OnUpdate(dynamic param)
+    {
+        _roomsComponent.LoadData();
     }
 }

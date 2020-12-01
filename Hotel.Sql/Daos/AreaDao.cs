@@ -33,6 +33,9 @@ namespace Hotel.Sql.Daos
             var area = await context.Areas.FirstOrDefaultAsync(x => x.Id == id)
                 ?? throw new HotelException("Obszar nie został odnaleziony.");
 
+            if (await context.Rooms.AnyAsync(x => x.Area.Id == id))
+                throw new HotelException($"Pokoje są przydzielone do obszaru {area.Name}");
+
             context.Remove(area);
             await context.SaveChangesAsync();
         }

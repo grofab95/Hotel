@@ -37,6 +37,8 @@ namespace Hotel.Web.Components.Interface
 
         public void Close() => _dialogService.Close();
 
+        public DialogService Service => _dialogService;
+
         public void Dispose()
         {
             _dialogService.Close();

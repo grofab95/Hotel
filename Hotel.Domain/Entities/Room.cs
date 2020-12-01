@@ -30,5 +30,16 @@ namespace Hotel.Domain.Entities
 
         public override string ToString()
             => $"{Area?.Name} pokój {Name}";
+
+        public void Update(Area area, string name, int peopleCapcity)
+        {
+            RoomValidators.ValidIfAreaExist(area);
+            RoomValidators.ValidIfNameExist(name);
+            RoomValidators.ValidIfPeopleCapacityIsPositive(peopleCapcity);
+
+            Area = area;
+            Name = name;
+            PeopleCapacity = peopleCapcity;
+        }
     }
 }

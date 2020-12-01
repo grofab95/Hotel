@@ -9,9 +9,9 @@
 else
 {
     <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@InsertRow" />
-    <RadzenGrid @ref="_grid" AllowFiltering="true" AllowPaging="true" PageSize="3" AllowSorting="true" 
+    <RadzenGrid @ref="_grid" AllowFiltering="true" AllowPaging="true" PageSize="16" AllowSorting="true" 
                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EditMode="DataGridEditMode.Single"
-                Data="@_rooms" TItem="RoomDto" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+                Data="@_rooms" TItem="RoomDto" >@*RowUpdate="@OnUpdateRow"*@
         <Columns>
             <RadzenGridColumn Width="100px" TItem="RoomDto" Property="Id" Title="Id" />
             <RadzenGridColumn Width="200px" TItem="RoomDto" Property="Area.Name" Title="Obszar">
@@ -19,14 +19,14 @@ else
                     <RadzenDropDown @bind-Value="_room.Area" Data="@_areas" TextProperty="Name" Style="width:100%" />
                 </EditTemplate>
             </RadzenGridColumn>
-            <RadzenGridColumn TItem="RoomDto" Property="Name" Title="Nazwa">
+            <RadzenGridColumn Width="300px" TItem="RoomDto" Property="Name" Title="Nazwa">
                 <EditTemplate Context="_room">
-                    <RadzenTextBox @bind-Value="_room.Name" Style="width: 100%;" />
+                    <RadzenTextBox @bind-Value="_room.Name" />
                 </EditTemplate>
             </RadzenGridColumn>
-            <RadzenGridColumn TItem="RoomDto" Property="PeopleCapacity" Title="Ilość osób">
+            <RadzenGridColumn Width="130px" TItem="RoomDto" Property="PeopleCapacity" Title="Ilość osób">
                 <EditTemplate Context="_room">
-                    <RadzenNumeric @bind-Value="_room.PeopleCapacity" Style="width:100%" Min="1" />
+                    <RadzenNumeric @bind-Value="_room.PeopleCapacity" Min="1" />
                 </EditTemplate>
             </RadzenGridColumn>           
             <RadzenGridColumn TItem="RoomDto" Context="_room" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">

@@ -13,6 +13,7 @@ namespace Hotel.Web.Components.RoomComponents
     {
         [Inject] IRoomDao RoomDao { get; set; }
         [Inject] IAreaDao AreaDao { get; set; }
+        [Parameter] public List<Area> Areas { get; set; }
 
         private List<RoomDto> _rooms;
         private List<AreaDto> _areas;
@@ -23,8 +24,7 @@ namespace Hotel.Web.Components.RoomComponents
         {
             try
             {
-                _rooms = Mapper.Map<List<RoomDto>>(await RoomDao.GetManyAsync(x => x.Id > 0));
-                _areas = Mapper.Map<List<AreaDto>>(await AreaDao.GetManyAsync(x => x.Id > 0));
+                await LoadData();
             }
             catch (Exception ex)
             {
@@ -32,16 +32,32 @@ namespace Hotel.Web.Components.RoomComponents
             }
         }
 
+        public async Task LoadData()
+        {
+            _rooms = Mapper.Map<List<RoomDto>>(await RoomDao.GetManyAsync(x => x.Id > 0));
+            _areas = Mapper.Map<List<AreaDto>>(await AreaDao.GetManyAsync(x => x.Id > 0));
+        }
+
         void EditRow(RoomDto room)
         {
             _grid.EditRow(room);
         }
 
-        private async Task OnUpdateRow(RoomDto room)
+        private async Task SaveRow(RoomDto room)
         {
             try
             {
-                await RoomDao.UpdateAsync(Mapper.Map<Room>(room));
+                if (room.Id == 0)
+                {
+                    await AddRow(room);
+                    return;
+                }
+
+                var updatedRoom = Mapper.Map<Room>(room);
+                updatedRoom.Update(Mapper.Map<Area>(room.Area), room.Name, room.PeopleCapacity);
+                await RoomDao.UpdateAsync(updatedRoom);
+
+                _grid.CancelEditRow(room);
 
                 await ShowNotification("Zapisano pomyślnie", Radzen.NotificationSeverity.Success);
             }
@@ -51,14 +67,18 @@ namespace Hotel.Web.Components.RoomComponents
             }
         }
 
-        private void SaveRow(RoomDto room)
-        {
-            _grid.UpdateRow(room);
-        }
+        //private void SaveRow(RoomDto room)
+        //{
+        //    _grid.UpdateRow(room);
+        //}
 
         private async Task CancelEdit(RoomDto room)
         {
-            _grid.CancelEditRow(room);
+            if (room.Id == 0)
+            {
+                _grid.CancelEditRow(room);
+                return;
+            }
 
             try
             {
@@ -66,6 +86,8 @@ namespace Hotel.Web.Components.RoomComponents
                 room.Name = roomDb.Name;
                 room.Area = Mapper.Map<AreaDto>(roomDb.Area);
                 room.PeopleCapacity = roomDb.PeopleCapacity;
+
+                _grid.CancelEditRow(room);
             }
             catch (Exception ex)
             {
@@ -75,6 +97,14 @@ namespace Hotel.Web.Components.RoomComponents
 
         private async Task DeleteRow(RoomDto room)
         {
+            if (room.Id == 0)
+            {
+                _rooms.Remove(room);
+                await _grid.Reload();
+
+                return;
+            }
+
             if (!(await ShowConfirm($"Czy napewno chcesz usunać pokój {room.Name}?")))
                 return;
 
@@ -88,25 +118,26 @@ namespace Hotel.Web.Components.RoomComponents
             {
                 await HandleException(ex);
             }
+
+            await _grid.Reload();
         }
 
         private void InsertRow()
         {
-            _grid.InsertRow(new RoomDto());
+            var newRoom = new RoomDto();
+            //_rooms.Add(newRoom);
+            _grid.InsertRow(newRoom);
+            _grid.EditRow(newRoom);
+
+            //_grid.InsertRow(new RoomDto());
         }
 
-        private async Task OnCreateRow(RoomDto room) 
+        private async Task AddRow(RoomDto room) 
         {
-            try
-            {
-                await RoomDao.AddAsync(Mapper.Map<Room>(room));
+            var area = Mapper.Map<Area>(room.Area);
+            await RoomDao.AddAsync(new Room(area, room.Name, room.PeopleCapacity));
 
-                await ShowNotification("Dodano pomyślnie", Radzen.NotificationSeverity.Success);
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            await ShowNotification("Dodano pomyślnie", Radzen.NotificationSeverity.Success);
         }
     }
 }

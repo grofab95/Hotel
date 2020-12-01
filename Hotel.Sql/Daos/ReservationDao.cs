@@ -104,9 +104,13 @@ namespace Hotel.Sql.Daos
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var reservation = await context.Reservations.FirstOrDefaultAsync(x => x.Id == id)
+                ?? throw new HotelException($"Rezerwacja o id {id} nie została odnaleziona.");
+
+            context.Reservations.Remove(reservation);
+            await context.SaveChangesAsync();
         }
 
         public async Task<Reservation> GetAsync(Expression<Func<Reservation, bool>> predicate)

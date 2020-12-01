@@ -67,10 +67,13 @@ namespace Hotel.Sql.Daos
 
         public async Task DeleteAsync(int id)
         {
-            var area = await context.Rooms.FirstOrDefaultAsync(x => x.Id == id)
+            var room = await context.Rooms.FirstOrDefaultAsync(x => x.Id == id)
                 ?? throw new HotelException("Pokój nie został odnaleziony.");
 
-            context.Remove(area);
+            if (await context.ReservationRooms.AnyAsync(x => x.Room.Id == id))
+                throw new HotelException($"Pokój {room.Name} znajduje się w rezerwacji.");
+
+            context.Remove(room);
             await context.SaveChangesAsync();
         }
 
