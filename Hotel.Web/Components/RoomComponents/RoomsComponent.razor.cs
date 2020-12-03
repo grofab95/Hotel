@@ -50,6 +50,8 @@ namespace Hotel.Web.Components.RoomComponents
                 if (room.Id == 0)
                 {
                     await AddRow(room);
+
+                    _grid.CancelEditRow(room);
                     return;
                 }
 
@@ -57,9 +59,8 @@ namespace Hotel.Web.Components.RoomComponents
                 updatedRoom.Update(Mapper.Map<Area>(room.Area), room.Name, room.PeopleCapacity);
                 await RoomDao.UpdateAsync(updatedRoom);
 
-                _grid.CancelEditRow(room);
-
                 await ShowNotification("Zapisano pomyślnie", Radzen.NotificationSeverity.Success);
+                _grid.CancelEditRow(room);
             }
             catch (Exception ex)
             {
@@ -67,16 +68,12 @@ namespace Hotel.Web.Components.RoomComponents
             }
         }
 
-        //private void SaveRow(RoomDto room)
-        //{
-        //    _grid.UpdateRow(room);
-        //}
-
         private async Task CancelEdit(RoomDto room)
         {
             if (room.Id == 0)
             {
-                _grid.CancelEditRow(room);
+                _rooms.Remove(room);
+                await _grid.Reload();
                 return;
             }
 
@@ -111,6 +108,8 @@ namespace Hotel.Web.Components.RoomComponents
             try
             {
                 await RoomDao.DeleteAsync(room.Id);
+                _rooms.Remove(room);
+                await _grid.Reload();
 
                 await ShowNotification("Usunięto pomyślnie", Radzen.NotificationSeverity.Success);
             }
@@ -118,24 +117,25 @@ namespace Hotel.Web.Components.RoomComponents
             {
                 await HandleException(ex);
             }
-
-            await _grid.Reload();
         }
 
-        private void InsertRow()
+        private async Task InsertRow()
         {
             var newRoom = new RoomDto();
-            //_rooms.Add(newRoom);
-            _grid.InsertRow(newRoom);
-            _grid.EditRow(newRoom);
-
-            //_grid.InsertRow(new RoomDto());
+            _rooms.Add(newRoom);
+            await _grid.Reload();
+            await _grid.EditRow(newRoom);            
         }
 
         private async Task AddRow(RoomDto room) 
         {
             var area = Mapper.Map<Area>(room.Area);
-            await RoomDao.AddAsync(new Room(area, room.Name, room.PeopleCapacity));
+            var added = await RoomDao.AddAsync(new Room(area, room.Name, room.PeopleCapacity));
+
+            room.Id = added.Id;
+
+            await _grid.Reload();
+            StateHasChanged();
 
             await ShowNotification("Dodano pomyślnie", Radzen.NotificationSeverity.Success);
         }

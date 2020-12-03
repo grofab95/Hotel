@@ -11,7 +11,7 @@ else
     <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@InsertRow" />
     <RadzenGrid @ref="_grid" AllowFiltering="true" AllowPaging="true" PageSize="16" AllowSorting="true" 
                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EditMode="DataGridEditMode.Single"
-                Data="@_rooms" TItem="RoomDto" >@*RowUpdate="@OnUpdateRow"*@
+                Data="@_rooms" TItem="RoomDto" >
         <Columns>
             <RadzenGridColumn Width="100px" TItem="RoomDto" Property="Id" Title="Id" />
             <RadzenGridColumn Width="200px" TItem="RoomDto" Property="Area.Name" Title="Obszar">
@@ -43,11 +43,13 @@ else
             </RadzenGridColumn>
             <RadzenGridColumn TItem="RoomDto" Context="_room" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
                 <Template Context="_room">
-                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Text="Usuń" Click="@(args => DeleteRow(_room))">
+                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Text="Usuń" 
+                                  Click="@(args => DeleteRow(_room))" Visible="@(_room.Id > 0)">
                     </RadzenButton>
                 </Template>
                 <EditTemplate Context="_room">
-                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Text="Usuń" Click="@(args => DeleteRow(_room))">
+                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Text="Usuń"
+                                  Click="@(args => DeleteRow(_room))" Visible="@(_room.Id > 0)">
                     </RadzenButton>
                 </EditTemplate>
             </RadzenGridColumn>
