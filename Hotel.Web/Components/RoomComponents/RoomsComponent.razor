@@ -8,7 +8,7 @@
 }
 else
 {
-    <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@InsertRow" />
+    <RadzenButton style="margin-bottom: 10px" Text="Dodaj pokój" Click="@InsertRow" Size="ButtonSize.Small" />
     <RadzenGrid @ref="_grid" AllowFiltering="true" AllowPaging="true" PageSize="16" AllowSorting="true" 
                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EditMode="DataGridEditMode.Single"
                 Data="@_rooms" TItem="RoomDto" >
