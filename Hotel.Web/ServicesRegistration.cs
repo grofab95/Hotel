@@ -13,6 +13,7 @@ namespace Hotel.Web
             services.AddScoped<IRoomDao, RoomDao>();
             services.AddScoped<IAreaDao, AreaDao>();
             services.AddScoped<ICustomerDao, CustomerDao>();
+            services.AddScoped<IStatisticDao, StatisticDao>();
         }
     }
 }
