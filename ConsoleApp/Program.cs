@@ -1,25 +1,43 @@
-﻿using Hotel.Domain.Entities;
+﻿using Hotel.Application.Services;
+using Hotel.Domain.Entities;
 using Hotel.Domain.Extensions;
 using Hotel.Sql;
 using Hotel.Sql.Tools;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 var context = new HotelContext();
 
-var customers = new List<Customer>
+try
 {
-    new Customer("Monika", "Olejnik"),
-    new Customer("Andrzej", "Kowalczyk"),
-    new Customer("Anna", "Nowak"),
-    new Customer("Stanisław", "Wodny"),
-    new Customer("Maria", "Kaziewska"),
-    new Customer("Stefan", "Gruby"),
-    new Customer("Żaneta", "Kuźniar"),
-    new Customer("Marian", "Nowy")
-};
+    var res = context.Reservations
+        .Include(x => x.Customer)
+        .Include(x => x.ReservationRooms).ThenInclude(x => x.Room).ThenInclude(x => x.Area)
+        .Include(x => x.ReservationRooms).ThenInclude(x => x.Guests)
+        .FirstOrDefault();
 
-context.AddRange(customers);
-context.SaveChanges();
+    var a = new WordReservationService(res);
+    a.Start();
+}
+catch (Exception ex)
+{
+
+}
+
+//var customers = new List<Customer>
+//{
+//    new Customer("Monika", "Olejnik"),
+//    new Customer("Andrzej", "Kowalczyk"),
+//    new Customer("Anna", "Nowak"),
+//    new Customer("Stanisław", "Wodny"),
+//    new Customer("Maria", "Kaziewska"),
+//    new Customer("Stefan", "Gruby"),
+//    new Customer("Żaneta", "Kuźniar"),
+//    new Customer("Marian", "Nowy")
+//};
+
+//context.AddRange(customers);
+//context.SaveChanges();
 

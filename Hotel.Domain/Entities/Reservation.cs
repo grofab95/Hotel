@@ -14,6 +14,7 @@ namespace Hotel.Domain.Entities
         public DateTime CheckOut { get; private set; }
         public virtual Customer Customer { get; private set; }
         public virtual List<ReservationRoom> ReservationRooms { get; private set; }
+        public decimal TotalPrice { get; private set; }
 
         protected Reservation() 
         {
@@ -97,7 +98,13 @@ namespace Hotel.Domain.Entities
         public bool IsRoomInReservation(Room room) => ReservationRooms.Any(x => x.Room.Id == room.Id);
 
         public decimal GetReservationPrice(PriceCalculator priceCalculator)
-            => GetReservationPriceForDay(priceCalculator) * GetDaysAmount();
+        { 
+            var price = GetReservationPriceForDay(priceCalculator) * GetDaysAmount();
+
+            TotalPrice = price;
+
+            return price;
+        }
      
         public decimal GetReservationPriceForDay(PriceCalculator priceCalculator)
         {
@@ -112,5 +119,6 @@ namespace Hotel.Domain.Entities
         public int GetGuestsAmount() => ReservationRooms.Sum(x => x.Guests.Count);
         public int GetRoomsAmount() => ReservationRooms.Count;
         public int GetDaysAmount() => (int)Math.Max(1, (CheckOut - CheckIn).TotalDays);
+        public int GetTotalRoomsCapacity() => GetRooms().Sum(x => x.PeopleCapacity);
     }
 }

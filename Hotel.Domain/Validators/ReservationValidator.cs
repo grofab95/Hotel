@@ -27,8 +27,11 @@ namespace Hotel.Domain.Validators
                 throw new HotelException("Rezerwacja nie zawiera gości.");
 
             var guests = _reservation.GetGuests();
-            if (!guests.All(x => x.BasePrice > 0))
+            if (!guests.All(x => x.BasePrice > 0)) // dodać wykluczenie tych co maja swoja cene
                 throw new HotelException("Nie wszyscy goście mają ustawioną cenę bazową.");
+
+            if (_reservation.TotalPrice == 0)
+                throw new HotelException("Cena za całość nie została wyliczona.");
         }
     }
 }

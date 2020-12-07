@@ -63,7 +63,7 @@ namespace Hotel.Web.Components.ReservationComponents
             try
             {
                 ShowWaitingWindow("Trwa tworzenie rezerwacji ...");
-
+                
                 var reservationId = (await ReservationDao.AddAsync(_reservation)).Id;
 
                 CloseWindow();

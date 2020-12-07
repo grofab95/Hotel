@@ -2,6 +2,7 @@
 
 @if (_isLoaded && Reservation != null)
 {
+    <p><b>Ilość miejsc:</b> @Reservation.GetTotalRoomsCapacity()</p>
     <table class="table" style="width: 1100px;">
         <thead class="thead-dark">
             <tr style="text-align: center;">
