@@ -1,35 +1,37 @@
-﻿using System;
+﻿using Hotel.Domain.Entities;
+using Hotel.Domain.Extensions;
+using MariGold.OpenXHTML;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using DocumentFormat.OpenXml;
-using Hotel.Domain.Entities;
-using MariGold.HtmlParser;
-using MariGold.OpenXHTML;
-using Hotel.Domain.Extensions;
 
 namespace Hotel.Application.Services
 {
-    public class WordReservationService
+    public class ReservationDocumentService
     {
         private Reservation _reservation;
         private StringBuilder _html;
 
-        public WordReservationService(Reservation reservation)
+        private string _document;
+
+        public ReservationDocumentService(Reservation reservation)
         {
             _reservation = reservation;
             _html = new StringBuilder();
+            _document = $"rezerwacja-{_reservation.Id}";
+
+            if (!Directory.Exists(".\\wwwroot\\documents"))
+                Directory.CreateDirectory(".\\wwwroot\\documents");
         }
 
-        public string GetCreatedWordName()
+        public string GetCreatedDocumentName()
         {
             PrepareFile();
             BuildTable();
             Save();
 
-            return null;
+            return _document;
         }
 
         private void PrepareFile()
@@ -79,19 +81,13 @@ namespace Hotel.Application.Services
                     _html.AppendLine("</tr>");
                 }
             }
-
-            var test = _html.ToString();
         }
 
         private void Save()
         {
             _html.AppendLine("</tbody></table>");
 
-            File.WriteAllText("data/index.html", _html.ToString());
-
-            WordDocument doc = new WordDocument("data/test.docx");
-
-            var tt = _html.ToString();
+            WordDocument doc = new WordDocument($".\\wwwroot\\documents\\{_document}.docx");
 
             doc.Process(new MariGold.OpenXHTML.HtmlParser(_html.ToString()));
             doc.Save();

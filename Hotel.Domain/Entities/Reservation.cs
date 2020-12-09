@@ -113,7 +113,6 @@ namespace Hotel.Domain.Entities
 
             return priceCalculator.CalculateReservationPrice(this);
         }
-
         public List<Room> GetRooms() => ReservationRooms.Select(x => x.Room).ToList();
         public List<Guest> GetGuests() => ReservationRooms.SelectMany(x => x.Guests).ToList();
         public int GetGuestsAmount() => ReservationRooms.Sum(x => x.Guests.Count);

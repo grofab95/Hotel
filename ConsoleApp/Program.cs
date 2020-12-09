@@ -18,7 +18,7 @@ try
         .Include(x => x.ReservationRooms).ThenInclude(x => x.Guests)
         .FirstOrDefault();
 
-    var a = new WordReservationService(res);
+    var a = new ReservationDocumentService(res);
     a.Start();
 }
 catch (Exception ex)

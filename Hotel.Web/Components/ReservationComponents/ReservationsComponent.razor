@@ -1,4 +1,4 @@
-﻿@inherits Base
+﻿@inherits Base 
 
 @if (_reservations == null)
 {
@@ -27,6 +27,7 @@ else
                             <th scope="col">Ilość osób</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,11 +42,15 @@ else
                                 <td>@reservation.RoomsAmount</td>
                                 <td>@reservation.BookingAmount</td>
                                 <td>
+                                    <RadzenButton Icon="info" Text="Dokument" ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Small"
+                                                  Click="(async () => await GetDocument(reservation.ReservationId))" />
+                                </td>
+                                <td>
                                     <RadzenButton Icon="info" Text="Szczegóły" ButtonStyle="ButtonStyle.Info" Size="ButtonSize.Small"
                                                   Click="(async () => await LoadReservation(reservation.ReservationId))" />
                                 </td>
                                 <td>
-                                    <RadzenButton Icon="delete_forever" Text="Usuń" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Small"
+                                    <RadzenButton Icon="delete_forever" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Small"
                                                   Click="(async () => await DeleteReservation(reservation.ReservationId))" />
                                 </td>
                             </tr>

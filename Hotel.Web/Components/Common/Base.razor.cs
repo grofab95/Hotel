@@ -13,7 +13,7 @@ namespace Hotel.Web.Components.Common
     {
         [Inject] NotificationService notificationService { get; set; }
         [Inject] NavigationManager NavigationManager { get; set; }
-        [Inject] IJSRuntime JsRuntime { get; set; }
+        [Inject] public IJSRuntime JsRuntime { get; set; }
         [Inject] public IMapper Mapper { get; set; }
 
         protected async Task<bool> DoSafeAction(Action action)

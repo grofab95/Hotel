@@ -1,0 +1,27 @@
+<h1 style="text-align: center;">
+    Rezerwacja [#ID#]
+</h1>
+
+<hr />
+
+<div style="font-size: 16px">
+    <p><b>Okres rezerwacji:</b> [#DATE_RANGE#]</p>
+    <p><b>Ilość pokoi:</b> [#ROOMS_AMOUNT#]</p>
+    <p><b>Rozmieszczonych gości:</b> [#GUESTS_ORDER#]</p>
+    <p><b>Suma:</b> [#TOTAL#]</p>
+</div>
+
+<hr />
+
+<table style="text-align: center;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid black;" scope="col">    </th>
+            <th style="border: 1px solid black;" scope="col">  Osoba  </th>
+            <th style="border: 1px solid black;" scope="col">  Nowożeniec  </th>
+            <th style="border: 1px solid black;" scope="col">  Dziecko  </th>
+            <th style="border: 1px solid black;" scope="col">  Śniadanie  </th>
+        </tr>
+    </thead>
+
+    <tbody>

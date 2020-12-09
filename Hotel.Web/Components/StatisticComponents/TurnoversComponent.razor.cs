@@ -19,8 +19,8 @@ namespace Hotel.Web.Components.StatisticComponents
         private List<int> _years;
         private Turnover _turnover;
 
-        private int _selectedMonth = 1;
-        private int _selectedYear = 2020;
+        private int _selectedMonth;
+        private int _selectedYear;
         private bool _isInitalDataLoaded = false;
         private bool _isTurnoverLoaded = false;
 
@@ -29,6 +29,9 @@ namespace Hotel.Web.Components.StatisticComponents
             try
             {
                 var firstReservationYear = await statisticDao.GetFirstReservationYearAsync();
+
+                _selectedMonth = DateTime.Now.Month;
+                _selectedYear = DateTime.Now.Year;
 
                 _years = new List<int>();
                 for (int year = firstReservationYear; year <= DateTime.Now.Year; year++)

@@ -1,4 +1,5 @@
-﻿using Hotel.Domain.Adapters;
+﻿using Hotel.Application.Services;
+using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Entities.Views;
@@ -120,5 +121,28 @@ namespace Hotel.Web.Components.ReservationComponents
         }
 
         private void OnEvent(bool state) => StateHasChanged();
+
+        private async Task GetDocument(int reservationId)
+        {
+            try
+            {
+                ShowWaitingWindow("Trwa generowanie ...");
+
+                var reservation = await ReservationDao.GetAsync(x => x.Id == reservationId);
+                var reservationDocumentService = new ReservationDocumentService(reservation);
+                var document = reservationDocumentService.GetCreatedDocumentName();
+                var url = $"documents\\{document}.docx";
+
+                CloseWindow();
+
+                await JsRuntime.InvokeAsync<object>("open", new string[] { url, "_blank" });
+            }
+            catch (Exception ex)
+            {
+                await HandleException(ex);
+
+                CloseWindow();
+            }
+        }
     }
 }
