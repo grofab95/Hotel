@@ -1,0 +1,14 @@
+﻿@page "/calendar"
+@inherits Base
+
+<h3>Kalendarz rezerwacji</h3>
+
+@if (_reservationsDtos != null)
+{
+    <RadzenScheduler @ref=@_scheduler style="height: 768px;" TItem="ReservationDto" Data=@_reservationsDtos
+                     TextProperty="Text" SelectedIndex="1" StartProperty="CheckIn" EndProperty="CheckOut"
+                     AppointmentRender="OnSchedulerRender">
+        <RadzenWeekView />
+        <RadzenMonthView />
+    </RadzenScheduler>
+}
