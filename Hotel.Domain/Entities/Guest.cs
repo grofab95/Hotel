@@ -38,7 +38,7 @@ namespace Hotel.Domain.Entities
                 throw new HotelException("Nie można przypisać gościa do innego pokoju");
 
             if (updatedGuest.IsChild && updatedGuest.IsNewlyweds)
-                throw new HotelException("Nie można dodać osoby - dziecko nie może być nowożeńcem XD");
+                throw new HotelException("Nie można dodać osoby - dziecko nie może być nowożeńcem");
 
             Name = updatedGuest.Name;
             IsChild = updatedGuest.IsChild;

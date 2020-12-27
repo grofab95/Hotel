@@ -1,0 +1,11 @@
+{
+	//"SqlConnection": "Server=DESKTOP-HV06FGL;Database=HOTEL;User Id=sa; Password=Q1w2e3;",			
+			
+	"SqlConnection": "Server=192.168.0.10\\SQL2019;Database=HOTEL;User Id=sa; Password=Q1w2e3;",
+	
+	"WebAddress": "192.168.0.15",	
+	"WebPort": "2000",
+	
+	"PriceForStay": 50,	
+	"FreeRoomHour": 15	
+}
