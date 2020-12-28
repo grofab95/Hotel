@@ -8,7 +8,7 @@ namespace Hotel.Domain.Entities
     {
         public string Name { get; private set; }
         public int PeopleCapacity { get; private set; }
-        public virtual Area Area { get; private set; }
+        public Area Area { get; private set; }
 
         [NotMapped]
         public string Note { get; private set; }

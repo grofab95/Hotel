@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Hotel.Sql\Hotel.Sql.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Components\ReservationComponents\Common\" />
-  </ItemGroup>
-
 </Project>

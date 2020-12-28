@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Hotel.Domain.Adapters;
+using Hotel.Web.Components.Interface;
 using Hotel.Web.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -13,6 +13,7 @@ namespace Hotel.Web.Components.Common
     {
         [Inject] NotificationService notificationService { get; set; }
         [Inject] NavigationManager NavigationManager { get; set; }
+        [Inject] Window Window { get; set; }
         [Inject] public IJSRuntime JsRuntime { get; set; }
         [Inject] public IMapper Mapper { get; set; }
 
@@ -35,7 +36,7 @@ namespace Hotel.Web.Components.Common
         protected async Task HandleException(Exception exception) => await ShowNotification(exception.Handle());
 
         protected async Task ShowNotification(string detail, NotificationSeverity severity, string summary = "Informacja", double duration = 6000)
-            => await ShowNotification(new NotificationMessage 
+            => await ShowNotification(new NotificationMessage
             {
                 Summary = summary,
                 Severity = severity,
@@ -51,14 +52,14 @@ namespace Hotel.Web.Components.Common
 
         public async Task ShowWindow(WindowConfiguration windowConfiguration)
         {
-            await window.Show(windowConfiguration);
+            await Window.Show(windowConfiguration);
         }
 
         protected NavigationManager Navigator => NavigationManager;
 
-        protected void CloseWindow() => window.Close();
+        protected void CloseWindow() => Window.Close();
 
         protected async Task<bool> ShowConfirm(string message) => await JsRuntime.InvokeAsync<bool>("confirm", message);
-        protected void ShowWaitingWindow(string waitingText) => window.ShowWaiting(waitingText);
+        protected void ShowWaitingWindow(string waitingText) => Window.ShowWaiting(waitingText);
     }
 }

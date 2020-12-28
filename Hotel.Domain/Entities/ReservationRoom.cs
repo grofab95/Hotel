@@ -7,10 +7,10 @@ namespace Hotel.Domain.Entities
 {
     public class ReservationRoom : Entity
     {
-        public virtual Room Room { get; private set; }
-        public virtual Reservation Reservation { get; private set; }
-        public virtual int ReservationId { get; private set; }
-        public virtual List<Guest> Guests { get; private set; }
+        public Room Room { get; private set; }
+        public Reservation Reservation { get; private set; }
+        public int ReservationId { get; private set; }
+        public List<Guest> Guests { get; private set; }
 
         public int BookingAmount => Guests?.Count ?? 0;
 

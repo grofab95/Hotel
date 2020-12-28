@@ -8,7 +8,7 @@ namespace Hotel.Domain.Entities
     {
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
-        public virtual List<Reservation> Reservations { get; private set; }
+        public List<Reservation> Reservations { get; private set; }
 
         protected Customer() { }
         public Customer(string firstName, string lastName)

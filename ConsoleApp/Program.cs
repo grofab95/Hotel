@@ -1,11 +1,6 @@
-﻿using Hotel.Application.Services;
-using Hotel.Domain.Entities;
-using Hotel.Domain.Extensions;
-using Hotel.Sql;
-using Hotel.Sql.Tools;
+﻿using Hotel.Sql;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 var context = new HotelContext();

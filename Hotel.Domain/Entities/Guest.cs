@@ -12,7 +12,7 @@ namespace Hotel.Domain.Entities
         public bool OrderedBreakfest { get; private set; }
         public decimal BasePrice { get; private set; }
         public decimal PriceForStay { get; private set; }
-        public virtual ReservationRoom ReservationRoom { get; private set; }
+        public ReservationRoom ReservationRoom { get; private set; }
 
         protected Guest() { }
 

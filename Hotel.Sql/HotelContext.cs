@@ -26,8 +26,8 @@ namespace Hotel.Sql
         {
             optionsBuilder.UseSqlServer(Config.Get.SqlConnection);
 
-            optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.UseLoggerFactory(DbLogger.Factory);            
+            //optionsBuilder.EnableSensitiveDataLogging();
+            //optionsBuilder.UseLoggerFactory(DbLogger.Factory);            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

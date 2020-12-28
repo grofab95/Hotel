@@ -12,8 +12,8 @@ namespace Hotel.Domain.Entities
     {
         public DateTime CheckIn { get; private set; }
         public DateTime CheckOut { get; private set; }
-        public virtual Customer Customer { get; private set; }
-        public virtual List<ReservationRoom> ReservationRooms { get; private set; }
+        public Customer Customer { get; private set; }
+        public List<ReservationRoom> ReservationRooms { get; private set; }
         public decimal TotalPrice { get; private set; }
 
         protected Reservation() 

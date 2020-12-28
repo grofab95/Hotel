@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Hotel.Application.Dtos;
+﻿using Hotel.Application.Dtos;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Extensions;
@@ -38,7 +37,7 @@ namespace Hotel.Web.Components
             }
             catch (Exception ex)
             {
-
+                await HandleException(ex);
             }
         }
 
@@ -60,7 +59,7 @@ namespace Hotel.Web.Components
             }
             catch (Exception ex)
             {
-
+                await HandleException(ex);
             }
         }
 
