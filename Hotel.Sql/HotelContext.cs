@@ -45,9 +45,8 @@ namespace Hotel.Sql
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var res = await base.SaveChangesAsync(cancellationToken);
-
-            if (res > 0)
+            var result = await base.SaveChangesAsync(cancellationToken);
+            if (result > 0)
             {
                 var trackedEntries = ChangeTracker.Entries()
                     .ToList();
@@ -55,7 +54,7 @@ namespace Hotel.Sql
                 trackedEntries.ForEach(x => x.State = EntityState.Detached);
             }
 
-            return res;
+            return result;
         }
     }
 }

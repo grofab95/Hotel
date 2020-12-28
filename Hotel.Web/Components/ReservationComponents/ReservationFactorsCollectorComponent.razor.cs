@@ -1,6 +1,6 @@
-﻿using Hotel.Domain.Adapters;
+﻿using Hotel.Application.Dtos;
+using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
-using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,6 @@ namespace Hotel.Web.Components.ReservationComponents
         [Parameter] public EventCallback<FindedRoomsFactors> OnFindedRooms { get; set; }
         [Parameter] public EventCallback<ReservationFactors> OnChange { get; set; }
 
-        private List<Room> _findedRooms;
         private ReservationFactors _reservationFactors;
         private bool _isRoomSearching;
 

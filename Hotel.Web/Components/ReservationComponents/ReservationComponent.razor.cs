@@ -1,6 +1,6 @@
-﻿using Hotel.Domain.Entities;
+﻿using Hotel.Application.Dtos;
+using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
-using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;

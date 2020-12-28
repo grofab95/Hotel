@@ -1,7 +1,7 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Entities.PriceRuleEntity;
 
-namespace Hotel.Web.Dtos
+namespace Hotel.Application.Dtos
 {
     public class PriceRuleDto : Entity
     {

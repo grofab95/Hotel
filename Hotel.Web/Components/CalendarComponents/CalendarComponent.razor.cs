@@ -1,6 +1,6 @@
-﻿using Hotel.Domain.Adapters;
+﻿using Hotel.Application.Dtos;
+using Hotel.Domain.Adapters;
 using Hotel.Domain.Environment;
-using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -57,7 +57,7 @@ namespace Hotel.Web.Components.CalendarComponents
 
             var random = new Random();
 
-            _reservationsDtos.ForEach(x => x.Color = colors[random.Next(colors.Count())]);
+            _reservationsDtos.ForEach(x => x.Color = colors[random.Next(colors.Count)]);
         }
 
         private void OnSchedulerRender(SchedulerAppointmentRenderEventArgs<ReservationDto> args)

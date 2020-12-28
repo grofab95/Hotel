@@ -1,7 +1,6 @@
-﻿using AutoMapper;
+﻿using Hotel.Application.Dtos;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
-using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;

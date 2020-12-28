@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Hotel.Application.Dtos;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Environment;
-using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,6 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
         [Parameter] public PriceCalculator PriceCalculator { get; set; }
         [Parameter] public ReservationFactors ReservationFactors { get; set; }
         [Parameter] public EventCallback<bool> OnEvent { get; set; }
-        [Inject] IMapper Mapper { get; set; }
 
         private decimal _standardPriceForStay;
         private Dictionary<Guest, bool> _guestStandardPrice;

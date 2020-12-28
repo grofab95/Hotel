@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Hotel.Web.Dtos
+namespace Hotel.Application.Dtos
 {
     public class ReservationDto
     {

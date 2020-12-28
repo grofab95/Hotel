@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Hotel.Application.Dtos;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Extensions;
-using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using System;
@@ -14,7 +14,6 @@ namespace Hotel.Web.Components
 {
     public partial class PriceRulesComponents
     {
-        [Inject] IMapper Mapper { get; set; }
         [Inject] IPriceRuleDao PriceRuleDao { get; set; }
 
         private PriceRuleManager _priceRuleManager;
@@ -63,16 +62,6 @@ namespace Hotel.Web.Components
             {
 
             }
-
-            //await DoSafeAction<bool>(async () => 
-            //{
-            //    var priceRule = _priceRules.Find(x => x.Id == priceRuleDto.Id);
-
-            //    var updated = priceRule.Update(Mapper.Map<PriceRule>(priceRuleDto));
-            //    await PriceRuleDao.UpdateAsync(updated);
-
-            //    await _grid.UpdateRow(priceRuleDto);
-            //}, "Zapisano zmiany");
         }
 
         private void CancelEdit(PriceRuleDto priceRule)

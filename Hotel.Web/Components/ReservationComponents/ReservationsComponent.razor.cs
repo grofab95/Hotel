@@ -1,9 +1,9 @@
-﻿using Hotel.Application.Services;
+﻿using Hotel.Application.Dtos;
+using Hotel.Application.Services;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Entities.Views;
-using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;

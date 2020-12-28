@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Hotel.Web
 {
-    public static class ServicesRegistration
+    public static class ServicesRegistrator
     {
         public static void AddDaos(this IServiceCollection services)
         {

@@ -1,7 +1,6 @@
 ﻿using Hotel.Domain.Utilities;
 using System;
 using System.IO;
-using System.Text.Json;
 
 namespace Hotel.Domain.Environment
 {
@@ -17,24 +16,20 @@ namespace Hotel.Domain.Environment
 
         private static Config GetConfig()
         {
-            CreateDataFolderIfNotExist();
-            var configPath = GetConfigFilePath();
-            var configJson = File.ReadAllText($"{configPath}/config.json");
-
-            ValidConfig(configJson);
-
-            Config config = null;
-
             try
             {
-                config = JsonUtility.ParseToObject<Config>(configJson);
+                CreateDataFolderIfNotExist();
+                var configPath = GetConfigFilePath();
+                var configJson = File.ReadAllText($"{configPath}/config.json");
+
+                ValidConfig(configJson);
+           
+                return JsonUtility.ParseToObject<Config>(configJson);
             }
             catch (Exception ex)
             {
                 throw new Exception($"błąd podczas odczytywania pliku config.json: {ex.Message}.");
             }
-
-            return config;
         }
 
         private static string GetConfigFilePath()
@@ -44,9 +39,8 @@ namespace Hotel.Domain.Environment
             var configDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
             while (!File.Exists(Path.Combine(configDirectory.FullName, configFileName)))
             {
-                configDirectory = new DirectoryInfo(configDirectory.FullName).Parent;
-                if (configDirectory == null)
-                    throw new Exception("Brak pliku config.json!");
+                configDirectory = new DirectoryInfo(configDirectory.FullName)?.Parent
+                    ?? throw new Exception("Brak pliku config.json!");
             }
 
             return configDirectory.FullName;
@@ -76,8 +70,5 @@ namespace Hotel.Domain.Environment
                 throw new Exception("Nieprawidłowy config.");
             }
         }
-
-        //public bool IsTestMode()
-        //   => Environment.MachineName != "SERVER2019";
     }
 }

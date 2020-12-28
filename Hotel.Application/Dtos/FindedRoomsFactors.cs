@@ -1,7 +1,7 @@
 ﻿using Hotel.Domain.Entities;
 using System.Collections.Generic;
 
-namespace Hotel.Web.Dtos
+namespace Hotel.Application.Dtos
 {
     public class FindedRoomsFactors
     {

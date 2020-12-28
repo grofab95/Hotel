@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using Hotel.Application.Dtos;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
-using Hotel.Web.Dtos;
 
 namespace Hotel.Web.Mapper
 {

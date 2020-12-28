@@ -30,12 +30,12 @@ namespace Hotel.Sql.Daos
             if (month != null)
                 monthsDays = DateTime.DaysInMonth(year, (int)month);
 
-            Expression<Func<Reservation, bool>> filter = 
+            Expression<Func<Reservation, bool>> request = 
                 (x => x.CheckIn >= new DateTime(year, month ?? 1, 1, 0, 0, 0) && 
                       x.CheckIn <= new DateTime(year, month ?? 12, month != null ? monthsDays : 31, 23, 59, 59));
 
             var reservationsIds = await context.Reservations
-                .Where(filter)
+                .Where(request)
                 .Select(x => x.Id)
                 .ToListAsync();
 

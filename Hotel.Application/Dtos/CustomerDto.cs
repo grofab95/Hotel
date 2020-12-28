@@ -1,4 +1,4 @@
-﻿namespace Hotel.Web.Dtos
+﻿namespace Hotel.Application.Dtos
 {
     public class CustomerDto
     {

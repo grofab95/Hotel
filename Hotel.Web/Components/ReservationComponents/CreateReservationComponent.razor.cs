@@ -1,7 +1,7 @@
-﻿using Hotel.Domain.Adapters;
+﻿using Hotel.Application.Dtos;
+using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
-using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using System;
@@ -19,9 +19,7 @@ namespace Hotel.Web.Components.ReservationComponents
         private PriceCalculator _priceCalculator;
         private ReservationFactors _reservationFactors;
 
-        private List<Room> _findedRooms;
-
-        private bool _isRoomSearching;        
+        private List<Room> _findedRooms;   
 
         protected override async Task OnInitializedAsync()
         {

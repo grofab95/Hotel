@@ -1,11 +1,9 @@
-﻿using Hotel.Domain.Adapters;
+﻿using Hotel.Application.Dtos;
+using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
-using Hotel.Domain.Extensions;
-using Hotel.Web.Dtos;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hotel.Web.Components.AreaComponents
