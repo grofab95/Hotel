@@ -4,6 +4,10 @@
 {
 
 }
+else if (!_reservationsInfos.Any())
+{
+    <h2>Brak rezerwacji w systemie ...</h2>
+}
 else
 {
     <RadzenCard Style="width: 490px;">
@@ -15,7 +19,7 @@ else
             <div class="col-9">
                 <RadzenRadioButtonList @bind-Value=@_turnoverType TValue="TurnoverTypes" Change="OnInputChange">
                     <Items>
-                        <RadzenRadioButtonListItem Text="roczny" Value="TurnoverTypes.Annual" />
+                        <RadzenRadioButtonListItem Text="roczny" Value="TurnoverTypes.Yearly" />
                         <RadzenRadioButtonListItem Text="miesięczny" Value="TurnoverTypes.Monthly" />
                     </Items>
                 </RadzenRadioButtonList>
@@ -24,22 +28,22 @@ else
         <hr />
         <div class="row">
             <div class="col-4">
-                <RadzenDropDown TValue="int" Data="_years" @bind-Value="_selectedYear"  Change="OnInputChange" />
+                <RadzenDropDown TValue="int" Data="_years" @bind-Value="_selectedYear" Change="OnInputChange" />
             </div>
 
             <div class="col-4">
                 <RadzenDropDown TValue="int" Data="_months" TextProperty="Value" Visible="@(_turnoverType == TurnoverTypes.Monthly)"
-                                ValueProperty="Key" @bind-Value="_selectedMonth"  Change="OnInputChange" />
+                                ValueProperty="Key" @bind-Value="_selectedMonth" Change="OnInputChange" />
             </div>
 
             <div class="col-4">
-                <RadzenButton Text="Pokaż" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Info" Click="ShowTurnover" />
+                <RadzenButton Text="Pokaż" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Info" Click="OnInputChange" />
             </div>
         </div>
     </RadzenCard>
     @if (_isTurnoverLoaded)
     {
-        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Style="width: 490px;" />
+        @*<RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Style="width: 490px;" />*@
     }
 }
 
@@ -52,16 +56,17 @@ else
         {
             @if (_turnoverType == TurnoverTypes.Monthly)
             {
-                <h2>Obroty za miesiąc @(_selectedMonth)/@_selectedYear</h2>
+                <h2>Obrót za miesiąc @(_selectedMonth)/@_selectedYear</h2>
             }
             else
             {
-                <h2>Obroty za rok @_selectedYear</h2>
+                <h2>Obrót za rok @_selectedYear</h2>
             }
 
             <hr />
 
             <h3><b>Przychód: </b>@_turnover.Income zł</h3>
+            <h3><b>Ilość rezerwacji: </b>@_turnover.ReservationAmount</h3>
             <h3><b>Ilość osób: </b>@_turnover.PeopleAmount</h3>
             <h3><b>Ilość śniadań: </b>@_turnover.BreakfestAmount</h3>
         }

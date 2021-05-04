@@ -3,6 +3,6 @@
     public enum TurnoverTypes
     {
         Monthly,
-        Annual
+        Yearly
     }
 }

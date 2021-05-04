@@ -1,5 +1,7 @@
 ﻿using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities.StatisticEntities;
+using Hotel.Domain.Entities.Views;
+using Hotel.Domain.Extensions;
 using Hotel.Web.Helpers.Enums;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -14,8 +16,11 @@ namespace Hotel.Web.Components.StatisticComponents
     {
         [Inject] IStatisticDao statisticDao { get; set; }
 
+        private List<ReservationInfoView> _reservationsInfos;
+
         private TurnoverTypes _turnoverType;
         private Dictionary<int, string> _months;
+        private Dictionary<int, List<int>> _reservationsMonths;
         private List<int> _years;
         private Turnover _turnover;
 
@@ -28,21 +33,13 @@ namespace Hotel.Web.Components.StatisticComponents
         {
             try
             {
-                var firstReservationYear = await statisticDao.GetFirstReservationYearAsync();
-
-                _selectedMonth = DateTime.Now.Month;
+                _reservationsInfos = await statisticDao.GetAllAsync();
+                _years = _reservationsInfos.Select(x => x.CheckIn.Year).OrderBy(x => x).Distinct().ToList();
                 _selectedYear = DateTime.Now.Year;
-
-                _years = new List<int>();
-                for (int year = firstReservationYear; year <= DateTime.Now.Year; year++)
-                {
-                    _years.Add(year);
-                }
-
-                var currentCultureMonths = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
-                _months = DateTimeFormatInfo.CurrentInfo.MonthNames
-                    .Where(x => !string.IsNullOrEmpty(x))
-                    .ToDictionary(x => currentCultureMonths.IndexOf(x) + 1, x => x);
+                _selectedMonth = DateTime.Now.Month;
+                _turnoverType = TurnoverTypes.Monthly;
+                if (_reservationsInfos.Any())
+                    await OnInputChange();
 
                 _isInitalDataLoaded = true;
             }
@@ -52,28 +49,60 @@ namespace Hotel.Web.Components.StatisticComponents
             }
         }
 
-        private void OnInputChange()
-        {
-            _turnover = null;
-
-            StateHasChanged();
-        }
-
-        private async Task ShowTurnover()
+        private async Task OnInputChange()
         {
             try
             {
-                _isTurnoverLoaded = true;
+                LoadMonths();
+                GateDateRange(out DateTime startDate, out DateTime endDate);
+                var reservations = _reservationsInfos
+                    .Where(x => x.CheckIn > startDate && x.CheckIn < endDate)
+                    .ToList();
 
-                int? selectedMonth = _turnoverType == TurnoverTypes.Monthly ? _selectedMonth : null;
-                _turnover = await statisticDao.GetTurnoverAsync(_selectedYear, selectedMonth);
+                _turnover = new Turnover(reservations);
+                StateHasChanged();
             }
             catch (Exception ex)
             {
                 await HandleException(ex);
             }
+        }
 
-            _isTurnoverLoaded = false;
+        private void GateDateRange(out DateTime startDate, out DateTime endDate)
+        {
+            startDate = DateTime.MinValue;
+            endDate = DateTime.MinValue;
+            if (_turnoverType == TurnoverTypes.Yearly)
+            {
+                startDate = new DateTime(_selectedYear, 1, 1, 0, 0, 0);
+                endDate = new DateTime(_selectedYear, 12, 31, 23, 59, 59);
+                return;
+            }
+            var montDays = DateTime.DaysInMonth(_selectedYear, _selectedMonth);
+            startDate = new DateTime(_selectedYear, _selectedMonth, 1, 0, 0, 0);
+            endDate = new DateTime(_selectedYear, _selectedMonth, montDays, 23, 59, 59);
+        }
+
+        private void LoadMonths()
+        {
+            var currentCultureMonths = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
+            var allMonths = DateTimeFormatInfo.CurrentInfo.MonthNames
+                .Where(x => !string.IsNullOrEmpty(x))
+                .ToDictionary(x => currentCultureMonths.IndexOf(x) + 1, x => x);
+
+            var monthsWithReservations = _reservationsInfos
+                .Where(x => x.CheckIn.Year == _selectedYear)
+                .OrderBy(x => x.CheckIn.Month)
+                .Select(x => x.CheckIn.Month)
+                .Distinct()
+                .ToList();
+
+            _months = allMonths
+                .GetSame(monthsWithReservations, x => x.Key, x => x)
+                .ToDictionary(x => x.Key, x => x.Value);
+
+            if (!monthsWithReservations.Contains(_selectedMonth))
+                _selectedMonth = monthsWithReservations.FirstOrDefault();
         }
     }
 }
