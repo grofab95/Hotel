@@ -19,13 +19,12 @@ namespace Hotel.Sql.Daos
         public async Task<List<Customer>> GetManyAsync(Expression<Func<Customer, bool>> expression)
             => await context.Customers
                 .Where(expression)
-                .OrderBy(x => x.FirstName)
+                .OrderBy(x => x.Name)
                 .ToListAsync();
 
         public async Task<Customer> AddAsync(Customer customer)
         {
-            if (await context.Customers.AnyAsync(x => x.FirstName.ToLower().Trim() == customer.FirstName.ToLower().Trim() &&
-                                                      x.LastName.ToLower().Trim() == customer.LastName.ToLower().Trim()))
+            if (await context.Customers.AnyAsync(x => x.Name.ToLower().Trim() == customer.Name.ToLower().Trim()))
                 throw new HotelException($"Klient {customer} już istnieje.");
 
             await context.AddAsync(customer);

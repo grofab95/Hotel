@@ -46,7 +46,6 @@ namespace Hotel.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls($"http://{config.WebAddress}:{config.WebPort}");
                     webBuilder.UseStartup<Startup>();
                     
                 });

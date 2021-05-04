@@ -52,10 +52,9 @@ namespace Hotel.Web.Components.CustomerComponents
         {
             try
             {
-                
+
                 var customerDb = (await CustomerDao.GetManyAsync(x => x.Id == customer.Id)).FirstOrDefault();
-                customer.FirstName = customerDb.FirstName;
-                customer.LastName = customerDb.LastName;
+                customer.Name = customerDb.Name;
 
                 _grid.CancelEditRow(customer);
 

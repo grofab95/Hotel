@@ -20,10 +20,12 @@ namespace Hotel.Web.Components.CustomerComponents
 
         private string _searchedValues;
 
-        protected override void OnParametersSet()
+        protected override async Task OnParametersSetAsync()
         {
             if (AlreadySlectedCustomer != null)
                 _selectedCustomer = AlreadySlectedCustomer;
+
+            //_findedCustomers = await CustomerDao.GetManyAsync(x => x.Id > 0);
         }
 
         private async Task SearchCustomers()
@@ -33,8 +35,7 @@ namespace Hotel.Web.Components.CustomerComponents
                 if (_searchedValues.IsNotExist())
                     return;
 
-                _findedCustomers = await CustomerDao
-                    .GetManyAsync(x => x.FirstName.Contains(_searchedValues) || x.LastName.Contains(_searchedValues));
+                _findedCustomers = await CustomerDao.GetManyAsync(x => x.Name.Contains(_searchedValues));
 
                 StateHasChanged();
             }

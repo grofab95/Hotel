@@ -20,7 +20,7 @@ namespace Hotel.Domain.Tests.Helpers
             _checkIn = checkIn;
             _checkOut = checkOut;
 
-            _customer = new Customer("Marta", "Nowak");
+            _customer = new Customer("Marta");
             _areas = new List<Area>
             {
                 new Area("Budynek A"),
