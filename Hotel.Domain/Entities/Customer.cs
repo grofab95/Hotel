@@ -6,21 +6,17 @@ namespace Hotel.Domain.Entities
 {
     public class Customer : Entity
     {
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
+        public string Name { get; private set; }
         public List<Reservation> Reservations { get; private set; }
 
         protected Customer() { }
-        public Customer(string firstName, string lastName)
+        public Customer(string name)
         {
-            CustomerValidators.ValidIfFirstNameExist(firstName);
-            CustomerValidators.ValidIfLastNameExist(lastName);
-            CustomerValidators.ValidIfFirstAndLastNameAreTheSame(firstName, lastName);
+            CustomerValidators.ValidIftNameExist(name);
 
-            FirstName = firstName;
-            LastName = lastName;
+            Name = name;
         }
 
-        public override string ToString() => $"{FirstName} {LastName}";
+        public override string ToString() => $"{Name}";
     }
 }

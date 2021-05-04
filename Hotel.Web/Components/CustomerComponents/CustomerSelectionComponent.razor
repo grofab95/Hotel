@@ -8,7 +8,7 @@
     </div>
 
     <div class="col-4" style="text-align: right;">
-        <RadzenButton Text="Zatwierdź" Size="ButtonSize.Small" 
+        <RadzenButton Text="Zatwierdź" Size="ButtonSize.Small"
                       Disabled="(_selectedCustomer == null)"
                       Click="CustomerAccepted" ButtonStyle="ButtonStyle.Success" />
     </div>
@@ -44,13 +44,12 @@
             <p style="text-align: center;">Brak wyników ...</p>
         }
         else
-        { 
+        {
             <table class="table items">
                 <thead class="items">
                     <tr class="items">
                         <th scope="col"></th>
-                        <th scope="col">Imię</th>
-                        <th scope="col">Nazwisko</th>
+                        <th scope="col">Nazwa</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -62,15 +61,14 @@
 
                         <tr class="items" @onclick="@(() => HandleFindedCustomerCheck(customer))" style="@style">
                             <th scope="row">@(_findedCustomers.IndexOf(customer)+1).</th>
-                            <td>@customer.FirstName</td>
-                            <td>@customer.LastName</td>
+                            <td>@customer.Name</td>
                             <td><RadzenCheckBox TValue="bool" Value="isSelected" Change="(() => HandleFindedCustomerCheck(customer))" /></td>
                         </tr>
                     }
                 </tbody>
             </table>
         }
-     }    
+    }
 </div>
 
 @code {
@@ -80,10 +78,10 @@
         {
             Title = "Utwórz klienta",
             Content =@<CreateCustomerComponent OnCreated="OnCustomerCreated" />,
-            DialogOptions = new DialogOptions
-            {
-                Width = "350px;"
-            }
-            });
-        }
+DialogOptions = new DialogOptions
+{
+Width = "350px;"
+}
+});
+}
 } 
