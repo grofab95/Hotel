@@ -2,7 +2,7 @@
 using Hotel.Sql.Daos;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Hotel.Web
+namespace Hotel.Common
 {
     public static class ServicesRegistrator
     {

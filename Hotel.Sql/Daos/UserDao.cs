@@ -4,6 +4,7 @@ using Hotel.Domain.Exceptions;
 using Hotel.Sql.ContextFactory;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Hotel.Sql.Daos
@@ -12,6 +13,11 @@ namespace Hotel.Sql.Daos
     {
         public UserDao(IContextFactory<HotelContext> contextFactory) : base(contextFactory)
         { }
+
+        public async Task<List<User>> GetAllAsync()
+        {
+            return await context.Users.Include(x => x.Token).ToListAsync();
+        }
 
         public async Task<User> GetUserByTokenAsync(string token)
         {

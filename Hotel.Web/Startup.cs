@@ -1,6 +1,7 @@
 using AutoMapper;
 using Blazored.LocalStorage;
 using Hotel.Application.Infrastructure;
+using Hotel.Common;
 using Hotel.Domain.Environment;
 using Hotel.Sql;
 using Hotel.Sql.ContextFactory;
