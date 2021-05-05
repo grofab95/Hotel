@@ -11,6 +11,8 @@ namespace Hotel.Domain.Entities
         public byte[] PasswordHash { get; private set; }
         public byte[] PasswordSalt { get; private set; }
 
+        private User() { }
+
         public User(string name, string email, Password password)
         {
             UserValidators.ValidIfNameExist(name);

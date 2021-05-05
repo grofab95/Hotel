@@ -21,6 +21,7 @@ namespace Hotel.Sql
         public DbSet<Guest> Guests { get; set; }
         public DbSet<PriceRule> PriceRules { get; set; }
         public DbSet<ReservationInfoView> ReservationInfoViews { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -41,6 +42,7 @@ namespace Hotel.Sql
             modelBuilder.ApplyConfiguration(new ReservationConfiguration());
             modelBuilder.ApplyConfiguration(new ReservationRoomConfiguration());
             modelBuilder.ApplyConfiguration(new GuestConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
