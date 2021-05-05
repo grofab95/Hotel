@@ -2,9 +2,9 @@
 using Hotel.Application.Managers;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
+using Hotel.Domain.Environment;
 using Hotel.Web.Helpers;
 using Microsoft.AspNetCore.Components.Authorization;
-using Serilog;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,11 +17,13 @@ namespace Hotel.Web.Providers
         private const string TOKEN = "token";
         private ILocalStorageService _localStorage;
         private IUserDao _userDao;
+        private ILogger _logger;
 
-        public AuthenticationProvider(ILocalStorageService localStorage, IUserDao userDao)
+        public AuthenticationProvider(ILocalStorageService localStorage, IUserDao userDao, ILogger logger)
         {
             _localStorage = localStorage;
             _userDao = userDao;
+            _logger = logger;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -51,7 +53,7 @@ namespace Hotel.Web.Providers
             catch (Exception ex)
             {
                 if (!ex.Message.Contains("Lifetime validation failed. The token is expired."))
-                    Log.Error(ex.Message);
+                    _logger.Log(ex.Message, LogLevel.Error);
 
                 await _localStorage.RemoveItemAsync(TOKEN);
                 return EmptyState;
