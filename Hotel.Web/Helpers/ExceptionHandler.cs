@@ -1,14 +1,13 @@
-﻿using Hotel.Domain.Exceptions;
+﻿using Hotel.Domain.Environment;
+using Hotel.Domain.Exceptions;
 using Radzen;
-using Serilog;
 using System;
-using System.Linq;
 
 namespace Hotel.Web.Helpers
 {
     public static class ExceptionHandler
     {
-        public static NotificationMessage Handle(this Exception ex)
+        public static NotificationMessage Handle(this Exception ex, ILogger logger)
         {
             if (ex.GetType() == typeof(HotelException) || ex.GetType() == typeof(MissingValueException))
             {
@@ -21,7 +20,7 @@ namespace Hotel.Web.Helpers
                 };
             }
 
-            Log.Error(ex.ToString());
+            logger.Log(ex.ToString(), LogLevel.Error);
 
             return new NotificationMessage
             {
