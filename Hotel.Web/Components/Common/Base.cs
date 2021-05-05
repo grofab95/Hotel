@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hotel.Domain.Environment;
 using Hotel.Web.Components.Interface;
 using Hotel.Web.Helpers;
 using Microsoft.AspNetCore.Components;
@@ -16,6 +17,7 @@ namespace Hotel.Web.Components.Common
         [Inject] Window Window { get; set; }
         [Inject] public IJSRuntime JsRuntime { get; set; }
         [Inject] public IMapper Mapper { get; set; }
+        [Inject] public ILogger Logger { get; set; }
 
         protected async Task<bool> DoSafeAction(Action action)
         {
@@ -27,13 +29,13 @@ namespace Hotel.Web.Components.Common
             }
             catch (Exception ex)
             {
-                await ShowNotification(ex.Handle());
+                await ShowNotification(ex.Handle(Logger));
             }
 
             return false;
         }
 
-        protected async Task HandleException(Exception exception) => await ShowNotification(exception.Handle());
+        protected async Task HandleException(Exception exception) => await ShowNotification(exception.Handle(Logger));
 
         protected async Task ShowNotification(string detail, NotificationSeverity severity, string summary = "Informacja", double duration = 6000)
             => await ShowNotification(new NotificationMessage

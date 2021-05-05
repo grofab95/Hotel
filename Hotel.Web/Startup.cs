@@ -1,5 +1,7 @@
 using AutoMapper;
 using Blazored.LocalStorage;
+using Hotel.Application.Infrastructure;
+using Hotel.Domain.Environment;
 using Hotel.Sql;
 using Hotel.Sql.ContextFactory;
 using Hotel.Web.Components.Interface;
@@ -28,6 +30,7 @@ namespace Hotel.Web
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddScoped<ILogger, Logger>();
             services.AddContextFactory<HotelContext>();
             services.AddBlazoredLocalStorage();
             services.AddScoped<AuthenticationStateProvider, AuthenticationProvider>();
