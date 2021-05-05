@@ -1,0 +1,27 @@
+﻿using Hotel.Domain.Exceptions;
+using Hotel.Domain.Extensions;
+using Hotel.Domain.Utilities.Models;
+
+namespace Hotel.Domain.Validators
+{
+    class UserValidators
+    {
+        public static void ValidIfNameExist(string name)
+        {
+            if (name.IsNotExist())
+                throw new MissingValueException("Nazwa jest wymagana.");
+        }
+
+        public static void ValidIfEmailExist(string email)
+        {
+            if (email.IsNotExist())
+                throw new MissingValueException("E-mail jest wymagana.");
+        }
+
+        public static void ValidIfPasswordExist(Password password)
+        {
+            if (password == null)
+                throw new MissingValueException("Hasło jest wymagane");
+        }
+    }
+}

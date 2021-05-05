@@ -21,19 +21,20 @@ namespace Hotel.Sql
         public DbSet<Guest> Guests { get; set; }
         public DbSet<PriceRule> PriceRules { get; set; }
         public DbSet<ReservationInfoView> ReservationInfoViews { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Token> Tokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(Config.Get.SqlConnection);
 
-            //optionsBuilder.EnableSensitiveDataLogging();
-            //optionsBuilder.UseLoggerFactory(DbLogger.Factory);            
+            optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.UseLoggerFactory(DbLogger.Factory);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyViews();
-
             modelBuilder.ApplyConfiguration(new CustomerConfiguration());
             modelBuilder.ApplyConfiguration(new AreaConfiguration());
             modelBuilder.ApplyConfiguration(new RoomConfiguration());
@@ -41,6 +42,8 @@ namespace Hotel.Sql
             modelBuilder.ApplyConfiguration(new ReservationConfiguration());
             modelBuilder.ApplyConfiguration(new ReservationRoomConfiguration());
             modelBuilder.ApplyConfiguration(new GuestConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new TokenConfiguration());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

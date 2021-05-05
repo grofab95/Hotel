@@ -1,8 +1,8 @@
 ﻿@page "/areasRooms" 
 @inject Window window 
+@attribute [Authorize()]
 
 <RadzenButton Text="Zarządzaj obszarami" ButtonStyle="ButtonStyle.Info" Size="ButtonSize.Small" Click="ShowAreaComponent" />
-
 <RoomsComponent @ref="_roomsComponent" />
 
 @code {  

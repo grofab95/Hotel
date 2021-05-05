@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Hotel.Domain.Entities;
+using Hotel.Domain.Entities.PriceRuleEntity;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Hotel.Sql.Tools
@@ -17,24 +19,25 @@ namespace Hotel.Sql.Tools
                                  ON f.Id = i.Id;
                                 GO ";
 
-        private static List<string> entitinesNames = new List<string>
+        private static List<string> entitiesNames = new List<string>
         {
-            "Customers",
-            "Rooms",
-            "Areas",
-            "Reservations",
-            "ReservationRooms",
-            "Guests",
-            "PriceRules"
+            nameof(Customer),
+            nameof(Room),
+            nameof(Area),
+            nameof(Reservation),
+            nameof(ReservationRoom),
+            nameof(Guest),
+            nameof(PriceRule),
+            nameof(User)
         };
 
         private static string GenerateScript()
         {
             var script = new StringBuilder();
 
-            foreach (var entityName in entitinesNames)
+            foreach (var entityName in entitiesNames)
             {
-                var trigger = schema.Replace("XXX", entityName);
+                var trigger = schema.Replace("XXX", entityName + "s");
                 script.AppendLine(trigger);
             }
 
