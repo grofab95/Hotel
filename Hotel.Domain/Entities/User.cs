@@ -10,6 +10,7 @@ namespace Hotel.Domain.Entities
         public string Email { get; private set; }
         public byte[] PasswordHash { get; private set; }
         public byte[] PasswordSalt { get; private set; }
+        public Token Token { get; private set; }
 
         private User() { }
 
@@ -23,6 +24,7 @@ namespace Hotel.Domain.Entities
             Email = email;
             PasswordHash = password.PasswordHash;
             PasswordSalt = password.PasswordSalt;
+            Token = new Token(this);
         }
 
         public bool IsPasswordValid(string password)

@@ -1,18 +1,65 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu />
-</div>
+<AuthorizeView>
+    <Authorized>
+        <div class="sidebar">
+            <NavMenu />
+        </div>
 
-<div class="main">
-    @*<div class="top-row px-4">
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-    </div>*@
+        <div class="main">
+            <RadzenDialog />
+            <div class="top-row px-4">
+                <div class="col-6" style="text-align: left; margin-top: 14px;">
+                    <h3>Witaj, @context?.User?.Identity?.Name</h3>
+                </div>
 
-    <div class="content px-4">
-        @Body
+                <div class="col-6" style="text-align: right;">
+                    <RadzenLink Text="Wyloguj"
+                                @onclick="Logout" />
+                </div>
+            </div>
+            <div class="content px-4">
+                @Body
 
-        <RadzenDialog />
-        <RadzenNotification />
-    </div>
-</div>
+                <div style="top: 0px !important;">
+                    <RadzenNotification />
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div style="margin: 0 auto; margin-top: 50px">
+            <Hotel.Web.Components.AuthComponents.LoginComponent />
+            <RadzenDialog />
+            <RadzenNotification />
+        </div>
+    </NotAuthorized>
+    <Authorizing>
+        <div style="margin: 0 auto; margin-top: 50px">
+
+        </div>
+    </Authorizing>
+</AuthorizeView>
+
+@code {
+    [Inject] AuthenticationStateProvider authenticationStateProvider { get; set; }
+    [Inject] NotificationService NotificationService { get; set; }
+
+    private async Task Logout()
+    {
+        await((Hotel.Web.Providers.AuthenticationProvider)authenticationStateProvider).MarkUserAsLoggedOut();
+        await ShowNotification(new NotificationMessage 
+        {
+            Summary = "Informacja",
+            Detail = "Wylogowano pomyślnie",
+            Severity = NotificationSeverity.Success,
+            Duration = 4000
+        });
+    }
+
+    protected async Task ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
+}

@@ -11,7 +11,7 @@ namespace Hotel.Web.Components.Common
 {
     public partial class Base : ComponentBase
     {
-        [Inject] NotificationService notificationService { get; set; }
+        [Inject] NotificationService NotificationService { get; set; }
         [Inject] NavigationManager NavigationManager { get; set; }
         [Inject] Window Window { get; set; }
         [Inject] public IJSRuntime JsRuntime { get; set; }
@@ -46,7 +46,7 @@ namespace Hotel.Web.Components.Common
 
         protected async Task ShowNotification(NotificationMessage message)
         {
-            notificationService.Notify(message);
+            NotificationService.Notify(message);
             await InvokeAsync(() => { StateHasChanged(); });
         }
 
@@ -55,11 +55,22 @@ namespace Hotel.Web.Components.Common
             await Window.Show(windowConfiguration);
         }
 
+        protected async Task<bool> ShowConfirm(string message)
+        {
+            try
+            {
+                return await JsRuntime.InvokeAsync<bool>("confirm", message);
+            }
+            catch (Exception)
+            { }
+
+            return false;
+        }
+
         protected NavigationManager Navigator => NavigationManager;
 
         protected void CloseWindow() => Window.Close();
 
-        protected async Task<bool> ShowConfirm(string message) => await JsRuntime.InvokeAsync<bool>("confirm", message);
         protected void ShowWaitingWindow(string waitingText) => Window.ShowWaiting(waitingText);
     }
 }

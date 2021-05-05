@@ -1,0 +1,39 @@
+﻿@inherits Base
+
+<h1 style="text-align: center;">Hotel</h1>
+
+<RadzenCard Style="width: 390px; margin-top: 60px;">
+    <RadzenTemplateForm Data="@_user" Submit="@((LoginDto args) =>  Login(args))">
+        <div class="row" style="margin-bottom: 5px;">
+            <div class="col-3" style="text-align: right;">
+                <RadzenLabel Text="E-Mail:" />
+            </div>
+            <div class="col-9">
+                <RadzenTextBox @bind-Value="_user.Email" Name="Email" Style="width: 100%;" />
+                <RadzenRequiredValidator Component="Email" Text="E-Mail jest wymagany"
+                                         Popup="@false" Style="position: inherit; width: 300px;" />
+                <RadzenEmailValidator Component="Email" Text="Podany adres jest błędny"
+                                      Popup="@false" Style="position: inherit; width: 300px;" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 5px;">
+            <div class="col-3" style="text-align: right;">
+                <RadzenLabel Text="Hasło:" />
+            </div>
+            <div class="col-9">
+                <RadzenPassword @bind-Value="_user.Password" Name="Password" Style="width: 100%;" />
+                <RadzenRequiredValidator Component="Password" Text="Hasło jest wymagane"
+                                         Popup="@false" Style="position: inherit; width: 300px;" />
+            </div>
+        </div>
+        <hr />
+        <div class="row" style="text-align: right;">
+            <div class="col">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Zaloguj"
+                              ButtonStyle="ButtonStyle.Light" Style="margin-top: 15px" />
+            </div>
+        </div>
+    </RadzenTemplateForm>
+</RadzenCard>
+

@@ -1,8 +1,11 @@
 using AutoMapper;
+using Blazored.LocalStorage;
 using Hotel.Sql;
 using Hotel.Sql.ContextFactory;
 using Hotel.Web.Components.Interface;
+using Hotel.Web.Providers;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,11 +29,12 @@ namespace Hotel.Web
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddContextFactory<HotelContext>();
+            services.AddBlazoredLocalStorage();
+            services.AddScoped<AuthenticationStateProvider, AuthenticationProvider>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<NotificationService>();
             services.AddScoped<DialogService>();
             services.AddScoped<Window>();
-
             services.AddDaos();
         }
 
@@ -49,7 +53,8 @@ namespace Hotel.Web
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();

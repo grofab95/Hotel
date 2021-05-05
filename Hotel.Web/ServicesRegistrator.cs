@@ -14,6 +14,7 @@ namespace Hotel.Web
             services.AddScoped<IAreaDao, AreaDao>();
             services.AddScoped<ICustomerDao, CustomerDao>();
             services.AddScoped<IStatisticDao, StatisticDao>();
+            services.AddScoped<IUserDao, UserDao>();
         }
     }
 }

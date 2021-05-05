@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel.Sql.Migrations
 {
     [DbContext(typeof(HotelContext))]
-    [Migration("20201207201535_added_totalPrice_column_to_reservation")]
-    partial class added_totalPrice_column_to_reservation
+    [Migration("20210505193047_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,10 +56,7 @@ namespace Hotel.Sql.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -248,9 +245,73 @@ namespace Hotel.Sql.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("Hotel.Domain.Entities.Token", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Tokens");
+                });
+
+            modelBuilder.Entity("Hotel.Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("Hotel.Domain.Entities.Views.ReservationInfoView", b =>
                 {
                     b.Property<int>("BookingAmount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BreakfestAmount")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CheckIn")
@@ -267,6 +328,9 @@ namespace Hotel.Sql.Migrations
 
                     b.Property<int>("RoomsAmount")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.ToView("ReservationInfoView");
                 });
@@ -316,6 +380,17 @@ namespace Hotel.Sql.Migrations
                     b.Navigation("Area");
                 });
 
+            modelBuilder.Entity("Hotel.Domain.Entities.Token", b =>
+                {
+                    b.HasOne("Hotel.Domain.Entities.User", "User")
+                        .WithOne("Token")
+                        .HasForeignKey("Hotel.Domain.Entities.Token", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Hotel.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Reservations");
@@ -329,6 +404,11 @@ namespace Hotel.Sql.Migrations
             modelBuilder.Entity("Hotel.Domain.Entities.ReservationRoom", b =>
                 {
                     b.Navigation("Guests");
+                });
+
+            modelBuilder.Entity("Hotel.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Token");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,6 +13,11 @@ namespace Hotel.Sql.Configurations
 
             builder.Property(x => x.CreatedAt)
                 .HasDefaultValueSql("getdate()");
+
+            builder.HasOne(x => x.Token)
+                .WithOne(x => x.User)
+                .HasForeignKey<Token>(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
