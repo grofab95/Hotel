@@ -1,6 +1,6 @@
-﻿namespace Hotel.Application.Dtos
+﻿namespace Hotel.Application.Dtos.GuestDtos
 {
-    public class GuestDto
+    public class GuestGetDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

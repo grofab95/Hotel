@@ -16,18 +16,18 @@ else
     <RadzenButton Text="Dodaj klienta" Size="ButtonSize.Small" Click="ShowCustomerCreatorWindow" ButtonStyle="ButtonStyle.Success" />
 
     <RadzenGrid @ref="_grid" AllowFiltering="true" AllowPaging="true" PageSize="17" AllowSorting="true" EditMode="DataGridEditMode.Single"
-                Data="@_customers" TItem="CustomerDto" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive">
+                Data="@_customers" TItem="CustomerGetDto" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive">
         <Columns>
 
-            <RadzenGridColumn Width="100px" TItem="CustomerDto" Property="Id" Title="Id" />
-            <RadzenGridColumn Width="300px" TItem="CustomerDto" Property="Name" Title="Nazwa">
+            <RadzenGridColumn Width="100px" TItem="CustomerGetDto" Property="Id" Title="Id" />
+            <RadzenGridColumn Width="300px" TItem="CustomerGetDto" Property="Name" Title="Nazwa">
                 <EditTemplate Context="_customer">
                     <RadzenTextBox @bind-Value="_customer.Name" Name="Name" />
                     <RadzenRequiredValidator Component="Name" Text="Nazwa jest wymagana" />
                 </EditTemplate>
             </RadzenGridColumn>
 
-            <RadzenGridColumn TItem="CustomerDto" Context="_customer" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="200px">
+            <RadzenGridColumn TItem="CustomerGetDto" Context="_customer" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="200px">
                 <Template Context="_customer">
                     <RadzenButton Icon="edit" Size="ButtonSize.Small" Text="Edytuj" Click="@(args => EditCustomer(_customer))">
                     </RadzenButton>
@@ -39,7 +39,7 @@ else
                     </RadzenButton>
                 </EditTemplate>
             </RadzenGridColumn>
-            <RadzenGridColumn TItem="CustomerDto" Context="Customer" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+            <RadzenGridColumn TItem="CustomerGetDto" Context="Customer" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
                 <Template Context="_customer">
                     <RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Usuń" Icon="close" Size="ButtonSize.Small" Click="@(args => DeleteCustomer(_customer))">
                     </RadzenButton>
@@ -60,10 +60,10 @@ else
         {
             Title = "Utwórz klienta",
             Content =@<CreateCustomerComponent OnCreated="OnCustomerCreated" />,
-DialogOptions = new DialogOptions
-{
-Width = "350px;"
-}
-});
-}
+            DialogOptions = new DialogOptions
+            {
+                Width = "350px;"
+            }
+        });
+    }
 } 

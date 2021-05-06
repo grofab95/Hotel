@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
-using Hotel.Application.Dtos;
+using Hotel.Application.Dtos.AreaDtos;
+using Hotel.Application.Dtos.CustomerDtos;
+using Hotel.Application.Dtos.GuestDtos;
+using Hotel.Application.Dtos.PriceRuleDtos;
+using Hotel.Application.Dtos.RoomDtos;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 
@@ -9,20 +13,20 @@ namespace Hotel.Common
     {
         public DomainMapperProfile()
         {
-            CreateMap<PriceRule, PriceRuleDto>();
-            CreateMap<PriceRuleDto, PriceRule>();
+            CreateMap<PriceRule, PriceRuleGetDto>();
+            CreateMap<PriceRuleGetDto, PriceRule>();
 
-            CreateMap<Guest, GuestDto>();
-            CreateMap<GuestDto, Guest>();
+            CreateMap<Guest, GuestGetDto>();
+            CreateMap<GuestGetDto, Guest>();
 
-            CreateMap<Room, RoomDto>();
-            CreateMap<RoomDto, Room>();
+            CreateMap<Room, RoomGetDto>();
+            CreateMap<RoomGetDto, Room>();
 
-            CreateMap<Area, AreaDto>();
-            CreateMap<AreaDto, Area>();
+            CreateMap<Area, AreaGetDto>();
+            CreateMap<AreaGetDto, Area>();
 
-            CreateMap<Customer, CustomerDto>();
-            CreateMap<CustomerDto, Customer>();
+            CreateMap<Customer, CustomerGetDto>();
+            CreateMap<CustomerGetDto, Customer>();
         }
     }
 }

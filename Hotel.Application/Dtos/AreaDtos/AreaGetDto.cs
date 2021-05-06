@@ -1,6 +1,6 @@
-﻿namespace Hotel.Application.Dtos
+﻿namespace Hotel.Application.Dtos.AreaDtos
 {
-    public class CustomerDto
+    public class AreaGetDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

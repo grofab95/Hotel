@@ -3,10 +3,7 @@ using Hotel.Domain.Entities;
 using Hotel.Domain.Exceptions;
 using Hotel.Domain.Tests.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Hotel.Domain.Tests.EntitiesTests

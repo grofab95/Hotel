@@ -1,4 +1,4 @@
-﻿using Hotel.Application.Dtos;
+﻿using Hotel.Application.Dtos.AreaDtos;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Components;
@@ -11,9 +11,9 @@ namespace Hotel.Web.Components.AreaComponents
     {
         [Inject] IAreaDao AreaDao { get; set; }
 
-        private AreaDto _newArea = new AreaDto();
+        private AreaGetDto _newArea = new AreaGetDto();
 
-        private async Task AddArea(AreaDto areaDto)
+        private async Task AddArea(AreaGetDto areaDto)
         {
             try
             {

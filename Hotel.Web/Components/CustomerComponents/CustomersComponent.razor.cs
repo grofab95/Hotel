@@ -1,4 +1,4 @@
-﻿using Hotel.Application.Dtos;
+﻿using Hotel.Application.Dtos.CustomerDtos;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Components;
@@ -14,8 +14,8 @@ namespace Hotel.Web.Components.CustomerComponents
     {
         [Inject] ICustomerDao CustomerDao { get; set; }
 
-        private List<CustomerDto> _customers;
-        private RadzenGrid<CustomerDto> _grid;
+        private List<CustomerGetDto> _customers;
+        private RadzenGrid<CustomerGetDto> _grid;
         private bool _firstLoad = true;
 
         protected override async Task OnInitializedAsync()
@@ -23,7 +23,7 @@ namespace Hotel.Web.Components.CustomerComponents
             try
             {
                 var customers = await CustomerDao.GetManyAsync(x => x.Id > 0);
-                _customers = Mapper.Map<List<CustomerDto>>(customers);
+                _customers = Mapper.Map<List<CustomerGetDto>>(customers);
             }
             catch (Exception ex)
             {
@@ -31,7 +31,7 @@ namespace Hotel.Web.Components.CustomerComponents
             }
         }
 
-        private async Task SaveCustomer(CustomerDto customer)
+        private async Task SaveCustomer(CustomerGetDto customer)
         {
             try
             {
@@ -46,9 +46,9 @@ namespace Hotel.Web.Components.CustomerComponents
             }
         }
 
-        private void EditCustomer(CustomerDto customer) => _grid.EditRow(customer);
+        private void EditCustomer(CustomerGetDto customer) => _grid.EditRow(customer);
 
-        private async Task CancelEditCustomer(CustomerDto customer)
+        private async Task CancelEditCustomer(CustomerGetDto customer)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Hotel.Web.Components.CustomerComponents
             }
         }
 
-        private async Task DeleteCustomer(CustomerDto customer)
+        private async Task DeleteCustomer(CustomerGetDto customer)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace Hotel.Web.Components.CustomerComponents
 
         private async Task OnCustomerCreated(Customer customer)
         {
-            _customers.Add(Mapper.Map<CustomerDto>(customer));
+            _customers.Add(Mapper.Map<CustomerGetDto>(customer));
             await _grid.Reload();
 
             window.Close();

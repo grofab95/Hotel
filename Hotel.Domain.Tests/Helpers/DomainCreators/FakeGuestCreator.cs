@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Hotel.Domain.Tests.Helpers.DomainCreators
+﻿namespace Hotel.Domain.Tests.Helpers.DomainCreators
 {
     public class FakeGuestCreator
     {

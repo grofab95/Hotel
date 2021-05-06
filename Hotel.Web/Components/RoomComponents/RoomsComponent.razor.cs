@@ -1,4 +1,5 @@
-﻿using Hotel.Application.Dtos;
+﻿using Hotel.Application.Dtos.AreaDtos;
+using Hotel.Application.Dtos.RoomDtos;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Components;
@@ -15,9 +16,9 @@ namespace Hotel.Web.Components.RoomComponents
         [Inject] IAreaDao AreaDao { get; set; }
         [Parameter] public List<Area> Areas { get; set; }
 
-        private List<RoomDto> _rooms;
-        private List<AreaDto> _areas;
-        private RadzenGrid<RoomDto> _grid;
+        private List<RoomGetDto> _rooms;
+        private List<AreaGetDto> _areas;
+        private RadzenGrid<RoomGetDto> _grid;
 
         protected override async Task OnInitializedAsync()
         {
@@ -33,16 +34,16 @@ namespace Hotel.Web.Components.RoomComponents
 
         public async Task LoadData()
         {
-            _rooms = Mapper.Map<List<RoomDto>>(await RoomDao.GetManyAsync(x => x.Id > 0));
-            _areas = Mapper.Map<List<AreaDto>>(await AreaDao.GetManyAsync(x => x.Id > 0));
+            _rooms = Mapper.Map<List<RoomGetDto>>(await RoomDao.GetManyAsync(x => x.Id > 0));
+            _areas = Mapper.Map<List<AreaGetDto>>(await AreaDao.GetManyAsync(x => x.Id > 0));
         }
 
-        void EditRow(RoomDto room)
+        void EditRow(RoomGetDto room)
         {
             _grid.EditRow(room);
         }
 
-        private async Task SaveRow(RoomDto room)
+        private async Task SaveRow(RoomGetDto room)
         {
             try
             {
@@ -67,7 +68,7 @@ namespace Hotel.Web.Components.RoomComponents
             }
         }
 
-        private async Task CancelEdit(RoomDto room)
+        private async Task CancelEdit(RoomGetDto room)
         {
             if (room.Id == 0)
             {
@@ -80,7 +81,7 @@ namespace Hotel.Web.Components.RoomComponents
             {
                 var roomDb = await RoomDao.GetAsync(x => x.Id == room.Id);
                 room.Name = roomDb.Name;
-                room.Area = Mapper.Map<AreaDto>(roomDb.Area);
+                room.Area = Mapper.Map<AreaGetDto>(roomDb.Area);
                 room.PeopleCapacity = roomDb.PeopleCapacity;
 
                 _grid.CancelEditRow(room);
@@ -91,7 +92,7 @@ namespace Hotel.Web.Components.RoomComponents
             }
         }
 
-        private async Task DeleteRow(RoomDto room)
+        private async Task DeleteRow(RoomGetDto room)
         {
             if (room.Id == 0)
             {
@@ -120,13 +121,13 @@ namespace Hotel.Web.Components.RoomComponents
 
         private async Task InsertRow()
         {
-            var newRoom = new RoomDto();
+            var newRoom = new RoomGetDto();
             _rooms.Add(newRoom);
             await _grid.Reload();
             await _grid.EditRow(newRoom);            
         }
 
-        private async Task AddRow(RoomDto room) 
+        private async Task AddRow(RoomGetDto room) 
         {
             var area = Mapper.Map<Area>(room.Area);
             var added = await RoomDao.AddAsync(new Room(area, room.Name, room.PeopleCapacity));

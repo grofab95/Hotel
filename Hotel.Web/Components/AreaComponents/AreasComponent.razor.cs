@@ -1,4 +1,4 @@
-﻿using Hotel.Application.Dtos;
+﻿using Hotel.Application.Dtos.AreaDtos;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Components;
@@ -12,8 +12,8 @@ namespace Hotel.Web.Components.AreaComponents
     {
         [Inject] IAreaDao AreaDao { get; set; }
 
-        private List<AreaDto> _areas;
-        private AreaDto _newArea = new AreaDto();
+        private List<AreaGetDto> _areas;
+        private AreaGetDto _newArea = new AreaGetDto();
 
         protected override async Task OnInitializedAsync()
         {
@@ -30,7 +30,7 @@ namespace Hotel.Web.Components.AreaComponents
         private async Task LoadAreas()
         {
             var areas = await AreaDao.GetManyAsync(x => x.Id > 0);
-            _areas = Mapper.Map<List<AreaDto>>(areas);
+            _areas = Mapper.Map<List<AreaGetDto>>(areas);
         }
 
         private async Task AddArea()
@@ -41,9 +41,9 @@ namespace Hotel.Web.Components.AreaComponents
 
                 await ShowNotification("Dodano pomyślnie", Radzen.NotificationSeverity.Success);
 
-                _areas.Add(Mapper.Map<AreaDto>(createdArea));
+                _areas.Add(Mapper.Map<AreaGetDto>(createdArea));
 
-                _newArea = new AreaDto();
+                _newArea = new AreaGetDto();
 
                 StateHasChanged();
             }
@@ -53,7 +53,7 @@ namespace Hotel.Web.Components.AreaComponents
             }
         }
 
-        private async Task Delete(AreaDto area)
+        private async Task Delete(AreaGetDto area)
         {
             if (!(await ShowConfirm($"Czy napewno chcesz usunać {area.Name}?")))
                 return;

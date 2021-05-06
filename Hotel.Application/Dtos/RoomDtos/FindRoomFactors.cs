@@ -1,7 +1,7 @@
 ﻿using Hotel.Domain.Entities;
 using System;
 
-namespace Hotel.Application.Dtos
+namespace Hotel.Application.Dtos.RoomDtos
 {
     public class ReservationFactors
     {

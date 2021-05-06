@@ -53,7 +53,7 @@
                 {
                     @foreach (var guest in guests)
                     {
-                        var guestDto = Mapper.Map<GuestDto>(guest);
+                        var guestDto = Mapper.Map<GuestGetDto>(guest);
 
                         <tr style=@style>
                             @if (guests.IndexOf(guest) == 0)

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Hotel.Application.Dtos
+namespace Hotel.Application.Dtos.ReservationDtos
 {
-    public class ReservationDto
+    public class ReservationGetDto
     {
         public int Id { get; set; }
         public DateTime CheckIn { get; set; }

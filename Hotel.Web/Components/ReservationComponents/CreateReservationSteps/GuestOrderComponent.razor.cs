@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using Hotel.Application.Dtos;
+﻿using Hotel.Application.Dtos.GuestDtos;
+using Hotel.Application.Dtos.RoomDtos;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Environment;
@@ -53,7 +53,7 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
             await CallEvent();
         }
 
-        private async Task PriceChanged(decimal price, Guest guest, GuestDto guestDto)
+        private async Task PriceChanged(decimal price, Guest guest, GuestGetDto guestDto)
         {
             if (price < 0) price = 0;
             if (price > 999) price = 999;
@@ -61,7 +61,7 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
             await UpdateGuest(guest, guestDto);
         }
 
-        private async Task BasePriceStateChanged(bool state, Guest guest, GuestDto guestDto)
+        private async Task BasePriceStateChanged(bool state, Guest guest, GuestGetDto guestDto)
         {
             if (!state)
                 return;
@@ -71,7 +71,7 @@ namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
             await UpdateGuest(guest, guestDto);
         }
 
-        private async Task UpdateGuest(Guest guest, GuestDto guestDto)
+        private async Task UpdateGuest(Guest guest, GuestGetDto guestDto)
         {
             await DoSafeAction(() => guest.Update(Mapper.Map<Guest>(guestDto)));
 

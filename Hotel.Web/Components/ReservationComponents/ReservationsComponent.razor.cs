@@ -1,4 +1,4 @@
-﻿using Hotel.Application.Dtos;
+﻿using Hotel.Application.Dtos.RoomDtos;
 using Hotel.Application.Services;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;

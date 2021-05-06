@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.API.Controllers.v1
 {
+    //[Authorize]
     [ApiVersion("1.0")]
     [Route("api/v1/[controller]")]
     [ApiController]
