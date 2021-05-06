@@ -15,6 +15,18 @@ namespace Hotel.Application.Managers
         private static SymmetricSecurityKey GetSymmetricSecurityKey() =>
             new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key));
 
+        public static TokenValidationParameters GetTokenValidationParameters()
+        {
+            return new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = GetSymmetricSecurityKey(),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+        }
+
         public static string GnerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -39,15 +51,7 @@ namespace Hotel.Application.Managers
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = GetSymmetricSecurityKey(),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
-
+                tokenHandler.ValidateToken(token, GetTokenValidationParameters(), out SecurityToken validatedToken);
                 jwtSecurityToken = (JwtSecurityToken)validatedToken;
                 return true;
             }

@@ -4,6 +4,7 @@ using Hotel.Application.Dtos.CustomerDtos;
 using Hotel.Application.Dtos.GuestDtos;
 using Hotel.Application.Dtos.PriceRuleDtos;
 using Hotel.Application.Dtos.RoomDtos;
+using Hotel.Application.Dtos.UserDtos;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 
@@ -27,6 +28,9 @@ namespace Hotel.Common
 
             CreateMap<Customer, CustomerGetDto>();
             CreateMap<CustomerGetDto, Customer>();
+
+            CreateMap<User, UserGetDto>();
+            CreateMap<UserGetDto, User>();
         }
     }
 }

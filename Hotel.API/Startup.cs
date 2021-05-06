@@ -1,20 +1,10 @@
-using AutoMapper;
-using Hotel.Application.Infrastructure;
+using Hotel.API.Registrators;
 using Hotel.Common;
-using Hotel.Domain.Environment;
-using Hotel.Sql;
-using Hotel.Sql.ContextFactory;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Reflection;
-using System.Text;
 
 namespace Hotel.API
 {
@@ -29,43 +19,14 @@ namespace Hotel.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ILogger, Logger>();
-            services.AddControllers();
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-            );
-            services.AddApiVersioning(config =>
-            {
-                config.DefaultApiVersion = new ApiVersion(1, 0);
-                config.AssumeDefaultVersionWhenUnspecified = true;
-                config.ReportApiVersions = true;
-            });
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotel Api Documentation", Version = "v1" });
-            });
-            services.AddContextFactory<HotelContext>();
-            services.AddAutoMapper(typeof(Hotel.Common.DomainMapperProfile).GetTypeInfo().Assembly);
-            services.AddAuthentication(options => {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(jwt => {
-                var key = Encoding.ASCII.GetBytes("dsfhsdfkserhtw435n63^*[6578657hjl86574847");
-                jwt.SaveToken = true;
-                jwt.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true, 
-                    IssuerSigningKey = new SymmetricSecurityKey(key), 
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    RequireExpirationTime = false,
-                    ValidateLifetime = true
-                };
-            });
-            services.AddDaos();
+            services.RegisterLogger();
+            services.RegisterControlers();
+            services.RegisterApiVersioning();
+            services.RegisterContextFactory();
+            services.RegisterAutoMapper();
+            services.RegisterSwagger();
+            services.RegisterAuthentication();
+            services.RegisterDaos();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
