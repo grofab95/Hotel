@@ -1,7 +1,10 @@
-﻿using Hotel.Domain.Adapters;
+﻿using Hotel.API.Wrappers;
+using Hotel.Domain.Adapters;
+using Hotel.Domain.Entities;
 using Hotel.Domain.Environment;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Hotel.API.Controllers.v1
@@ -21,17 +24,18 @@ namespace Hotel.API.Controllers.v1
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync([FromQuery] PaggedRequest paggedRequest)
         {
             try
             {
-                var users = await _userDao.GetAllAsync();
-                return Ok(new { users });
+                var total = await _userDao.GetTotalAsync();
+                var users = await _userDao.GetAllAsync(paggedRequest.Page, paggedRequest.Size);
+                return Ok(new PagedResponse<List<User>>(users, total, paggedRequest));
             }
             catch (Exception ex)
             {
                 _logger.Log(ex.Message, LogLevel.Error);
-                return BadRequest(new { ex.Message });
+                return BadRequest(new Response(ex));
             }
         }
     }

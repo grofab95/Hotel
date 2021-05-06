@@ -9,7 +9,13 @@ namespace Hotel.Domain.Validators
         public static void ValidIfNameExist(string name)
         {
             if (name.IsNotExist())
-                throw new MissingValueException("Nazwa jest wymagana.");
+                throw new MissingValueException("Imię jest wymagane.");
+        }
+
+        public static void ValidIfSurnameExist(string surname)
+        {
+            if (surname.IsNotExist())
+                throw new MissingValueException("Nazwisko jest wymagane.");
         }
 
         public static void ValidIfEmailExist(string email)

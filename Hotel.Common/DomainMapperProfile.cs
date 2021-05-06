@@ -3,7 +3,7 @@ using Hotel.Application.Dtos;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 
-namespace Hotel.Web.Mapper
+namespace Hotel.Common
 {
     public class DomainMapperProfile : Profile
     {

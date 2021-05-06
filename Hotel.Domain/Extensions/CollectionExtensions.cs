@@ -28,5 +28,10 @@ namespace Hotel.Domain.Extensions
                     where ud != null && !ud.Equals(default(T2))
                     select entry1);
         }
+
+        public static IQueryable<T> Pagging<T>(this IQueryable<T> collection, int page, int limit)
+        {
+            return collection.Skip((page - 1) * limit).Take(limit);
+        }
     }
 }

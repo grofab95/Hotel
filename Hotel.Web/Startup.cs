@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Radzen;
-using System;
+using System.Reflection;
 
 namespace Hotel.Web
 {
@@ -35,7 +35,8 @@ namespace Hotel.Web
             services.AddContextFactory<HotelContext>();
             services.AddBlazoredLocalStorage();
             services.AddScoped<AuthenticationStateProvider, AuthenticationProvider>();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(typeof(Hotel.Common.DomainMapperProfile).GetTypeInfo().Assembly);
+            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<NotificationService>();
             services.AddScoped<DialogService>();
             services.AddScoped<Window>();
