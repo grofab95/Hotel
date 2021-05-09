@@ -24,9 +24,6 @@ namespace Hotel.Sql.Daos
 
         public async Task<Customer> AddAsync(Customer customer)
         {
-            if (await context.Customers.AnyAsync(x => x.Name.ToLower().Trim() == customer.Name.ToLower().Trim()))
-                throw new HotelException($"Klient {customer} już istnieje.");
-
             await context.AddAsync(customer);
             await context.SaveChangesAsync();
 

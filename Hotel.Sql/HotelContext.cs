@@ -26,17 +26,6 @@ namespace Hotel.Sql
         public DbSet<User> Users { get; set; }
         public DbSet<Token> Tokens { get; set; }
 
-        private ILogger _logger;
-
-        public HotelContext(ILogger logger)
-        {
-            _logger = logger;
-        }
-
-        //public HotelContext() 
-        //{
-        //}
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(Config.Get.SqlConnection);
@@ -66,12 +55,9 @@ namespace Hotel.Sql
                 var result = await base.SaveChangesAsync(cancellationToken);
                 if (result > 0)
                 {
-                    var trackedEntries = ChangeTracker.Entries()
-                        .ToList();
-
+                    var trackedEntries = ChangeTracker.Entries().ToList();
                     trackedEntries.ForEach(x => x.State = EntityState.Detached);
                 }
-
                 return result;
             }
             catch (Exception ex)
@@ -82,11 +68,6 @@ namespace Hotel.Sql
                     var value = error.Split(new string[] { "The duplicate key value is (", ")." }, StringSplitOptions.TrimEntries)[1];
                     throw new Exception($"Wartość {value.Replace(",", "")} już istnieje w bazie.");
                 }
-
-                if (ex.GetType() == typeof(HotelException) || ex.GetType() == typeof(MissingValueException))
-                    throw;
-
-                _logger.Log(ex.ToString(), LogLevel.Error);
                 throw;
             }
         }
