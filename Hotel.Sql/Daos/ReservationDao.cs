@@ -122,5 +122,18 @@ namespace Hotel.Sql.Daos
                 .FirstOrDefaultAsync(predicate)
                     ?? throw new HotelException($"Reserwacja nie istnieje.");
         }
+
+        public async Task<int> GetTotalAsync() => await context.Reservations.CountAsync();
+
+        public async Task<List<Reservation>> GetAllAsync(int page, int limit)
+        {
+            return await context.Reservations
+                .Include(x => x.Customer)
+                .Include(x => x.ReservationRooms).ThenInclude(x => x.Room).ThenInclude(x => x.Area)
+                .Include(x => x.ReservationRooms).ThenInclude(x => x.Guests)
+                .OrderBy(x => x.Id)
+                .Pagging(page, limit)
+                .ToListAsync();
+        }
     }
 }

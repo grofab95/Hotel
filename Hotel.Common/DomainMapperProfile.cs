@@ -3,6 +3,8 @@ using Hotel.Application.Dtos.AreaDtos;
 using Hotel.Application.Dtos.CustomerDtos;
 using Hotel.Application.Dtos.GuestDtos;
 using Hotel.Application.Dtos.PriceRuleDtos;
+using Hotel.Application.Dtos.ReservationDtos;
+using Hotel.Application.Dtos.ReservationRoomDtos;
 using Hotel.Application.Dtos.RoomDtos;
 using Hotel.Application.Dtos.UserDtos;
 using Hotel.Domain.Entities;
@@ -34,6 +36,12 @@ namespace Hotel.Common
 
             CreateMap<User, UserCreateDto>();
             CreateMap<UserCreateDto, User>();
+
+            CreateMap<Reservation, ReservationGetDto>();
+            CreateMap<ReservationGetDto, Reservation>();
+
+            CreateMap<ReservationRoom, ReservationRoomGetDto>();
+            CreateMap<ReservationRoomGetDto, ReservationRoom>();
         }
     }
 }

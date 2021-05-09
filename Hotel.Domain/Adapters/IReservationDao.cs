@@ -9,6 +9,8 @@ namespace Hotel.Domain.Adapters
 {
     public interface IReservationDao : IDao<Reservation>
     {
+        Task<int> GetTotalAsync();
+        Task<List<Reservation>> GetAllAsync(int page, int limit);
         Task<List<ReservationInfoView>> GetReservationBasicInfosAsync();
         //Task<List<ReservationInfoView>> SearchReservations(Expression<Func<ReservationInfoView, bool>> query);
         IQueryable<ReservationInfoView> SearchReservations();

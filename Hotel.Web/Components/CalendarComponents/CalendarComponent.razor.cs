@@ -16,8 +16,8 @@ namespace Hotel.Web.Components.CalendarComponents
     {
         [Inject] IReservationDao ReservationDao { get; set; }
 
-        private List<ReservationGetDto> _reservationsDtos;
-        private RadzenScheduler<ReservationGetDto> _scheduler;
+        private List<ReservationInfoDto> _reservationsDtos;
+        private RadzenScheduler<ReservationInfoDto> _scheduler;
 
         protected override async Task OnInitializedAsync()
         {
@@ -25,7 +25,7 @@ namespace Hotel.Web.Components.CalendarComponents
             {
                 var basicReservationsInfo = await ReservationDao.GetReservationBasicInfosAsync();
 
-                _reservationsDtos = basicReservationsInfo.Select(x => new ReservationGetDto
+                _reservationsDtos = basicReservationsInfo.Select(x => new ReservationInfoDto
                 {
                     Id = x.ReservationId,
                     CheckIn = x.CheckIn,
@@ -60,7 +60,7 @@ namespace Hotel.Web.Components.CalendarComponents
             _reservationsDtos.ForEach(x => x.Color = colors[random.Next(colors.Count)]);
         }
 
-        private void OnSchedulerRender(SchedulerAppointmentRenderEventArgs<ReservationGetDto> args)
+        private void OnSchedulerRender(SchedulerAppointmentRenderEventArgs<ReservationInfoDto> args)
         {            
             args.Attributes["style"] = $"background: {args.Data.Color}";
         }
