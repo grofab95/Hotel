@@ -54,9 +54,6 @@ namespace Hotel.Sql.Daos
 
         public async Task<Room> AddAsync(Room entity)
         {
-            if (await context.Rooms.AnyAsync(x => x.Name.ToLower().Trim() == entity.Name.ToLower().Trim()))
-                throw new HotelException($"Pokój o takiej nazwie już istnieje");
-
             AttachEntry(entity.Area);
 
             await context.Rooms.AddAsync(entity);

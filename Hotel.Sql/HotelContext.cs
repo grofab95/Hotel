@@ -2,9 +2,11 @@
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Entities.Views;
 using Hotel.Domain.Environment;
+using Hotel.Domain.Exceptions;
 using Hotel.Sql.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +25,17 @@ namespace Hotel.Sql
         public DbSet<ReservationInfoView> ReservationInfoViews { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Token> Tokens { get; set; }
+
+        private ILogger _logger;
+
+        public HotelContext(ILogger logger)
+        {
+            _logger = logger;
+        }
+
+        //public HotelContext() 
+        //{
+        //}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -48,16 +61,34 @@ namespace Hotel.Sql
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var result = await base.SaveChangesAsync(cancellationToken);
-            if (result > 0)
+            try
             {
-                var trackedEntries = ChangeTracker.Entries()
-                    .ToList();
+                var result = await base.SaveChangesAsync(cancellationToken);
+                if (result > 0)
+                {
+                    var trackedEntries = ChangeTracker.Entries()
+                        .ToList();
 
-                trackedEntries.ForEach(x => x.State = EntityState.Detached);
+                    trackedEntries.ForEach(x => x.State = EntityState.Detached);
+                }
+
+                return result;
             }
+            catch (Exception ex)
+            {
+                if (ex.InnerException?.Message?.Contains("Cannot insert duplicate key row in object") ?? false)
+                {
+                    var error = ex.InnerException.Message;
+                    var value = error.Split(new string[] { "The duplicate key value is (", ")." }, StringSplitOptions.TrimEntries)[1];
+                    throw new Exception($"Wartość {value.Replace(",", "")} już istnieje w bazie.");
+                }
 
-            return result;
+                if (ex.GetType() == typeof(HotelException) || ex.GetType() == typeof(MissingValueException))
+                    throw;
+
+                _logger.Log(ex.ToString(), LogLevel.Error);
+                throw;
+            }
         }
     }
 }

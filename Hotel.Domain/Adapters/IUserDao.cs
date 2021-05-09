@@ -6,6 +6,7 @@ namespace Hotel.Domain.Adapters
 {
     public interface IUserDao
     {
+        Task<User> AddUser(User user);
         Task<int> GetTotalAsync();
         Task<List<User>> GetAllAsync(int page, int limit);
         Task<User> GetUserByTokenAsync(string token);

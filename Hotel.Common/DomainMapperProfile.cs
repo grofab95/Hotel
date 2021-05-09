@@ -31,6 +31,9 @@ namespace Hotel.Common
 
             CreateMap<User, UserGetDto>();
             CreateMap<UserGetDto, User>();
+
+            CreateMap<User, UserCreateDto>();
+            CreateMap<UserCreateDto, User>();
         }
     }
 }

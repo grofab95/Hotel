@@ -4,14 +4,16 @@ using Hotel.Sql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Hotel.Sql.Migrations
 {
     [DbContext(typeof(HotelContext))]
-    partial class HotelContextModelSnapshot : ModelSnapshot
+    [Migration("20210507230127_Add_Unique_Index_For_User_Email")]
+    partial class Add_Unique_Index_For_User_Email
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,16 +34,12 @@ namespace Hotel.Sql.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Areas");
                 });
@@ -232,7 +230,7 @@ namespace Hotel.Sql.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PeopleCapacity")
                         .HasColumnType("int");
@@ -243,10 +241,6 @@ namespace Hotel.Sql.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AreaId");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Rooms");
                 });
@@ -296,7 +290,7 @@ namespace Hotel.Sql.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordHash")
                         .HasColumnType("varbinary(max)");
@@ -305,7 +299,7 @@ namespace Hotel.Sql.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -315,10 +309,6 @@ namespace Hotel.Sql.Migrations
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
-
-                    b.HasIndex("Name", "Surname")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL AND [Surname] IS NOT NULL");
 
                     b.ToTable("Users");
                 });

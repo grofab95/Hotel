@@ -10,7 +10,7 @@ namespace Hotel.Sql.Configurations
         {
             builder.ToTable("Areas");
             builder.HasKey(x => x.Id);
-
+            builder.HasIndex(x => x.Name).IsUnique();
             builder.Property(x => x.CreatedAt)
                 .HasDefaultValueSql("getdate()");
         }

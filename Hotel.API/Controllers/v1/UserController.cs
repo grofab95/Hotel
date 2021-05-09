@@ -6,6 +6,7 @@ using Hotel.Application.Managers;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Environment;
+using Hotel.Domain.Utilities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -30,9 +31,9 @@ namespace Hotel.API.Controllers.v1
             _logger = logger;
             _mapper = mapper;
         }
-
-        [AllowAnonymous]
+               
         [Route("authorize")]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AuthorizeAsync([FromBody] UserCredentialDto userCredential)
         {
@@ -40,11 +41,26 @@ namespace Hotel.API.Controllers.v1
             {
                 var user = await _userDao.VerifyCredentialAsync(userCredential.Email, userCredential.Password);
                 var token = TokenManager.GnerateToken(user);
+                await _userDao.UpdateTokenAsync(user.Id, token);
                 return Ok(new Response<TokenResponse>(new TokenResponse(token)));
             }
             catch (Exception ex)
             {
-                _logger.Log(ex.Message, LogLevel.Error);
+                return BadRequest(new Response(ex));
+            }
+        }
+
+        [Route("addUser")]
+        [HttpPost]
+        public async Task<IActionResult> AddAsync([FromBody] UserCreateDto dto)
+        {
+            try
+            {
+                var user = await _userDao.AddUser(new User(dto.Name, dto.Surname, dto.Email, new Password(dto.Password)));
+                return Ok(new Response<User>(user));
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(new Response(ex));
             }
         }
@@ -62,7 +78,6 @@ namespace Hotel.API.Controllers.v1
             }
             catch (Exception ex)
             {
-                _logger.Log(ex.Message, LogLevel.Error);
                 return BadRequest(new Response(ex));
             }
         }
