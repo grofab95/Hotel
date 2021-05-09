@@ -6,8 +6,7 @@ using Hotel.Sql;
 using Hotel.Sql.Tools;
 using System;
 
-ILogger logger = new Logger();
-var context = new HotelContext(logger);
+var context = new HotelContext();
 
 try
 {

@@ -11,7 +11,6 @@ namespace Hotel.Sql.Configurations
             builder.ToTable("Users");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.CreatedAt).HasDefaultValueSql("getdate()");
-            builder.HasIndex(x => new { x.Name, x.Surname }).IsUnique();
             builder.HasIndex(x => x.Email).IsUnique();
             builder.HasOne(x => x.Token)
                 .WithOne(x => x.User)

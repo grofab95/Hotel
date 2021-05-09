@@ -2,8 +2,8 @@
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Entities.Views;
 using Hotel.Domain.Environment;
-using Hotel.Domain.Exceptions;
 using Hotel.Sql.Configurations;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -59,6 +59,10 @@ namespace Hotel.Sql
                     trackedEntries.ForEach(x => x.State = EntityState.Detached);
                 }
                 return result;
+            }
+            catch (SqlException ex)
+            {
+                throw;
             }
             catch (Exception ex)
             {
