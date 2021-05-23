@@ -1,36 +1,21 @@
-﻿using Hotel.Sql;
-using Microsoft.EntityFrameworkCore;
+﻿using Hotel.Application.Infrastructure;
+using Hotel.Domain.Entities;
+using Hotel.Domain.Environment;
+using Hotel.Domain.Utilities.Models;
+using Hotel.Sql;
+using Hotel.Sql.Tools;
 using System;
-using System.Linq;
 
 var context = new HotelContext();
 
 try
 {
-    var res = context.Reservations
-        .Include(x => x.Customer)
-        .Include(x => x.ReservationRooms).ThenInclude(x => x.Room).ThenInclude(x => x.Area)
-        .Include(x => x.ReservationRooms).ThenInclude(x => x.Guests)
-        .FirstOrDefault();
-
+    var password = new Password("tajne");
+    var user = new User("Fabian2", "Grochla2", "Q@w", password);
+    context.Users.Add(user);
+    context.SaveChanges();
 }
 catch (Exception ex)
 {
 
 }
-
-//var customers = new List<Customer>
-//{
-//    new Customer("Monika", "Olejnik"),
-//    new Customer("Andrzej", "Kowalczyk"),
-//    new Customer("Anna", "Nowak"),
-//    new Customer("Stanisław", "Wodny"),
-//    new Customer("Maria", "Kaziewska"),
-//    new Customer("Stefan", "Gruby"),
-//    new Customer("Żaneta", "Kuźniar"),
-//    new Customer("Marian", "Nowy")
-//};
-
-//context.AddRange(customers);
-//context.SaveChanges();
-

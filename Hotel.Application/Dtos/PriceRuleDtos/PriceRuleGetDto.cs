@@ -1,9 +1,9 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Entities.PriceRuleEntity;
 
-namespace Hotel.Application.Dtos
+namespace Hotel.Application.Dtos.PriceRuleDtos
 {
-    public class PriceRuleDto : Entity
+    public class PriceRuleGetDto : Entity
     {
         public RuleName RuleName { get; set; }
         public RuleType RuleType { get; set; }

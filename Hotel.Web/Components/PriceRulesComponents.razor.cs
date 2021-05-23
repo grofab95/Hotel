@@ -1,4 +1,4 @@
-﻿using Hotel.Application.Dtos;
+﻿using Hotel.Application.Dtos.PriceRuleDtos;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Extensions;
@@ -16,24 +16,24 @@ namespace Hotel.Web.Components
         [Inject] IPriceRuleDao PriceRuleDao { get; set; }
 
         private PriceRuleManager _priceRuleManager;
-        private RadzenGrid<PriceRuleDto> _grid;
+        private RadzenGrid<PriceRuleGetDto> _grid;
 
         private List<PriceRule> _priceRules;
-        private List<PriceRuleDto> _priceRulesDtos;
+        private List<PriceRuleGetDto> _priceRulesDtos;
         private Dictionary<RuleType, string> _ruleTypesNames;
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
-                var priceRules = await PriceRuleDao.GetManyAsync(x => x.Id > 0);
+                var priceRules = await PriceRuleDao.GetManyAsync(1, 100, x => x.Id > 0);  // todo: implement paggination
                 _priceRuleManager = new PriceRuleManager(priceRules);
                 _priceRules = _priceRuleManager.GetOrderedRules();
 
                 _ruleTypesNames = Enum.GetValues(typeof(RuleType)).Cast<RuleType>()
                     .ToDictionary(x => x, x => x.GetDescription());
 
-                _priceRulesDtos = Mapper.Map<List<PriceRuleDto>>(_priceRules);
+                _priceRulesDtos = Mapper.Map<List<PriceRuleGetDto>>(_priceRules);
             }
             catch (Exception ex)
             {
@@ -41,12 +41,12 @@ namespace Hotel.Web.Components
             }
         }
 
-        private void EditRow(PriceRuleDto priceRule)
+        private void EditRow(PriceRuleGetDto priceRule)
         {
             _grid.EditRow(priceRule);
         }
 
-        private async Task SaveRow(PriceRuleDto priceRuleDto)
+        private async Task SaveRow(PriceRuleGetDto priceRuleDto)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace Hotel.Web.Components
             }
         }
 
-        private void CancelEdit(PriceRuleDto priceRule)
+        private void CancelEdit(PriceRuleGetDto priceRule)
         {
             _grid.CancelEditRow(priceRule);
         }

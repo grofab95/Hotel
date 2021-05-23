@@ -28,7 +28,8 @@ namespace Hotel.Sql.Tools
             nameof(ReservationRoom),
             nameof(Guest),
             nameof(PriceRule),
-            nameof(User)
+            nameof(User),
+            nameof(Token)
         };
 
         private static string GenerateScript()

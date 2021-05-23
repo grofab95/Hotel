@@ -7,6 +7,7 @@ namespace Hotel.Domain.Entities
     public class User : Entity
     {
         public string Name { get; private set; }
+        public string Surname { get; private set; }
         public string Email { get; private set; }
         public byte[] PasswordHash { get; private set; }
         public byte[] PasswordSalt { get; private set; }
@@ -14,13 +15,15 @@ namespace Hotel.Domain.Entities
 
         private User() { }
 
-        public User(string name, string email, Password password)
+        public User(string name, string surname, string email, Password password)
         {
             UserValidators.ValidIfNameExist(name);
+            UserValidators.ValidIfSurnameExist(surname);
             UserValidators.ValidIfEmailExist(email);
             UserValidators.ValidIfPasswordExist(password);
             EmailValidators.ValidEmail(email);
             Name = name;
+            Surname = surname;
             Email = email;
             PasswordHash = password.PasswordHash;
             PasswordSalt = password.PasswordSalt;

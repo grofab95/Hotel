@@ -11,7 +11,7 @@ namespace Hotel.Sql.Configurations
         {
             builder.ToTable("PriceRules");
             builder.HasKey(x => x.Id);
-
+            builder.HasIndex(x => x.FriendlyName).IsUnique();
             builder.Property(x => x.CreatedAt)
                 .HasDefaultValueSql("getdate()");
 

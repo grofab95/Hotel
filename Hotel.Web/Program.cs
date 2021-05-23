@@ -1,5 +1,4 @@
-﻿using Hotel.Domain.Environment;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace Hotel.Web
@@ -8,10 +7,10 @@ namespace Hotel.Web
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args, Config.Get).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args, Config config) =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

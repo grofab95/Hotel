@@ -2,9 +2,12 @@
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Entities.Views;
 using Hotel.Domain.Environment;
+using Hotel.Domain.Exceptions;
 using Hotel.Sql.Configurations;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,16 +51,30 @@ namespace Hotel.Sql
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var result = await base.SaveChangesAsync(cancellationToken);
-            if (result > 0)
+            try
             {
-                var trackedEntries = ChangeTracker.Entries()
-                    .ToList();
-
-                trackedEntries.ForEach(x => x.State = EntityState.Detached);
+                var result = await base.SaveChangesAsync(cancellationToken);
+                if (result > 0)
+                {
+                    var trackedEntries = ChangeTracker.Entries().ToList();
+                    trackedEntries.ForEach(x => x.State = EntityState.Detached);
+                }
+                return result;
             }
-
-            return result;
+            catch (SqlException ex)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException?.Message?.Contains("Cannot insert duplicate key row in object") ?? false)
+                {
+                    var error = ex.InnerException.Message;
+                    var value = error.Split(new string[] { "The duplicate key value is (", ")." }, StringSplitOptions.TrimEntries)[1];
+                    throw new HotelException($"Wartość {value.Replace(",", "")} już istnieje w bazie.");
+                }
+                throw;
+            }
         }
     }
 }

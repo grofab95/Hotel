@@ -9,18 +9,18 @@
 else
 {
     <RadzenGrid @ref="_grid" EditMode="DataGridEditMode.Single"
-                Data="@_priceRulesDtos" TItem="PriceRuleDto">
+                Data="@_priceRulesDtos" TItem="PriceRuleGetDto">
         <Columns>
-            <RadzenGridColumn Width="50px" TItem="PriceRuleDto" Property="Id" Title="Id" />
+            <RadzenGridColumn Width="50px" TItem="PriceRuleGetDto" Property="Id" Title="Id" />
 
-            <RadzenGridColumn Width="200px" TItem="PriceRuleDto" Property="FriendlyName" Title="Nazwa reguły">
+            <RadzenGridColumn Width="200px" TItem="PriceRuleGetDto" Property="FriendlyName" Title="Nazwa reguły">
                 <EditTemplate Context="priceRule">
                     <RadzenTextBox @bind-Value="priceRule.FriendlyName" Style="width:100%; display: block" Name="FriendlyName" />
                     <RadzenRequiredValidator Text="Nazwa jest wymagana" Component="FriendlyName" Popup="true" />
                 </EditTemplate>
             </RadzenGridColumn>
 
-            <RadzenGridColumn Width="200px" TItem="PriceRuleDto" Property="RuleType" Title="Typ reguły">
+            <RadzenGridColumn Width="200px" TItem="PriceRuleGetDto" Property="RuleType" Title="Typ reguły">
                 <Template Context="priceRule">
                     <p>@priceRule.RuleType.GetDescription()</p>
                 </Template>
@@ -30,7 +30,7 @@ else
                 </EditTemplate>
             </RadzenGridColumn>
 
-            <RadzenGridColumn Width="50px" TItem="PriceRuleDto" Property="Value" Title="Wartość">
+            <RadzenGridColumn Width="50px" TItem="PriceRuleGetDto" Property="Value" Title="Wartość">
                 <Template Context="priceRule">
                     <p>@priceRule.Value @(priceRule.RuleType.ToString().Contains("Value") ? " zł" : " %")</p>
                 </Template>
@@ -39,15 +39,15 @@ else
                 </EditTemplate>
             </RadzenGridColumn>
 
-            <RadzenGridColumn Width="100px" TItem="PriceRuleDto" Property="Priority" Title="Priorytet" />
+            <RadzenGridColumn Width="100px" TItem="PriceRuleGetDto" Property="Priority" Title="Priorytet" />
 
-            <RadzenGridColumn Width="100px" TItem="PriceRuleDto" Property="ApplyNextRules.GetName()" Title="Wykonuj kolejne reguły">
+            <RadzenGridColumn Width="100px" TItem="PriceRuleGetDto" Property="ApplyNextRules.GetName()" Title="Wykonuj kolejne reguły">
                 <EditTemplate Context="priceRule">
                     <RadzenCheckBox @bind-Value="priceRule.ApplyNextRules" />
                 </EditTemplate>
             </RadzenGridColumn>
 
-            <RadzenGridColumn TItem="PriceRuleDto" Context="sampleBlazorModelsSamplePriceRule" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+            <RadzenGridColumn TItem="PriceRuleGetDto" Context="sampleBlazorModelsSamplePriceRule" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                 <Template Context="priceRule">
                     <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(priceRule))">
                     </RadzenButton>

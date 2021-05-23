@@ -1,4 +1,4 @@
-﻿using Hotel.Application.Dtos;
+﻿using Hotel.Application.Dtos.CustomerDtos;
 using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Microsoft.AspNetCore.Components;
@@ -12,9 +12,9 @@ namespace Hotel.Web.Components.CustomerComponents
         [Parameter] public EventCallback<Customer> OnCreated { get; set; }
         [Inject] ICustomerDao CustomerDao { get; set; }
 
-        private CustomerDto _newCustomer = new CustomerDto();
+        private CustomerGetDto _newCustomer = new CustomerGetDto();
 
-        private async Task Create(CustomerDto newCustomer)
+        private async Task Create(CustomerGetDto newCustomer)
         {
             try
             {

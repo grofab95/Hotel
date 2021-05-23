@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.Sql.Daos
 {
-    public class UserDao : BaseDao, IUserDao
+    public class UserDao : BaseDao<User>, IUserDao
     {
         public UserDao(IContextFactory<HotelContext> contextFactory) : base(contextFactory)
         { }

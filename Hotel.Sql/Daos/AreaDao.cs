@@ -11,24 +11,13 @@ using System.Threading.Tasks;
 
 namespace Hotel.Sql.Daos
 {
-    public class AreaDao : BaseDao, IAreaDao
+    public class AreaDao : BaseDao<Area>, IAreaDao
     {
         public AreaDao(IContextFactory<HotelContext> contextFactory) : base(contextFactory)
         {
         }
 
-        public async Task<Area> AddAsync(Area entity)
-        {
-            if (await context.Areas.AnyAsync(x => x.Name.ToLower().Trim() == entity.Name.ToLower().Trim()))
-                throw new HotelException($"Obszar o takiej nazwie już istnieje");
-
-            await context.Areas.AddAsync(entity);
-            await context.SaveChangesAsync();
-
-            return entity;
-        }
-
-        public async Task DeleteAsync(int id)
+        public override async Task DeleteAsync(int id)
         {
             var area = await context.Areas.FirstOrDefaultAsync(x => x.Id == id)
                 ?? throw new HotelException("Obszar nie został odnaleziony.");
@@ -40,18 +29,13 @@ namespace Hotel.Sql.Daos
             await context.SaveChangesAsync();
         }
 
-        public async Task<Area> GetAsync(Expression<Func<Area, bool>> predicate)
+        public override async Task<Area> GetAsync(Expression<Func<Area, bool>> predicate)
         {
             return await context.Areas.FirstOrDefaultAsync(predicate)
                 ?? throw new HotelException("Obszar nie został odnaleziony.");
         }
 
-        public async Task<List<Area>> GetManyAsync(Expression<Func<Area, bool>> predicate)
-        {
-            return await context.Areas.Where(predicate).ToListAsync();
-        }
-
-        public async Task<Area> UpdateAsync(Area entity)
+        public override async Task<Area> UpdateAsync(Area entity)
         {
             if (!(await context.Areas.AnyAsync(x => x.Id == entity.Id)))
                 throw new HotelException($"Obszar {entity.Name} nie istnieje.");

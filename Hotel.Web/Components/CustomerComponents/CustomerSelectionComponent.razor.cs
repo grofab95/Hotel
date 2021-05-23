@@ -35,7 +35,7 @@ namespace Hotel.Web.Components.CustomerComponents
                 if (_searchedValues.IsNotExist())
                     return;
 
-                _findedCustomers = await CustomerDao.GetManyAsync(x => x.Name.Contains(_searchedValues));
+                _findedCustomers = await CustomerDao.GetManyAsync(1, 1000, x => x.Name.Contains(_searchedValues));  // todo: implement paggination
 
                 StateHasChanged();
             }

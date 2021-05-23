@@ -7,9 +7,6 @@ namespace Hotel.Domain.Adapters
 {
     public interface IStatisticDao
     {
-        Task<Turnover> GetTurnoverAsync(int year, int? month);
-        Task<int> GetFirstReservationYearAsync();
-        Task<Dictionary<int, List<int>>> GetReservationsMonthsAsync();
         Task<List<ReservationInfoView>> GetAllAsync();
     }
 }

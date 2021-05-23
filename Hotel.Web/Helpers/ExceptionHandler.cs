@@ -5,7 +5,7 @@ using System;
 
 namespace Hotel.Web.Helpers
 {
-    public static class ExceptionHandler
+    internal static class ExceptionHandler
     {
         public static NotificationMessage Handle(this Exception ex, ILogger logger)
         {

@@ -9,6 +9,7 @@ namespace Hotel.Domain.Tests.EntitiesTests
     public class UserTests
     {
         private const string _name = "Tom";
+        private const string _surname = "Blank";
         private const string _email = "tom@test.com";
         private readonly Password _password;
 
@@ -20,7 +21,7 @@ namespace Hotel.Domain.Tests.EntitiesTests
         [Fact]
         public void CreatedUser_Should_Has_Name()
         {
-            var user = new User(_name, _email, _password);
+            var user = new User(_name, _surname, _email, _password);
             var actual = user.Name;
             var expected = _name;
 
@@ -28,9 +29,19 @@ namespace Hotel.Domain.Tests.EntitiesTests
         }
 
         [Fact]
+        public void CreatedUser_Should_Has_Surname()
+        {
+            var user = new User(_name, _surname, _email, _password);
+            var actual = user.Surname;
+            var expected = _surname;
+
+            actual.Should().Be(expected);
+        }
+
+        [Fact]
         public void CreatedUser_Should_Has_Email()
         {
-            var user = new User(_name, _email, _password);
+            var user = new User(_name, _surname, _email, _password);
             var actual = user.Email;
             var expected = _email;
 
@@ -43,7 +54,18 @@ namespace Hotel.Domain.Tests.EntitiesTests
         [InlineData("")]
         public void ValidName_When_NameNotExist_Should_Throw_MissingValueException(string name)
         {
-            FluentActions.Invoking(() => new User(name, _email, _password))
+            FluentActions.Invoking(() => new User(name, _surname, _email, _password))
+               .Should()
+               .Throw<MissingValueException>();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(" ")]
+        [InlineData("")]
+        public void ValidName_When_SurnameNotExist_Should_Throw_MissingValueException(string surname)
+        {
+            FluentActions.Invoking(() => new User(_name, surname, _email, _password))
                .Should()
                .Throw<MissingValueException>();
         }
@@ -54,7 +76,7 @@ namespace Hotel.Domain.Tests.EntitiesTests
         [InlineData("")]
         public void ValidEmail_When_EmailNotExist_Should_Throw_MissingValueException(string email)
         {
-            FluentActions.Invoking(() => new User(_name, email, _password))
+            FluentActions.Invoking(() => new User(_name, _surname, email, _password))
                .Should()
                .Throw<MissingValueException>();
         }
@@ -67,7 +89,7 @@ namespace Hotel.Domain.Tests.EntitiesTests
         [InlineData("address@@wp.pl")]
         public void ValidEmail_For_InvalidFormat_Throw_InvalidEmail(string email)
         {
-            FluentActions.Invoking(() => new User(_name, email, _password))
+            FluentActions.Invoking(() => new User(_name, _surname, email, _password))
                 .Should()
                 .Throw<InvalidEmailException>();
         }

@@ -10,10 +10,8 @@ namespace Hotel.Sql.Configurations
         {
             builder.ToTable("Users");
             builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.CreatedAt)
-                .HasDefaultValueSql("getdate()");
-
+            builder.Property(x => x.CreatedAt).HasDefaultValueSql("getdate()");
+            builder.HasIndex(x => x.Email).IsUnique();
             builder.HasOne(x => x.Token)
                 .WithOne(x => x.User)
                 .HasForeignKey<Token>(x => x.UserId)

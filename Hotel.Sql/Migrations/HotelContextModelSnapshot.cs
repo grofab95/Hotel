@@ -32,12 +32,16 @@ namespace Hotel.Sql.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Areas");
                 });
@@ -55,12 +59,16 @@ namespace Hotel.Sql.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Customers");
                 });
@@ -124,7 +132,7 @@ namespace Hotel.Sql.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("FriendlyName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -144,6 +152,10 @@ namespace Hotel.Sql.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FriendlyName")
+                        .IsUnique()
+                        .HasFilter("[FriendlyName] IS NOT NULL");
 
                     b.ToTable("PriceRules");
                 });
@@ -228,7 +240,7 @@ namespace Hotel.Sql.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("PeopleCapacity")
                         .HasColumnType("int");
@@ -239,6 +251,10 @@ namespace Hotel.Sql.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AreaId");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Rooms");
                 });
@@ -285,7 +301,7 @@ namespace Hotel.Sql.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -296,10 +312,17 @@ namespace Hotel.Sql.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("Users");
                 });
