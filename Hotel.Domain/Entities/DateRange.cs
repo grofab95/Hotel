@@ -11,7 +11,7 @@ namespace Hotel.Domain.Entities
         public DateRange(DateTime from, DateTime to)
         {
             if (from > to)
-                throw new HotelException("Data do nie może być wczęśniejsza od daty od.");
+                throw new HotelException("Data do nie może być wcześniejsza od daty od.");
 
             From = from;
             To = to;

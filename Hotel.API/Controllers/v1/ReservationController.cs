@@ -2,6 +2,7 @@
 using Hotel.API.Wrappers;
 using Hotel.Application.Dtos.ReservationDtos;
 using Hotel.Domain.Adapters;
+using Hotel.Domain.Entities;
 using Hotel.Domain.Environment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,6 +59,21 @@ namespace Hotel.API.Controllers.v1
                 var reservations = await _reservationDao.GetManyAsync(paggedRequest.Page, paggedRequest.Size, x => x.Customer.Id == customerId);
                 var mapped = _mapper.Map<List<ReservationGetDto>>(reservations);
                 return Ok(new PagedResponse<List<ReservationGetDto>>(mapped, total, paggedRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse(ex));
+            }
+        }
+
+        [Route("createReservation")]
+        [HttpPost]
+        public async Task<IActionResult> CreateReservationAsync([FromBody] ReservationCreateDto createDto)
+        {
+            try
+            {
+                var reservation = await _reservationDao.CreateReservation(createDto.CustomerId, new DateRange(createDto.CheckIn, createDto.CheckOut));
+                return Ok(new SuccessResponse<Reservation>(reservation));
             }
             catch (Exception ex)
             {

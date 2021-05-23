@@ -14,6 +14,6 @@ namespace Hotel.Domain.Adapters
         Task<List<Reservation>> GetReservationsAsync(int page, int limit, Expression<Func<Reservation, bool>> predicate);
         Task<List<ReservationInfoView>> GetReservationBasicInfosAsync();
         IQueryable<ReservationInfoView> SearchReservations();
-
+        Task<Reservation> CreateReservation(int customerId, DateRange dateRange);
     }
 }

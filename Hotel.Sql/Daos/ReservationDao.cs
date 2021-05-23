@@ -108,5 +108,17 @@ namespace Hotel.Sql.Daos
                 .Pagging(page, limit)
                 .ToListAsync();
         }
+
+        public async Task<Reservation> CreateReservation(int customerId, DateRange dateRange)
+        {
+            var customer = await context.Customers.FindAsync(customerId)
+                ?? throw new HotelException("Klient nie został odnaleziony.");
+
+            AttachEntry(customer);
+            var reservation = Reservation.Create(customer, dateRange.From, dateRange.To);
+            await context.Reservations.AddAsync(reservation);
+            await context.SaveChangesAsync();
+            return reservation;
+        }
     }
 }
