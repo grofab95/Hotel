@@ -26,6 +26,7 @@ namespace Hotel.Web
             services.RegisterAutoMapper();
             services.RegisterRadzenFactors();
             services.RegisterDaos();
+            services.RegisterReservationDao();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

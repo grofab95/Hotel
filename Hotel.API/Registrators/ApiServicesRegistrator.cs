@@ -1,4 +1,5 @@
 ﻿using Hotel.Application.Managers;
+using Hotel.Domain.Adapters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -98,6 +99,11 @@ namespace Hotel.Api.Registrators
                     return new BadRequestObjectResult(errors);
                 };
             });
+        }
+
+        public static void RegisterReservationDao(this IServiceCollection services)
+        {
+            services.AddScoped<IReservationDao, SqlDapper.Daos.ReservationDao>();
         }
     }
 }

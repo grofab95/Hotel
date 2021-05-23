@@ -29,7 +29,8 @@ namespace Hotel.Api
             services.RegisterAutoMapper();
             services.RegisterSwagger();
             services.RegisterAuthentication();
-            services.RegisterDaos();           
+            services.RegisterDaos();
+            services.RegisterReservationDao();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger)

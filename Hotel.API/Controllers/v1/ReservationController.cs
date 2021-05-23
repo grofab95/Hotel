@@ -32,23 +32,34 @@ namespace Hotel.Api.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> GetReservationsAsync([FromQuery] PaggedRequest paggedRequest)
         {
-            var total = await _reservationDao.CountAsync(x => x.Id > 0);
-            var reservations = await _reservationDao.GetManyAsync(paggedRequest.Page, paggedRequest.Size, x => x.Id > 0);
-            var mapped = _mapper.Map<List<ReservationGetDto>>(reservations);
-            return Ok(new PagedResponse<List<ReservationGetDto>>(mapped, total, paggedRequest));
+            return Ok();
+            //var total = await _reservationDao.CountAllReservationsAsync();
+            //var reservations = await _reservationDao.GetManyAsync(paggedRequest.Page, paggedRequest.Size, x => x.Id > 0);
+            //var mapped = _mapper.Map<List<ReservationGetDto>>(reservations);
+            //return Ok(new PagedResponse<List<ReservationGetDto>>(mapped, total, paggedRequest));
+        }
+
+        [Route("getReservation/{reservationId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetReservationAsync(int reservationId)
+        {
+            var reservation = await _reservationDao.GetReservationAsync(reservationId);
+            var mapped = _mapper.Map<ReservationGetDto>(reservation);
+            return Ok(new SuccessResponse<ReservationGetDto>(mapped));
         }
 
         [Route("getReservations/customer/{customerId}")]
         [HttpGet]
         public async Task<IActionResult> GetCustomerReservationsAsync(int customerId, [FromQuery] PaggedRequest paggedRequest)
         {
-            var total = await _reservationDao.CountAsync(x => x.Customer.Id == customerId);
-            if (total == 0)
-                return NotFound(new ErrorResponse("Klient nie posiada rezerwacji."));
+            return Ok();
+            //var total = await _reservationDao.CountCustomerReservationsAsync(customerId);
+            //if (total == 0)
+            //    return NotFound(new ErrorResponse("Klient nie posiada rezerwacji."));
 
-            var reservations = await _reservationDao.GetManyAsync(paggedRequest.Page, paggedRequest.Size, x => x.Customer.Id == customerId);
-            var mapped = _mapper.Map<List<ReservationGetDto>>(reservations);
-            return Ok(new PagedResponse<List<ReservationGetDto>>(mapped, total, paggedRequest));
+            //var reservations = await _reservationDao.GetManyAsync(paggedRequest.Page, paggedRequest.Size, x => x.Customer.Id == customerId);
+            //var mapped = _mapper.Map<List<ReservationGetDto>>(reservations);
+            //return Ok(new PagedResponse<List<ReservationGetDto>>(mapped, total, paggedRequest));
         }
 
         [Route("createReservation")]
@@ -56,7 +67,8 @@ namespace Hotel.Api.Controllers.v1
         public async Task<IActionResult> CreateReservationAsync([FromBody] ReservationCreateDto createDto)
         {
             var reservation = await _reservationDao.CreateReservation(createDto.CustomerId, new DateRange(createDto.CheckIn, createDto.CheckOut));
-            return Ok(new SuccessResponse<Reservation>(reservation));
+            var mapped = _mapper.Map<ReservationGetDto>(reservation);
+            return Ok(new SuccessResponse<ReservationGetDto>(mapped));
         }
 
         [Route("{reservationId}/room/addRoom/{roomId}")]

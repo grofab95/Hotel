@@ -14,8 +14,7 @@ namespace Hotel.Common
     {
         public static void RegisterDaos(this IServiceCollection services)
         {
-            services.AddScoped<IPriceRuleDao, PriceRuleDao>();
-            services.AddScoped<IReservationDao, ReservationDao>();
+            services.AddScoped<IPriceRuleDao, PriceRuleDao>();            
             services.AddScoped<IRoomDao, RoomDao>();
             services.AddScoped<IAreaDao, AreaDao>();
             services.AddScoped<ICustomerDao, CustomerDao>();
