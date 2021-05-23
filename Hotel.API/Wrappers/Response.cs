@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Hotel.API.Wrappers
 {
-    public class Response<T>
+    public abstract class Response<T>
     {
         public T Data { get; private set; }
         public bool Succeeded { get; private set; }
@@ -15,9 +15,14 @@ namespace Hotel.API.Wrappers
             Data = data;
             Succeeded = true;
         }
+
+        public Response()
+        {
+            Succeeded = true;
+        }
     }
 
-    public class Response
+    public abstract class Response
     {
         public bool Succeeded { get; private set; }
         public string[] Errors { get; private set; }
@@ -31,6 +36,12 @@ namespace Hotel.API.Wrappers
         public Response(IEnumerable<string> errors)
         {
             Errors = errors.ToArray();
+            Succeeded = false;
+        }
+
+        public Response(string error)
+        {
+            Errors = new string[] { error };
             Succeeded = false;
         }
     }

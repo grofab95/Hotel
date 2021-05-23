@@ -42,11 +42,11 @@ namespace Hotel.API.Controllers.v1
                 var user = await _userDao.VerifyCredentialAsync(userCredential.Email, userCredential.Password);
                 var token = TokenManager.GnerateToken(user);
                 await _userDao.UpdateTokenAsync(user.Id, token);
-                return Ok(new Response<TokenResponse>(new TokenResponse(token)));
+                return Ok(new SuccessResponse<TokenResponse>(new TokenResponse(token)));
             }
             catch (Exception ex)
             {
-                return BadRequest(new Response(ex));
+                return BadRequest(new ErrorResponse(ex));
             }
         }
 
@@ -57,11 +57,11 @@ namespace Hotel.API.Controllers.v1
             try
             {
                 var user = await _userDao.AddAsync(new User(dto.Name, dto.Surname, dto.Email, new Password(dto.Password)));
-                return Ok(new Response<User>(user));
+                return Ok(new SuccessResponse<User>(user));
             }
             catch (Exception ex)
             {
-                return BadRequest(new Response(ex));
+                return BadRequest(new ErrorResponse(ex));
             }
         }
 
@@ -78,7 +78,7 @@ namespace Hotel.API.Controllers.v1
             }
             catch (Exception ex)
             {
-                return BadRequest(new Response(ex));
+                return BadRequest(new ErrorResponse(ex));
             }
         }
     }

@@ -41,7 +41,7 @@ namespace Hotel.API.Controllers.v1
             }
             catch (Exception ex)
             {
-                return BadRequest(new Response(ex));
+                return BadRequest(new ErrorResponse(ex));
             }
         }
 
@@ -53,7 +53,7 @@ namespace Hotel.API.Controllers.v1
             {
                 var total = await _reservationDao.CountAsync(x => x.Customer.Id == customerId);
                 if (total == 0)
-                    return NotFound(new Response(new string[] { "Klient nie posiada rezerwacji." }));
+                    return NotFound(new ErrorResponse("Klient nie posiada rezerwacji."));
 
                 var reservations = await _reservationDao.GetManyAsync(paggedRequest.Page, paggedRequest.Size, x => x.Customer.Id == customerId);
                 var mapped = _mapper.Map<List<ReservationGetDto>>(reservations);
@@ -61,7 +61,7 @@ namespace Hotel.API.Controllers.v1
             }
             catch (Exception ex)
             {
-                return BadRequest(new Response(ex));
+                return BadRequest(new ErrorResponse(ex));
             }
         }
     }
