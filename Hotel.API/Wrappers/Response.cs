@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Hotel.API.Wrappers
 {
@@ -23,6 +25,12 @@ namespace Hotel.API.Wrappers
         public Response(Exception exception)
         {
             Errors = new string[] { exception.Message };
+            Succeeded = false;
+        }
+
+        public Response(IEnumerable<string> errors)
+        {
+            Errors = errors.ToArray();
             Succeeded = false;
         }
     }

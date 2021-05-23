@@ -5,7 +5,7 @@
 
 @if (_reservationsDtos != null)
 {
-    <RadzenScheduler @ref=@_scheduler style="height: 768px;" TItem="ReservationGetDto" Data=@_reservationsDtos
+    <RadzenScheduler @ref=@_scheduler style="height: 768px;" TItem="ReservationInfoDto" Data=@_reservationsDtos
                      TextProperty="Text" SelectedIndex="1" StartProperty="CheckIn" EndProperty="CheckOut"
                      AppointmentRender="OnSchedulerRender">
         <RadzenWeekView />

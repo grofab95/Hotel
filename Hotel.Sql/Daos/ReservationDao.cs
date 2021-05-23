@@ -123,11 +123,19 @@ namespace Hotel.Sql.Daos
                     ?? throw new HotelException($"Reserwacja nie istnieje.");
         }
 
-        public async Task<int> GetTotalAsync() => await context.Reservations.CountAsync();
-
-        public async Task<List<Reservation>> GetAllAsync(int page, int limit)
+        public async Task<int> GetTotalAsync(Expression<Func<Reservation, bool>> predicate)
         {
+            return await context.Reservations.Where(predicate).CountAsync();
+        }
+
+        public async Task<List<Reservation>> GetAllAsync(int page, int limit, Expression<Func<Reservation, bool>> predicate = null)
+        {
+            Expression<Func<Reservation, bool>> filter = predicate == null
+                ? x => x.Id > 0
+                : predicate;
+
             return await context.Reservations
+                .Where(predicate)
                 .Include(x => x.Customer)
                 .Include(x => x.ReservationRooms).ThenInclude(x => x.Room).ThenInclude(x => x.Area)
                 .Include(x => x.ReservationRooms).ThenInclude(x => x.Guests)

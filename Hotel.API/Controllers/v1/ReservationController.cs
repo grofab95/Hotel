@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hotel.API.Controllers.v1
@@ -31,12 +30,32 @@ namespace Hotel.API.Controllers.v1
 
         [Route("getReservations")]
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync([FromQuery] PaggedRequest paggedRequest)
+        public async Task<IActionResult> GetReservationsAsync([FromQuery] PaggedRequest paggedRequest)
         {
             try
             {
-                var total = await _reservationDao.GetTotalAsync();
+                var total = await _reservationDao.GetTotalAsync(x => x.Id > 0);
                 var reservations = await _reservationDao.GetAllAsync(paggedRequest.Page, paggedRequest.Size);
+                var mapped = _mapper.Map<List<ReservationGetDto>>(reservations);
+                return Ok(new PagedResponse<List<ReservationGetDto>>(mapped, total, paggedRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(ex));
+            }
+        }
+
+        [Route("getReservations/customer/{customerId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetCustomerReservationsAsync(int customerId, [FromQuery] PaggedRequest paggedRequest)
+        {
+            try
+            {
+                var total = await _reservationDao.GetTotalAsync(x => x.Customer.Id == customerId);
+                if (total == 0)
+                    return NotFound(new Response(new string[] { "Klient nie posiada rezerwacji." }));
+
+                var reservations = await _reservationDao.GetAllAsync(paggedRequest.Page, paggedRequest.Size, x => x.Customer.Id == customerId);
                 var mapped = _mapper.Map<List<ReservationGetDto>>(reservations);
                 return Ok(new PagedResponse<List<ReservationGetDto>>(mapped, total, paggedRequest));
             }

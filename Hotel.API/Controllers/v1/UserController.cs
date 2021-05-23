@@ -52,7 +52,7 @@ namespace Hotel.API.Controllers.v1
 
         [Route("addUser")]
         [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] UserCreateDto dto)
+        public async Task<IActionResult> AddUserAsync([FromBody] UserCreateDto dto)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace Hotel.API.Controllers.v1
 
         [Route("getUsers")]
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync([FromQuery] PaggedRequest paggedRequest)
+        public async Task<IActionResult> GetUsersAsync([FromQuery] PaggedRequest paggedRequest)
         {
             try
             {
