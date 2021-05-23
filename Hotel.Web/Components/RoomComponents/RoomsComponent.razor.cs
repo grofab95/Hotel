@@ -32,10 +32,10 @@ namespace Hotel.Web.Components.RoomComponents
             }
         }
 
-        public async Task LoadData()
+        public async Task LoadData() // todo: implement paggination
         {
-            _rooms = Mapper.Map<List<RoomGetDto>>(await RoomDao.GetManyAsync(x => x.Id > 0));
-            _areas = Mapper.Map<List<AreaGetDto>>(await AreaDao.GetManyAsync(x => x.Id > 0));
+            _rooms = Mapper.Map<List<RoomGetDto>>(await RoomDao.GetManyAsync(1, 500, x => x.Id > 0));
+            _areas = Mapper.Map<List<AreaGetDto>>(await AreaDao.GetManyAsync(1, 500, x => x.Id > 0));
         }
 
         void EditRow(RoomGetDto room)

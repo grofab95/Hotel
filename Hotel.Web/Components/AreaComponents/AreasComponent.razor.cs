@@ -29,7 +29,7 @@ namespace Hotel.Web.Components.AreaComponents
 
         private async Task LoadAreas()
         {
-            var areas = await AreaDao.GetManyAsync(x => x.Id > 0);
+            var areas = await AreaDao.GetManyAsync(1, 500, x => x.Id > 0);   // todo: implement paggination
             _areas = Mapper.Map<List<AreaGetDto>>(areas);
         }
 

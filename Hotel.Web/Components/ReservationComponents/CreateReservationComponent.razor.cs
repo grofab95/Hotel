@@ -25,9 +25,8 @@ namespace Hotel.Web.Components.ReservationComponents
         {
             try
             {
-                var priceRules = await PriceRuleDao.GetManyAsync(x => x.Id > 0);
-
-                _priceCalculator = new PriceCalculator(priceRules);
+                var priceRules = await PriceRuleDao.GetManyAsync(1, 100, x => x.Id > 0); // todo: implement paggination
+                _priceCalculator = new PriceCalculator(priceRules); 
             }
             catch (Exception ex)
             {

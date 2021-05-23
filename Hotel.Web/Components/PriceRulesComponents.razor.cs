@@ -26,7 +26,7 @@ namespace Hotel.Web.Components
         {
             try
             {
-                var priceRules = await PriceRuleDao.GetManyAsync(x => x.Id > 0);
+                var priceRules = await PriceRuleDao.GetManyAsync(1, 100, x => x.Id > 0);  // todo: implement paggination
                 _priceRuleManager = new PriceRuleManager(priceRules);
                 _priceRules = _priceRuleManager.GetOrderedRules();
 

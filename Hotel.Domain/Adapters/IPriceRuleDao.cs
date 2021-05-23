@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.Domain.Adapters
 {
-    public interface IPriceRuleDao : IDao<PriceRule>
+    public interface IPriceRuleDao : IAddDao<PriceRule>, IModifyDao<PriceRule>, IGetDao<PriceRule>
     {
         Task<PriceCalculator> GetPriceCalculator();
     }

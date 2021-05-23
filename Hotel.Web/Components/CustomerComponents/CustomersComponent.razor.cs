@@ -22,7 +22,7 @@ namespace Hotel.Web.Components.CustomerComponents
         {
             try
             {
-                var customers = await CustomerDao.GetManyAsync(x => x.Id > 0);
+                var customers = await CustomerDao.GetManyAsync(1, 1000, x => x.Id > 0);  // todo: implement paggination
                 _customers = Mapper.Map<List<CustomerGetDto>>(customers);
             }
             catch (Exception ex)
@@ -53,7 +53,7 @@ namespace Hotel.Web.Components.CustomerComponents
             try
             {
 
-                var customerDb = (await CustomerDao.GetManyAsync(x => x.Id == customer.Id)).FirstOrDefault();
+                var customerDb = await CustomerDao.GetAsync(x => x.Id == customer.Id);
                 customer.Name = customerDb.Name;
 
                 _grid.CancelEditRow(customer);
@@ -70,7 +70,7 @@ namespace Hotel.Web.Components.CustomerComponents
         {
             try
             {
-                var isConfirm = await ShowConfirm($"Czy napewno chcesz usunąć klienta {customer}?");
+                var isConfirm = await ShowConfirm($"Czy napewno chcesz usunąć klienta {customer.Name}?");
                 if (!isConfirm)
                     return;
 

@@ -2,6 +2,7 @@
 using Hotel.Domain.Entities.PriceRuleEntity;
 using Hotel.Domain.Entities.Views;
 using Hotel.Domain.Environment;
+using Hotel.Domain.Exceptions;
 using Hotel.Sql.Configurations;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -70,7 +71,7 @@ namespace Hotel.Sql
                 {
                     var error = ex.InnerException.Message;
                     var value = error.Split(new string[] { "The duplicate key value is (", ")." }, StringSplitOptions.TrimEntries)[1];
-                    throw new Exception($"Wartość {value.Replace(",", "")} już istnieje w bazie.");
+                    throw new HotelException($"Wartość {value.Replace(",", "")} już istnieje w bazie.");
                 }
                 throw;
             }

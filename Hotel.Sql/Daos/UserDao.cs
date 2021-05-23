@@ -1,30 +1,17 @@
 ﻿using Hotel.Domain.Adapters;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Exceptions;
-using Hotel.Domain.Extensions;
 using Hotel.Sql.ContextFactory;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hotel.Sql.Daos
 {
-    public class UserDao : BaseDao, IUserDao
+    public class UserDao : BaseDao<User>, IUserDao
     {
         public UserDao(IContextFactory<HotelContext> contextFactory) : base(contextFactory)
         { }
-
-        public async Task<int> GetTotalAsync() => await context.Users.CountAsync();
-
-        public async Task<List<User>> GetAllAsync(int page, int limit)
-        {
-            return await context.Users.Include(x => x.Token)
-                .OrderBy(x => x.Id)
-                .Pagging(page, limit)
-                .ToListAsync();
-        }
 
         public async Task<User> GetUserByTokenAsync(string token)
         {
@@ -49,14 +36,6 @@ namespace Hotel.Sql.Daos
 
             if (user.IsPasswordValid(password) == false)
                 throw new HotelException("Podane hasło jest nieprawidłowe.");
-
-            return user;
-        }
-
-        public async Task<User> AddUser(User user)
-        {
-            await context.Users.AddAsync(user);
-            await context.SaveChangesAsync();
 
             return user;
         }

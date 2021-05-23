@@ -9,10 +9,9 @@ using System.Threading.Tasks;
 
 namespace Hotel.Domain.Adapters
 {
-    public interface IReservationDao : IDao<Reservation>
+    public interface IReservationDao : IAddDao<Reservation>, IModifyDao<Reservation>, IGetDao<Reservation>, ICountDao<Reservation>
     {
-        Task<int> GetTotalAsync(Expression<Func<Reservation, bool>> predicate);
-        Task<List<Reservation>> GetAllAsync(int page, int limit, Expression<Func<Reservation, bool>> predicate = null);
+        Task<List<Reservation>> GetReservationsAsync(int page, int limit, Expression<Func<Reservation, bool>> predicate);
         Task<List<ReservationInfoView>> GetReservationBasicInfosAsync();
         IQueryable<ReservationInfoView> SearchReservations();
 

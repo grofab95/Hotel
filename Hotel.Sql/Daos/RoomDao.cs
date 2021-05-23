@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.Sql.Daos
 {
-    public class RoomDao : BaseDao, IRoomDao
+    public class RoomDao : BaseDao<Room>, IRoomDao
     {
         public RoomDao(IContextFactory<HotelContext> contextFactory) : base(contextFactory)
         { }
@@ -52,17 +52,7 @@ namespace Hotel.Sql.Daos
             return freeRooms.Concat(reservedRooms).ToList();
         }
 
-        public async Task<Room> AddAsync(Room entity)
-        {
-            AttachEntry(entity.Area);
-
-            await context.Rooms.AddAsync(entity);
-            await context.SaveChangesAsync();
-
-            return entity;
-        }
-
-        public async Task DeleteAsync(int id)
+        public override async Task DeleteAsync(int id)
         {
             var room = await context.Rooms.FirstOrDefaultAsync(x => x.Id == id)
                 ?? throw new HotelException("Pokój nie został odnaleziony.");
@@ -74,24 +64,31 @@ namespace Hotel.Sql.Daos
             await context.SaveChangesAsync();
         }
 
-        public async Task<Room> GetAsync(Expression<Func<Room, bool>> predicate)
+        public override async Task<Room> AddAsync(Room entity)
+        {
+            AttachEntry(entity.Area);
+            await context.Rooms.AddAsync(entity);
+            await context.SaveChangesAsync();
+            return entity;
+        }
+
+        public override async Task<Room> GetAsync(Expression<Func<Room, bool>> predicate)
         {
             return await context.Rooms.Include(x => x.Area).FirstOrDefaultAsync(predicate)
                 ?? throw new HotelException("Obszar nie został odnaleziony.");
         }
 
-        public async Task<List<Room>> GetManyAsync(Expression<Func<Room, bool>> predicate)
+        public override async Task<List<Room>> GetManyAsync(int page, int limit, Expression<Func<Room, bool>> predicate)
         {
             return await context.Rooms.Include(x => x.Area).Where(predicate).ToListAsync();
         }
 
-        public async Task<Room> UpdateAsync(Room entity)
+        public override async Task<Room> UpdateAsync(Room entity)
         {
             if (!(await context.Rooms.AnyAsync(x => x.Id == entity.Id)))
                 throw new HotelException($"Pokój {entity.Name} nie istnieje.");
 
             AttachEntry(entity.Area);
-
             await UpdateEntry(entity);
             return entity;
         }

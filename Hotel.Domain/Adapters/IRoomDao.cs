@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Hotel.Domain.Adapters
 {
-    public interface IRoomDao : IDao<Room>
+    public interface IRoomDao : IAddDao<Room>, IModifyDao<Room>, IGetDao<Room>
     {
         Task<List<Room>> GetFreeByDateRangeAsync(int peopleAmount, DateRange dateRange);
     }

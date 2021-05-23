@@ -56,7 +56,7 @@ namespace Hotel.API.Controllers.v1
         {
             try
             {
-                var user = await _userDao.AddUser(new User(dto.Name, dto.Surname, dto.Email, new Password(dto.Password)));
+                var user = await _userDao.AddAsync(new User(dto.Name, dto.Surname, dto.Email, new Password(dto.Password)));
                 return Ok(new Response<User>(user));
             }
             catch (Exception ex)
@@ -71,8 +71,8 @@ namespace Hotel.API.Controllers.v1
         {
             try
             {
-                var total = await _userDao.GetTotalAsync();
-                var users = await _userDao.GetAllAsync(paggedRequest.Page, paggedRequest.Size);
+                var total = await _userDao.CountAsync(x => x.Id > 0);
+                var users = await _userDao.GetManyAsync(paggedRequest.Page, paggedRequest.Size, x => x.Id > 0);
                 var mapped = _mapper.Map<List<UserGetDto>>(users);
                 return Ok(new PagedResponse<List<UserGetDto>>(mapped, total, paggedRequest));
             }

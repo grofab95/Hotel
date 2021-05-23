@@ -34,8 +34,8 @@ namespace Hotel.API.Controllers.v1
         {
             try
             {
-                var total = await _reservationDao.GetTotalAsync(x => x.Id > 0);
-                var reservations = await _reservationDao.GetAllAsync(paggedRequest.Page, paggedRequest.Size);
+                var total = await _reservationDao.CountAsync(x => x.Id > 0);
+                var reservations = await _reservationDao.GetManyAsync(paggedRequest.Page, paggedRequest.Size, x => x.Id > 0);
                 var mapped = _mapper.Map<List<ReservationGetDto>>(reservations);
                 return Ok(new PagedResponse<List<ReservationGetDto>>(mapped, total, paggedRequest));
             }
@@ -51,11 +51,11 @@ namespace Hotel.API.Controllers.v1
         {
             try
             {
-                var total = await _reservationDao.GetTotalAsync(x => x.Customer.Id == customerId);
+                var total = await _reservationDao.CountAsync(x => x.Customer.Id == customerId);
                 if (total == 0)
                     return NotFound(new Response(new string[] { "Klient nie posiada rezerwacji." }));
 
-                var reservations = await _reservationDao.GetAllAsync(paggedRequest.Page, paggedRequest.Size, x => x.Customer.Id == customerId);
+                var reservations = await _reservationDao.GetManyAsync(paggedRequest.Page, paggedRequest.Size, x => x.Customer.Id == customerId);
                 var mapped = _mapper.Map<List<ReservationGetDto>>(reservations);
                 return Ok(new PagedResponse<List<ReservationGetDto>>(mapped, total, paggedRequest));
             }
