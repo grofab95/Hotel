@@ -1,5 +1,5 @@
-using Hotel.API.Middleware;
-using Hotel.API.Registrators;
+using Hotel.Api.Middleware;
+using Hotel.Api.Registrators;
 using Hotel.Common;
 using Hotel.Domain.Environment;
 using Microsoft.AspNetCore.Builder;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Hotel.API
+namespace Hotel.Api
 {
     public class Startup
     {

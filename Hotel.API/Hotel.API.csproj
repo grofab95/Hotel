@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>Hotel.Api</AssemblyName>
+    <RootNamespace>Hotel.Api</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

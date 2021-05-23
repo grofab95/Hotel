@@ -2,9 +2,8 @@ using Hotel.Application.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
 
-namespace Hotel.API
+namespace Hotel.Api
 {
     public class Program
     {

@@ -1,4 +1,4 @@
-﻿using Hotel.API.Wrappers;
+﻿using Hotel.Api.Wrappers;
 using Hotel.Domain.Environment;
 using Hotel.Domain.Exceptions;
 using Hotel.Domain.Utilities;
@@ -7,7 +7,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Hotel.API.Middleware
+namespace Hotel.Api.Middleware
 {
     public class ExceptionMiddleware
     {

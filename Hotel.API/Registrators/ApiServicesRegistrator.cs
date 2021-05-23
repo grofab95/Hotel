@@ -6,7 +6,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Linq;
 
-namespace Hotel.API.Registrators
+namespace Hotel.Api.Registrators
 {
     public static class ApiServicesRegistrator
     {

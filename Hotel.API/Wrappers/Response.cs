@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Hotel.API.Wrappers
+namespace Hotel.Api.Wrappers
 {
     public abstract class Response<T>
     {

@@ -1,4 +1,4 @@
-﻿namespace Hotel.API.Wrappers
+﻿namespace Hotel.Api.Wrappers
 {
     public class SuccessResponse<T> : Response<T>
     {

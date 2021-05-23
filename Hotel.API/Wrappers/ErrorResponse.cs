@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Hotel.API.Wrappers
+namespace Hotel.Api.Wrappers
 {
     public class ErrorResponse : Response
     {

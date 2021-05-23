@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Hotel.API.Wrappers
+namespace Hotel.Api.Wrappers
 {
     public class PagedResponse<T> : Response<T> where T : ICollection
     {

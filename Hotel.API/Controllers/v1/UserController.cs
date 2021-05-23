@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Hotel.API.Wrappers;
+using Hotel.Api.Wrappers;
 using Hotel.Application.Dtos.TokenDtos;
 using Hotel.Application.Dtos.UserDtos;
 using Hotel.Application.Managers;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Hotel.API.Controllers.v1
+namespace Hotel.Api.Controllers.v1
 {
     [Authorize]
     [ApiVersion("1.0")]
