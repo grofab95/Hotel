@@ -94,7 +94,7 @@ namespace Hotel.Sql.Daos
                 .Include(x => x.ReservationRooms).ThenInclude(x => x.Room).ThenInclude(x => x.Area)
                 .Include(x => x.ReservationRooms).ThenInclude(x => x.Guests)
                 .FirstOrDefaultAsync(predicate)
-                    ?? throw new HotelException($"Reserwacja nie istnieje.");
+                    ?? throw new HotelException($"Rezerwacja nie istnieje.");
         }
 
         public async Task<List<Reservation>> GetReservationsAsync(int page, int limit, Expression<Func<Reservation, bool>> predicate)
@@ -119,6 +119,36 @@ namespace Hotel.Sql.Daos
             await context.Reservations.AddAsync(reservation);
             await context.SaveChangesAsync();
             return reservation;
+        }
+
+        public Task AddRoomToReservationAsync(int reservationId, int roomId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveRoomFromReservationAsync(int reservationId, int roomId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddGuestToReservationRoomAsync(int reservationId, int guestId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveGuestFromReservationRoomAsync(int reservationId, int guestId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<decimal> GetReservationPriceAsync(int reservationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<decimal> GetReservationPriceForDay(int reservationId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

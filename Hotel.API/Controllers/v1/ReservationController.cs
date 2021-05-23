@@ -58,5 +58,53 @@ namespace Hotel.Api.Controllers.v1
             var reservation = await _reservationDao.CreateReservation(createDto.CustomerId, new DateRange(createDto.CheckIn, createDto.CheckOut));
             return Ok(new SuccessResponse<Reservation>(reservation));
         }
+
+        [Route("{reservationId}/room/addRoom/{roomId}")]
+        [HttpPut]
+        public async Task<IActionResult> AddRoomToReservationAsync(int reservationId, int roomId)
+        {
+            await _reservationDao.AddRoomToReservationAsync(reservationId, roomId);
+            return Ok(new SuccessResponse());
+        }
+
+        [Route("{reservationId}/room/removeRoom/{roomId}")]
+        [HttpPut]
+        public async Task<IActionResult> RemoveRoomToReservationAsync(int reservationId, int roomId)
+        {
+            await _reservationDao.RemoveRoomFromReservationAsync(reservationId, roomId);
+            return Ok(new SuccessResponse());
+        }
+
+        [Route("{reservationId}/guest/addGuest/{guestId}")]
+        [HttpPut]
+        public async Task<IActionResult> AddGuestToReservationRoomAsync(int reservationId, int guestId)
+        {
+            await _reservationDao.AddGuestToReservationRoomAsync(reservationId, guestId);
+            return Ok(new SuccessResponse());
+        }
+
+        [Route("{reservationId}/guest/removeGuest/{guestId}")]
+        [HttpPut]
+        public async Task<IActionResult> RemoveGuestFromReservationRoomAsync(int reservationId, int guestId)
+        {
+            await _reservationDao.RemoveGuestFromReservationRoomAsync(reservationId, guestId);
+            return Ok(new SuccessResponse());
+        }
+
+        [Route("{reservationId}/price/total")]
+        [HttpGet]
+        public async Task<IActionResult> GetReservationPriceAsync(int reservationId)
+        {
+            var totalPrice = await _reservationDao.GetReservationPriceAsync(reservationId);
+            return Ok(new SuccessResponse<ReservationPriceGetDto>(new ReservationPriceGetDto(reservationId, totalPrice)));
+        }
+
+        [Route("{reservationId}/price/forDay")]
+        [HttpGet]
+        public async Task<IActionResult> GetReservationPriceForDay(int reservationId)
+        {
+            var priceForDay = await _reservationDao.GetReservationPriceForDay(reservationId);
+            return Ok(new SuccessResponse<ReservationPriceGetDto>(new ReservationPriceGetDto(reservationId, priceForDay)));
+        }
     }
 }

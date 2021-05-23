@@ -15,5 +15,11 @@ namespace Hotel.Domain.Adapters
         Task<List<ReservationInfoView>> GetReservationBasicInfosAsync();
         IQueryable<ReservationInfoView> SearchReservations();
         Task<Reservation> CreateReservation(int customerId, DateRange dateRange);
+        Task AddRoomToReservationAsync(int reservationId, int roomId);
+        Task RemoveRoomFromReservationAsync(int reservationId, int roomId);
+        Task AddGuestToReservationRoomAsync(int reservationId, int guestId);
+        Task RemoveGuestFromReservationRoomAsync(int reservationId, int guestId);
+        Task<decimal> GetReservationPriceAsync(int reservationId);
+        Task<decimal> GetReservationPriceForDay(int reservationId);
     }
 }

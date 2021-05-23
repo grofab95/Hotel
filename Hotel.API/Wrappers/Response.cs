@@ -44,5 +44,10 @@ namespace Hotel.Api.Wrappers
             Errors = new string[] { error };
             Succeeded = false;
         }
+
+        public Response()
+        {
+            Succeeded = true;
+        }
     }
 }

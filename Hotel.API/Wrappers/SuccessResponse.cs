@@ -8,4 +8,10 @@
         public SuccessResponse(T data) : base(data)
         { }
     }
+
+    public class SuccessResponse : Response
+    {
+        public SuccessResponse() : base()
+        { }
+    }
 }
