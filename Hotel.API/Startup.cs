@@ -1,5 +1,7 @@
+using Hotel.API.Middleware;
 using Hotel.API.Registrators;
 using Hotel.Common;
+using Hotel.Domain.Environment;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,23 +23,23 @@ namespace Hotel.API
         {
             services.RegisterLogger();
             services.RegisterControlers();
+            services.RegisterApiBehaviorOptions();
             services.RegisterApiVersioning();
             services.RegisterContextFactory();
             services.RegisterAutoMapper();
             services.RegisterSwagger();
             services.RegisterAuthentication();
-            services.RegisterDaos();
+            services.RegisterDaos();           
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger)
         {
+            app.UseMiddleware<ExceptionMiddleware>(logger);
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hotel Api Documentation v1"));
             }
-
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();

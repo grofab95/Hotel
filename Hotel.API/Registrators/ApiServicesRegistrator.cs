@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Linq;
 
 namespace Hotel.API.Registrators
 {
@@ -77,6 +78,25 @@ namespace Hotel.API.Registrators
             .AddJwtBearer(jwt => {
                 jwt.SaveToken = true;
                 jwt.TokenValidationParameters = TokenManager.GetTokenValidationParameters();
+            });
+        }
+
+        public static void RegisterApiBehaviorOptions(this IServiceCollection services)
+        {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var errors = actionContext.ModelState
+                        .Where(e => e.Value.Errors.Count > 0)
+                        .Select(e => new
+                        {
+                            Name = e.Key,
+                            Message = e.Value.Errors.First().ErrorMessage
+                        }).ToArray();
+
+                    return new BadRequestObjectResult(errors);
+                };
             });
         }
     }
