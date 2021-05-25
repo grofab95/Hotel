@@ -11,6 +11,7 @@ namespace Hotel.Domain.Tests.EntitiesTests
     public class ReservationTests
     {
         private FakeReservationCreator _fakeReservationCreator;
+        private Customer _customer;
 
         private readonly DateTime _checkIn;
         private readonly DateTime _checkOut;
@@ -19,16 +20,14 @@ namespace Hotel.Domain.Tests.EntitiesTests
         {
             _checkIn = DateTime.Now.AddDays(1);
             _checkOut = DateTime.Now.AddDays(6);
-
             _fakeReservationCreator = new FakeReservationCreator(_checkIn, _checkOut);
+            _customer = new Customer("CustomerX");
         }
 
         [Fact]
         public void Create_Should_Return_Created_Reservation()
         {
-            var customer = _fakeReservationCreator.GetCustomer();
-
-            var reservation = Reservation.Create(customer, _checkIn, _checkOut);
+            var reservation = Reservation.Create(_customer, _checkIn, _checkOut);
             reservation.Should().NotBeNull();
         }
 
@@ -40,24 +39,23 @@ namespace Hotel.Domain.Tests.EntitiesTests
                .Throw<MissingValueException>();
         }
 
-        [Theory]
-        [InlineData("2020, 5, 2", "2020, 5, 10")]
-        public void ValidDates_For_DateInPast_Throw_HotelException(string checkInString, string checkOutString)
-        {
-            var customer = _fakeReservationCreator.GetCustomer();
+        //[Theory] // bussines change: allowed create reservation in past
+        //[InlineData("2020, 5, 2", "2020, 5, 10")]
+        //public void ValidDates_For_DateInPast_Throw_HotelException(string checkInString, string checkOutString)
+        //{
+        //    var customer = _fakeReservationCreator.GetCustomer();
 
-            FluentActions.Invoking(() => Reservation.Create(customer, DateTime.Parse(checkInString), DateTime.Parse(checkOutString)))
-               .Should()
-               .Throw<HotelException>();
-        }
+        //    FluentActions.Invoking(() => Reservation.Create(customer, DateTime.Parse(checkInString), DateTime.Parse(checkOutString)))
+        //       .Should()
+        //       .Throw<HotelException>();
+        //}
 
         [Theory]
         [InlineData("2022, 5, 2", "2022, 5, 1")]
         public void ValidDates_For_CheckInLAterThanCheckOut_Throw_HotelException(string checkInString, string checkOutString)
         {
-            var customer = _fakeReservationCreator.GetCustomer();
-
-            FluentActions.Invoking(() => Reservation.Create(customer, DateTime.Parse(checkInString), DateTime.Parse(checkOutString)))
+            FluentActions.Invoking(() => 
+                Reservation.Create(_customer, DateTime.Parse(checkInString), DateTime.Parse(checkOutString)))
                .Should()
                .Throw<HotelException>();
         }
@@ -65,42 +63,49 @@ namespace Hotel.Domain.Tests.EntitiesTests
         [Fact]
         public void ChangeCheckIn_Should_SetCheckIn()
         {
+            //Arrange
             var reservation = _fakeReservationCreator.GetReservation();
             var newCheckIn = reservation.CheckIn.AddDays(1);
 
+            //Act
             var expected = newCheckIn;
-
             reservation.ChangeCheckIn(newCheckIn);
             var actual = reservation.CheckIn;
 
+            //Assert
             actual.Should().Be(expected);
         }
 
         [Fact]
         public void ChangeCheckOut_Should_SetCheckOut()
         {
+            //Arrange
             var reservation = _fakeReservationCreator.GetReservation();
             var newCheckOut = reservation.CheckOut.AddDays(1);
 
+            //Act
             var expected = newCheckOut;
-
             reservation.ChangeCheckOut(newCheckOut);
             var actual = reservation.CheckOut;
 
+            //Assert
             actual.Should().Be(expected);
         }
 
         [Fact]
         public void AddRoom_Should_AddReservationRoom()
         {
-            var area = _fakeReservationCreator.GetAreas().First();
+            //Arrange
+            var area = new Area("Area 1");
             var reservation = _fakeReservationCreator.GetReservation();
             var room = new Room(area, "Room XYZ", 5);
 
+            //Act
             var expected = room;
             reservation.AddRoom(room);
             var actual = reservation.ReservationRooms.LastOrDefault()?.Room;
 
+            //Assert
             actual.Should().Be(expected);
         }
 
@@ -118,12 +123,16 @@ namespace Hotel.Domain.Tests.EntitiesTests
         [Fact]
         public void DeleteRoom_Should_DeleteReservationRoom()
         {
-            var reservation = _fakeReservationCreator.GetReservation();
+            //Arrange
+            var creator = new FakeReservationCreator(_checkIn, _checkOut).AddRoom();
+            var reservation = creator.GetReservation();
             var room = reservation.ReservationRooms.First().Room;
 
+            //Act
             reservation.DeleteRoom(room);
-
             var deletedRoom = reservation.ReservationRooms.FirstOrDefault(x => x.Room == room);
+
+            //Assert
             deletedRoom.Should().BeNull();
         }
     }

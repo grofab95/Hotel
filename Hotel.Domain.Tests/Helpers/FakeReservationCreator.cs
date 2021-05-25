@@ -1,76 +1,48 @@
 ﻿using Hotel.Domain.Entities;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace Hotel.Domain.Tests.Helpers
 {
     public class FakeReservationCreator
     {
         private static readonly decimal _priceForStay = 50;
+        private Reservation _reservation;
+        private ReservationRoom _lastReservationRoom;
+        private int _lastRoomId;
+        private int _lastGuestId;
 
-        private Customer _customer;
-        private List<Area> _areas;
-        private List<Room> _rooms;
-
-        private readonly DateTime _checkIn;
-        private readonly DateTime _checkOut;
-
-        public FakeReservationCreator(DateTime checkIn, DateTime checkOut)
+        public FakeReservationCreator(DateTime? checkIn = null, DateTime? checkOut = null)
         {
-            _checkIn = checkIn;
-            _checkOut = checkOut;
-
-            _customer = new Customer("Marta");
-            _areas = new List<Area>
-            {
-                new Area("Budynek A"),
-                new Area("Budynek B")
-            };
-
-            _rooms = new List<Room>
-            {
-                new Room(_areas[0], "P1", 4),
-                new Room(_areas[0], "P2", 2),
-                new Room(_areas[0], "P3", 3),
-                new Room(_areas[1], "P4", 2),
-                new Room(_areas[1], "P5", 2),
-                new Room(_areas[1], "P6", 5)
-            };
+            var customer = new Customer("CustomerX");
+            _reservation = Reservation.Create(
+                customer, 
+                checkIn ?? DateTime.Now.AddDays(1),
+                checkOut ?? DateTime.Now.AddDays(5));
         }
 
-        public Customer GetCustomer() => _customer;
-        public List<Room> GetRooms() => _rooms;
-        public List<Area> GetAreas() => _areas;
+        public Reservation GetReservation() => _reservation;
 
-        public Reservation GetReservation()
+        public FakeReservationCreator AddRoom()
         {
-            var reservation = Reservation.Create(_customer, _checkIn, _checkOut);
+            var room = new Room(new Area("Budynek A"), $"Pokój X{_lastRoomId}", 4);
+            _lastRoomId++;
+            _reservation.AddRoom(room);
+            _lastReservationRoom = _reservation.ReservationRooms.Last();
+            return this;
+        }
 
-            reservation.AddRoom(_rooms[0]);
-            reservation.AddRoom(_rooms[1]);
-            reservation.AddRoom(_rooms[2]);
-            reservation.AddRoom(_rooms[3]);
-
-            var room1 = reservation.ReservationRooms[0];
-            var room2 = reservation.ReservationRooms[1];
-            var room3 = reservation.ReservationRooms[2];
-            var room4 = reservation.ReservationRooms[3];
-
-            var res1 = reservation.AddGuestToRoom(room1, "Wujek Andrzej", false, false, true, _priceForStay);
-            var res2 = reservation.AddGuestToRoom(room1, "Ciocia Ania", false, false, true, _priceForStay);
-            var res3 = reservation.AddGuestToRoom(room1, "Janusz", true, false, false, _priceForStay);
-            var res4 = reservation.AddGuestToRoom(room1, "Zosia", true, false, false, _priceForStay);
-
-            var res5 = reservation.AddGuestToRoom(room2, "Pani młoda", false, true, true, _priceForStay);
-            var res6 = reservation.AddGuestToRoom(room2, "Pan młody", false, true, true, _priceForStay);
-
-            var res7 = reservation.AddGuestToRoom(room3, "Jacek", false, false, true, _priceForStay);
-            var res8 = reservation.AddGuestToRoom(room3, "Eliza", false, false, true, _priceForStay);
-
-            var res9 = reservation.AddGuestToRoom(room4, "Babcia Agnieszka", false, false, false, _priceForStay);
-            var res0 = reservation.AddGuestToRoom(room4, "Dziadek Józef", false, false, false, _priceForStay);
-
-            return reservation;
+        public FakeReservationCreator AddGuest()
+        {
+            var room = _reservation.GetRooms()?.FirstOrDefault();
+            if (room == null)
+            {
+                AddRoom();
+                room = _reservation.GetRooms()?.FirstOrDefault();
+            }
+            _reservation.AddGuestToRoom(_lastReservationRoom, $"Guest Y{_lastGuestId}", false, false, false, _priceForStay);
+            _lastGuestId++;
+            return this;
         }
     }
 }

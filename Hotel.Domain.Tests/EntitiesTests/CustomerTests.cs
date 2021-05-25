@@ -11,7 +11,7 @@ namespace Hotel.Domain.Tests.EntitiesTests
         [InlineData(null)]
         [InlineData(" ")]
         [InlineData("")]
-        public void ValidName_When_NameNotExist_Should_Throw_MissingValueException(string name)
+        public void ValidFirstName_When_NameNotExist_Should_Throw_MissingValueException(string name)
         {
             FluentActions.Invoking(() => new Customer(name))
                 .Should()

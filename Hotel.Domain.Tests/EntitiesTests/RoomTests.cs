@@ -47,7 +47,6 @@ namespace Hotel.Domain.Tests.EntitiesTests
         public void RoomToString_Should_Return_AreAndRoomName()
         {
             var room = new Room(_area, "p1", 2);
-
             room.ToString().Should().Be($"{_area.Name} pokój p1");
         }
     }
