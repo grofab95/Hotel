@@ -1,4 +1,6 @@
 ﻿using Blazored.LocalStorage;
+using Hotel.Domain.Adapters;
+using Hotel.Sql.Daos;
 using Hotel.Web.Components.Interface;
 using Hotel.Web.Providers;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -26,6 +28,11 @@ namespace Hotel.Web.Registrators
         public static void RegisterAuthentication(this IServiceCollection services)
         {
             services.AddScoped<AuthenticationStateProvider, AuthenticationProvider>();
+        }
+
+        public static void RegisterReservationDao(this IServiceCollection services)
+        {
+            //services.AddScoped<IReservationDao, ReservationDao>();
         }
     }
 }
