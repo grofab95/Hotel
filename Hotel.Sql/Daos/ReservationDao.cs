@@ -55,14 +55,14 @@ namespace Hotel.Sql.Daos
                 .Where(x => x.ReservationId == reservation.Id)
                 .ToListAsync();
 
-            var toDelete = reservationsRoomsDb.GetUnique(reservation.ReservationRooms, x => x.Id, x => x.Id).ToList();
-            var toAdd = reservation.ReservationRooms.GetUnique(reservationsRoomsDb, x => x.Id, x => x.Id).ToList();
+            var toDelete = reservationsRoomsDb.GetUniques(reservation.ReservationRooms, x => x.Id, x => x.Id).ToList();
+            var toAdd = reservation.ReservationRooms.GetUniques(reservationsRoomsDb, x => x.Id, x => x.Id).ToList();
             context.RemoveRange(toDelete);
             await context.AddRangeAsync(toAdd);
             var guestsId = reservationsRoomsDb.SelectMany(x => x.Guests).Select(x => x.Id).ToList();
             var guestsDb = await context.Guests.Where(x => guestsId.Contains(x.Id)).ToListAsync();
-            var guestToDelete = guestsDb.GetUnique(guests, x => x.Id, x => x.Id).ToList();
-            var guestToAdd = guests.GetUnique(guestsDb, x => x.Id, x => x.Id).ToList();
+            var guestToDelete = guestsDb.GetUniques(guests, x => x.Id, x => x.Id).ToList();
+            var guestToAdd = guests.GetUniques(guestsDb, x => x.Id, x => x.Id).ToList();
             context.RemoveRange(guestToDelete);
             await context.AddRangeAsync(guestToAdd);
             await context.SaveChangesAsync();
