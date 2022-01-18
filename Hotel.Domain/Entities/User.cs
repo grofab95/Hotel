@@ -21,7 +21,7 @@ namespace Hotel.Domain.Entities
             UserValidators.ValidIfSurnameExist(surname);
             UserValidators.ValidIfEmailExist(email);
             UserValidators.ValidIfPasswordExist(password);
-            EmailValidators.ValidEmail(email);
+            //EmailValidators.ValidEmail(email);
             Name = name;
             Surname = surname;
             Email = email;

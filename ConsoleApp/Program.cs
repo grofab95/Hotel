@@ -11,7 +11,7 @@ var context = new HotelContext();
 try
 {
     var password = new Password("tajne");
-    var user = new User("Fabian2", "Grochla2", "Q@w", password);
+    var user = new User("Fabian2", "Grochla2", "q@w.pl", password);
     context.Users.Add(user);
     context.SaveChanges();
 }
