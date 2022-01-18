@@ -2,27 +2,26 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Hotel.Sql.ContextFactory
+namespace Hotel.Sql.ContextFactory;
+
+public class DbContextFactory<TContext>
+    : IContextFactory<TContext> where TContext : DbContext
 {
-    public class DbContextFactory<TContext>
-        : IContextFactory<TContext> where TContext : DbContext
+    private readonly IServiceProvider provider;
+
+    public DbContextFactory(IServiceProvider provider)
     {
-        private readonly IServiceProvider provider;
+        this.provider = provider;
+    }
 
-        public DbContextFactory(IServiceProvider provider)
+    public TContext CreateDbContext()
+    {
+        if (provider == null)
         {
-            this.provider = provider;
+            throw new InvalidOperationException(
+                $"You must configure an instance of IServiceProvider");
         }
 
-        public TContext CreateDbContext()
-        {
-            if (provider == null)
-            {
-                throw new InvalidOperationException(
-                    $"You must configure an instance of IServiceProvider");
-            }
-
-            return ActivatorUtilities.CreateInstance<TContext>(provider);
-        }
+        return ActivatorUtilities.CreateInstance<TContext>(provider);
     }
 }

@@ -6,101 +6,100 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Hotel.Web.Components.AreaComponents
+namespace Hotel.Web.Components.AreaComponents;
+
+public partial class AreasComponent
 {
-    public partial class AreasComponent
+    [Inject] IAreaDao AreaDao { get; set; }
+
+    private List<AreaGetDto> _areas;
+    private AreaGetDto _newArea = new AreaGetDto();
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject] IAreaDao AreaDao { get; set; }
-
-        private List<AreaGetDto> _areas;
-        private AreaGetDto _newArea = new AreaGetDto();
-
-        protected override async Task OnInitializedAsync()
+        try
         {
-            try
-            {
-                await LoadAreas();
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            await LoadAreas();
         }
-
-        private async Task LoadAreas()
+        catch (Exception ex)
         {
-            var areas = await AreaDao.GetManyAsync(1, 500, x => x.Id > 0);   // todo: implement paggination
-            _areas = Mapper.Map<List<AreaGetDto>>(areas);
+            await HandleException(ex);
         }
+    }
 
-        private async Task AddArea()
+    private async Task LoadAreas()
+    {
+        var areas = await AreaDao.GetManyAsync(1, 500, x => x.Id > 0);   // todo: implement paggination
+        _areas = Mapper.Map<List<AreaGetDto>>(areas);
+    }
+
+    private async Task AddArea()
+    {
+        try
         {
-            try
-            {
-                var createdArea = await AreaDao.AddAsync(new Area(_newArea.Name));
+            var createdArea = await AreaDao.AddAsync(new Area(_newArea.Name));
 
-                await ShowNotification("Dodano pomyślnie", Radzen.NotificationSeverity.Success);
+            await ShowNotification("Dodano pomyślnie", Radzen.NotificationSeverity.Success);
 
-                _areas.Add(Mapper.Map<AreaGetDto>(createdArea));
+            _areas.Add(Mapper.Map<AreaGetDto>(createdArea));
 
-                _newArea = new AreaGetDto();
+            _newArea = new AreaGetDto();
 
-                StateHasChanged();
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            StateHasChanged();
         }
-
-        private async Task Delete(AreaGetDto area)
+        catch (Exception ex)
         {
-            if (!(await ShowConfirm($"Czy napewno chcesz usunać {area.Name}?")))
-                return;
-
-            try
-            {
-                await AreaDao.DeleteAsync(area.Id);
-
-                _areas.Remove(area);
-
-                StateHasChanged();
-
-                await ShowNotification("Usnięto pomyślnie", Radzen.NotificationSeverity.Success);
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            await HandleException(ex);
         }
+    }
 
-        private async Task Save()
+    private async Task Delete(AreaGetDto area)
+    {
+        if (!(await ShowConfirm($"Czy napewno chcesz usunać {area.Name}?")))
+            return;
+
+        try
         {
-            try
-            {
-                foreach (var area in _areas)              
-                    await AreaDao.UpdateAsync(Mapper.Map<Area>(area));
+            await AreaDao.DeleteAsync(area.Id);
 
-                await ShowNotification("Zapisano pomyślnie", Radzen.NotificationSeverity.Success);
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            _areas.Remove(area);
+
+            StateHasChanged();
+
+            await ShowNotification("Usnięto pomyślnie", Radzen.NotificationSeverity.Success);
         }
-
-        private async Task Cancel()
+        catch (Exception ex)
         {
-            try
-            {
-                await LoadAreas();
+            await HandleException(ex);
+        }
+    }
 
-                StateHasChanged();
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+    private async Task Save()
+    {
+        try
+        {
+            foreach (var area in _areas)              
+                await AreaDao.UpdateAsync(Mapper.Map<Area>(area));
+
+            await ShowNotification("Zapisano pomyślnie", Radzen.NotificationSeverity.Success);
+        }
+        catch (Exception ex)
+        {
+            await HandleException(ex);
+        }
+    }
+
+    private async Task Cancel()
+    {
+        try
+        {
+            await LoadAreas();
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await HandleException(ex);
         }
     }
 }

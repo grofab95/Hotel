@@ -1,17 +1,16 @@
-﻿namespace Hotel.Api.Wrappers
+﻿namespace Hotel.Api.Wrappers;
+
+public class SuccessResponse<T> : Response<T>
 {
-    public class SuccessResponse<T> : Response<T>
-    {
-        public SuccessResponse()
-        { }
+    public SuccessResponse()
+    { }
 
-        public SuccessResponse(T data) : base(data)
-        { }
-    }
+    public SuccessResponse(T data) : base(data)
+    { }
+}
 
-    public class SuccessResponse : Response
-    {
-        public SuccessResponse() : base()
-        { }
-    }
+public class SuccessResponse : Response
+{
+    public SuccessResponse() : base()
+    { }
 }

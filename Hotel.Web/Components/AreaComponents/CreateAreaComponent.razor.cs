@@ -5,24 +5,23 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
 
-namespace Hotel.Web.Components.AreaComponents
+namespace Hotel.Web.Components.AreaComponents;
+
+public partial class CreateAreaComponent
 {
-    public partial class CreateAreaComponent
+    [Inject] IAreaDao AreaDao { get; set; }
+
+    private AreaGetDto _newArea = new AreaGetDto();
+
+    private async Task AddArea(AreaGetDto areaDto)
     {
-        [Inject] IAreaDao AreaDao { get; set; }
-
-        private AreaGetDto _newArea = new AreaGetDto();
-
-        private async Task AddArea(AreaGetDto areaDto)
+        try
         {
-            try
-            {
-                await AreaDao.AddAsync(Mapper.Map<Area>(areaDto));
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            await AreaDao.AddAsync(Mapper.Map<Area>(areaDto));
+        }
+        catch (Exception ex)
+        {
+            await HandleException(ex);
         }
     }
 }

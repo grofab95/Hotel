@@ -3,10 +3,9 @@ using Hotel.Domain.Entities.Views;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Hotel.Domain.Adapters
+namespace Hotel.Domain.Adapters;
+
+public interface IStatisticDao
 {
-    public interface IStatisticDao
-    {
-        Task<List<ReservationInfoView>> GetAllAsync();
-    }
+    Task<List<ReservationInfoView>> GetAllAsync();
 }

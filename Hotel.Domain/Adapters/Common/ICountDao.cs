@@ -2,10 +2,9 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Hotel.Domain.Adapters.Common
+namespace Hotel.Domain.Adapters.Common;
+
+public interface ICountDao<T>
 {
-    public interface ICountDao<T>
-    {
-        Task<int> CountAsync(Expression<Func<T, bool>> predicate);
-    }
+    Task<int> CountAsync(Expression<Func<T, bool>> predicate);
 }

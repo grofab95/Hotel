@@ -1,29 +1,28 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System.Collections.Generic;
 
-namespace Hotel.Domain.Utilities
+namespace Hotel.Domain.Utilities;
+
+public class CsvUtility
 {
-    public class CsvUtility
+    public static List<string[]> ReadCsvFile(string filePath, string[] delimeters = null, bool hasFieldsEnclosedInQuotes = false)
     {
-        public static List<string[]> ReadCsvFile(string filePath, string[] delimeters = null, bool hasFieldsEnclosedInQuotes = false)
+        var readedLines = new List<string[]>();
+
+        using (TextFieldParser csvReader = new TextFieldParser(filePath))
         {
-            var readedLines = new List<string[]>();
+            csvReader.SetDelimiters(delimeters ?? new string[] { ";" }); ;
+            csvReader.HasFieldsEnclosedInQuotes = hasFieldsEnclosedInQuotes;
 
-            using (TextFieldParser csvReader = new TextFieldParser(filePath))
+            while (true)
             {
-                csvReader.SetDelimiters(delimeters ?? new string[] { ";" }); ;
-                csvReader.HasFieldsEnclosedInQuotes = hasFieldsEnclosedInQuotes;
+                if (csvReader.EndOfData)
+                    break;
 
-                while (true)
-                {
-                    if (csvReader.EndOfData)
-                        break;
-
-                    readedLines.Add(csvReader.ReadFields());
-                }
+                readedLines.Add(csvReader.ReadFields());
             }
-
-            return readedLines;
         }
+
+        return readedLines;
     }
 }

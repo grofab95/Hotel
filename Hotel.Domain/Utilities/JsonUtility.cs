@@ -1,25 +1,24 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Hotel.Domain.Utilities
+namespace Hotel.Domain.Utilities;
+
+public class JsonUtility
 {
-    public class JsonUtility
+    public static T ParseToObject<T>(string json, bool isUpperCase = true)
     {
-        public static T ParseToObject<T>(string json, bool isUpperCase = true)
+        var serializerSettings = new JsonSerializerSettings
         {
-            var serializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
-            return isUpperCase
-                ? JsonConvert.DeserializeObject<T>(json, serializerSettings)
-                : JsonConvert.DeserializeObject<T>(json);
-        }
+        return isUpperCase
+            ? JsonConvert.DeserializeObject<T>(json, serializerSettings)
+            : JsonConvert.DeserializeObject<T>(json);
+    }
 
-        public static string ParseToJson(object obj)
-        {
-            return JsonConvert.SerializeObject(obj);
-        }
+    public static string ParseToJson(object obj)
+    {
+        return JsonConvert.SerializeObject(obj);
     }
 }

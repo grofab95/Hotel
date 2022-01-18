@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Hotel.Domain.Adapters.Common
+namespace Hotel.Domain.Adapters.Common;
+
+public interface IModifyDao<T>
 {
-    public interface IModifyDao<T>
-    {
-        Task<T> UpdateAsync(T entity);
-        Task DeleteAsync(int id);
-    }
+    Task<T> UpdateAsync(T entity);
+    Task DeleteAsync(int id);
 }

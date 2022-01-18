@@ -1,20 +1,19 @@
 ﻿using Hotel.Domain.Exceptions;
 using System;
 
-namespace Hotel.Domain.Entities
+namespace Hotel.Domain.Entities;
+
+public class DateRange
 {
-    public class DateRange
+    public DateTime From { get; set; }
+    public DateTime To { get; set; }
+
+    public DateRange(DateTime from, DateTime to)
     {
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        if (from > to)
+            throw new HotelException("Data do nie może być wcześniejsza od daty od.");
 
-        public DateRange(DateTime from, DateTime to)
-        {
-            if (from > to)
-                throw new HotelException("Data do nie może być wcześniejsza od daty od.");
-
-            From = from;
-            To = to;
-        }
+        From = from;
+        To = to;
     }
 }

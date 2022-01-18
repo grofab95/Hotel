@@ -5,20 +5,19 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Hotel.Sql.Daos
+namespace Hotel.Sql.Daos;
+
+public class StatisticDao : IStatisticDao
 {
-    public class StatisticDao : IStatisticDao
+    private HotelContext _context;
+
+    public StatisticDao(IContextFactory<HotelContext> contextFactory)
     {
-        private HotelContext _context;
+        _context = contextFactory.CreateDbContext();
+    }
 
-        public StatisticDao(IContextFactory<HotelContext> contextFactory)
-        {
-            _context = contextFactory.CreateDbContext();
-        }
-
-        public async Task<List<ReservationInfoView>> GetAllAsync()
-        {
-            return await _context.ReservationInfoViews.ToListAsync();
-        }
+    public async Task<List<ReservationInfoView>> GetAllAsync()
+    {
+        return await _context.ReservationInfoViews.ToListAsync();
     }
 }

@@ -1,18 +1,17 @@
 ﻿using Hotel.Domain.Entities.Common;
 using Hotel.Domain.Validators;
 
-namespace Hotel.Domain.Entities
+namespace Hotel.Domain.Entities;
+
+public class Area : Entity
 {
-    public class Area : Entity
+    public string Name { get; private set; }
+
+    protected Area() { }
+    public Area(string name)
     {
-        public string Name { get; private set; }
+        AreaValidators.ValidIfNameExist(name);
 
-        protected Area() { }
-        public Area(string name)
-        {
-            AreaValidators.ValidIfNameExist(name);
-
-            Name = name;
-        }
+        Name = name;
     }
 }

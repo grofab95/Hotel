@@ -1,35 +1,34 @@
 ﻿using Hotel.Domain.Environment;
 
-namespace Hotel.Application.Infrastructure
+namespace Hotel.Application.Infrastructure;
+
+public class Logger : ILogger
 {
-    public class Logger : ILogger
+    private readonly Serilog.ILogger _serilog;
+
+    public Logger()
     {
-        private readonly Serilog.ILogger _serilog;
+        _serilog = LoggerFactory.BuildSeriLog();
+    }
 
-        public Logger()
+    public void Log(string message, LogLevel logLevel)
+    {
+        switch (logLevel)
         {
-            _serilog = LoggerFactory.BuildSeriLog();
-        }
+            case LogLevel.Information:
+                _serilog.Information(message);
+                break;
 
-        public void Log(string message, LogLevel logLevel)
-        {
-            switch (logLevel)
-            {
-                case LogLevel.Information:
-                    _serilog.Information(message);
-                    break;
+            case LogLevel.Error:
+                _serilog.Error(message);
+                break;
 
-                case LogLevel.Error:
-                    _serilog.Error(message);
-                    break;
+            case LogLevel.Fatal:
+                _serilog.Fatal(message);
+                break;
 
-                case LogLevel.Fatal:
-                    _serilog.Fatal(message);
-                    break;
-
-                default:
-                    break;
-            }
+            default:
+                break;
         }
     }
 }

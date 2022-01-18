@@ -1,6 +1,5 @@
-﻿namespace Hotel.Web.Components.RoomComponents
+﻿namespace Hotel.Web.Components.RoomComponents;
+
+public partial class CreateRoomComponent
 {
-    public partial class CreateRoomComponent
-    {
-    }
 }

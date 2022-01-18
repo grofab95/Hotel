@@ -1,8 +1,7 @@
-﻿namespace Hotel.Application.Dtos.UserDtos
+﻿namespace Hotel.Application.Dtos.UserDtos;
+
+public class UserCredentialDto
 {
-    public class UserCredentialDto
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
+    public string Email { get; set; }
+    public string Password { get; set; }
 }

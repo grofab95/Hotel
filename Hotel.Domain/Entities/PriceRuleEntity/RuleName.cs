@@ -1,9 +1,8 @@
-﻿namespace Hotel.Domain.Entities.PriceRuleEntity
+﻿namespace Hotel.Domain.Entities.PriceRuleEntity;
+
+public enum RuleName
 {
-    public enum RuleName
-    {
-        PriceWhenBreakfest,
-        PriceWhenChild,
-        PriceWhenNewlywed        
-    }
+    PriceWhenBreakfest,
+    PriceWhenChild,
+    PriceWhenNewlywed        
 }

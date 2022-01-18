@@ -1,9 +1,8 @@
 ﻿using Hotel.Domain.Adapters.Common;
 using Hotel.Domain.Entities;
 
-namespace Hotel.Domain.Adapters
+namespace Hotel.Domain.Adapters;
+
+public interface IAreaDao : IAddDao<Area>, IModifyDao<Area>, IGetDao<Area>
 {
-    public interface IAreaDao : IAddDao<Area>, IModifyDao<Area>, IGetDao<Area>
-    {
-    }
 }

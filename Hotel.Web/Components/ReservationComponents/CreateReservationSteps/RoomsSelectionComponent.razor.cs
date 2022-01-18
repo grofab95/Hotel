@@ -5,51 +5,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps
+namespace Hotel.Web.Components.ReservationComponents.CreateReservationSteps;
+
+public partial class RoomsSelectionComponent : Base
 {
-    public partial class RoomsSelectionComponent : Base
+    [Parameter] public List<Room> Rooms { get; set; }
+    [Parameter] public Reservation Reservation { get; set; }
+    [Parameter] public EventCallback<bool> OnEvent { get; set; }
+
+    private List<Room> _rooms;
+    private bool _isLoaded;
+
+    private void SetRooms()
     {
-        [Parameter] public List<Room> Rooms { get; set; }
-        [Parameter] public Reservation Reservation { get; set; }
-        [Parameter] public EventCallback<bool> OnEvent { get; set; }
+        _isLoaded = false;
 
-        private List<Room> _rooms;
-        private bool _isLoaded;
+        var rooms = new List<Room>();
 
-        private void SetRooms()
+        if (Rooms != null)
+            rooms.AddRange(Rooms);
+
+        if (Reservation != null)
         {
-            _isLoaded = false;
+            var roomsInReservation = Reservation.GetRooms();
+            //roomsInReservation.ForEach(x => x.SetNote("W rezerwacji"));
 
-            var rooms = new List<Room>();
-
-            if (Rooms != null)
-                rooms.AddRange(Rooms);
-
-            if (Reservation != null)
-            {
-                var roomsInReservation = Reservation.GetRooms();
-                //roomsInReservation.ForEach(x => x.SetNote("W rezerwacji"));
-
-                rooms.AddRange(roomsInReservation);
-            }
-
-            _rooms = rooms.GroupBy(x => x.Id).Select(x => x.First()).ToList();
-
-            _isLoaded = true;
+            rooms.AddRange(roomsInReservation);
         }
 
-        protected override void OnParametersSet()
-        {
-            SetRooms();
-        }
+        _rooms = rooms.GroupBy(x => x.Id).Select(x => x.First()).ToList();
 
-        private async Task RoomCheckedHandler(Room room)
-        {
-            await DoSafeAction(Reservation.IsRoomInReservation(room)
-                ? () => Reservation.DeleteRoom(room)
-                : () => Reservation.AddRoom(room));     
+        _isLoaded = true;
+    }
 
-            await OnEvent.InvokeAsync(true);
-        }
+    protected override void OnParametersSet()
+    {
+        SetRooms();
+    }
+
+    private async Task RoomCheckedHandler(Room room)
+    {
+        await DoSafeAction(Reservation.IsRoomInReservation(room)
+            ? () => Reservation.DeleteRoom(room)
+            : () => Reservation.AddRoom(room));     
+
+        await OnEvent.InvokeAsync(true);
     }
 }

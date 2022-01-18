@@ -9,63 +9,62 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hotel.Web.Components
+namespace Hotel.Web.Components;
+
+public partial class PriceRulesComponents
 {
-    public partial class PriceRulesComponents
+    [Inject] IPriceRuleDao PriceRuleDao { get; set; }
+
+    private PriceRuleManager _priceRuleManager;
+    private RadzenGrid<PriceRuleGetDto> _grid;
+
+    private List<PriceRule> _priceRules;
+    private List<PriceRuleGetDto> _priceRulesDtos;
+    private Dictionary<RuleType, string> _ruleTypesNames;
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject] IPriceRuleDao PriceRuleDao { get; set; }
-
-        private PriceRuleManager _priceRuleManager;
-        private RadzenGrid<PriceRuleGetDto> _grid;
-
-        private List<PriceRule> _priceRules;
-        private List<PriceRuleGetDto> _priceRulesDtos;
-        private Dictionary<RuleType, string> _ruleTypesNames;
-
-        protected override async Task OnInitializedAsync()
+        try
         {
-            try
-            {
-                var priceRules = await PriceRuleDao.GetManyAsync(1, 100, x => x.Id > 0);  // todo: implement paggination
-                _priceRuleManager = new PriceRuleManager(priceRules);
-                _priceRules = _priceRuleManager.GetOrderedRules();
+            var priceRules = await PriceRuleDao.GetManyAsync(1, 100, x => x.Id > 0);  // todo: implement paggination
+            _priceRuleManager = new PriceRuleManager(priceRules);
+            _priceRules = _priceRuleManager.GetOrderedRules();
 
-                _ruleTypesNames = Enum.GetValues(typeof(RuleType)).Cast<RuleType>()
-                    .ToDictionary(x => x, x => x.GetDescription());
+            _ruleTypesNames = Enum.GetValues(typeof(RuleType)).Cast<RuleType>()
+                .ToDictionary(x => x, x => x.GetDescription());
 
-                _priceRulesDtos = Mapper.Map<List<PriceRuleGetDto>>(_priceRules);
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            _priceRulesDtos = Mapper.Map<List<PriceRuleGetDto>>(_priceRules);
         }
-
-        private void EditRow(PriceRuleGetDto priceRule)
+        catch (Exception ex)
         {
-            _grid.EditRow(priceRule);
+            await HandleException(ex);
         }
+    }
 
-        private async Task SaveRow(PriceRuleGetDto priceRuleDto)
+    private void EditRow(PriceRuleGetDto priceRule)
+    {
+        _grid.EditRow(priceRule);
+    }
+
+    private async Task SaveRow(PriceRuleGetDto priceRuleDto)
+    {
+        try
         {
-            try
-            {
-                var priceRule = _priceRules.Find(x => x.Id == priceRuleDto.Id);
+            var priceRule = _priceRules.Find(x => x.Id == priceRuleDto.Id);
 
-                var updated = priceRule.Update(Mapper.Map<PriceRule>(priceRuleDto));
-                await PriceRuleDao.UpdateAsync(updated);
+            var updated = priceRule.Update(Mapper.Map<PriceRule>(priceRuleDto));
+            await PriceRuleDao.UpdateAsync(updated);
 
-                await _grid.UpdateRow(priceRuleDto);
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            await _grid.UpdateRow(priceRuleDto);
         }
-
-        private void CancelEdit(PriceRuleGetDto priceRule)
+        catch (Exception ex)
         {
-            _grid.CancelEditRow(priceRule);
+            await HandleException(ex);
         }
+    }
+
+    private void CancelEdit(PriceRuleGetDto priceRule)
+    {
+        _grid.CancelEditRow(priceRule);
     }
 }

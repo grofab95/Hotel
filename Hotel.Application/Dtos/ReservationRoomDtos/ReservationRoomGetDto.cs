@@ -1,11 +1,10 @@
 ﻿using Hotel.Application.Dtos.GuestDtos;
 using System.Collections.Generic;
 
-namespace Hotel.Application.Dtos.ReservationRoomDtos
+namespace Hotel.Application.Dtos.ReservationRoomDtos;
+
+public class ReservationRoomGetDto
 {
-    public class ReservationRoomGetDto
-    {
-        public int RoomId { get; private set; }
-        public List<GuestGetDto> Guests { get; private set; }
-    }
+    public int RoomId { get; private set; }
+    public List<GuestGetDto> Guests { get; private set; }
 }

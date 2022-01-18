@@ -1,17 +1,16 @@
 ﻿using Hotel.Domain.Entities.Views;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hotel.Sql.Configurations
+namespace Hotel.Sql.Configurations;
+
+static class ViewsConfiguration
 {
-    static class ViewsConfiguration
+    public static void ApplyViews(this ModelBuilder modelBuilder)
     {
-        public static void ApplyViews(this ModelBuilder modelBuilder)
+        modelBuilder.Entity<ReservationInfoView>(x =>
         {
-            modelBuilder.Entity<ReservationInfoView>(x =>
-            {
-                x.HasNoKey();
-                x.ToView("ReservationInfoView");
-            });
-        }
+            x.HasNoKey();
+            x.ToView("ReservationInfoView");
+        });
     }
 }

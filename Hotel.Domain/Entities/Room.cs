@@ -2,44 +2,43 @@
 using Hotel.Domain.Validators;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Hotel.Domain.Entities
+namespace Hotel.Domain.Entities;
+
+public class Room : Entity
 {
-    public class Room : Entity
+    public string Name { get; private set; }
+    public int PeopleCapacity { get; private set; }
+    public Area Area { get; private set; }
+
+    [NotMapped]
+    public string Note { get; private set; }
+
+    protected Room() { }
+
+    public Room(Area area, string name, int peopleCapcity)
     {
-        public string Name { get; private set; }
-        public int PeopleCapacity { get; private set; }
-        public Area Area { get; private set; }
+        RoomValidators.ValidIfAreaExist(area);
+        RoomValidators.ValidIfNameExist(name);
+        RoomValidators.ValidIfPeopleCapacityIsPositive(peopleCapcity);
 
-        [NotMapped]
-        public string Note { get; private set; }
+        Area = area;
+        Name = name;
+        PeopleCapacity = peopleCapcity;
+    }
 
-        protected Room() { }
+    public void SetNote(string note) => Note = note;
 
-        public Room(Area area, string name, int peopleCapcity)
-        {
-            RoomValidators.ValidIfAreaExist(area);
-            RoomValidators.ValidIfNameExist(name);
-            RoomValidators.ValidIfPeopleCapacityIsPositive(peopleCapcity);
+    public override string ToString()
+        => $"{Area?.Name} pokój {Name}";
 
-            Area = area;
-            Name = name;
-            PeopleCapacity = peopleCapcity;
-        }
+    public void Update(Area area, string name, int peopleCapcity)
+    {
+        RoomValidators.ValidIfAreaExist(area);
+        RoomValidators.ValidIfNameExist(name);
+        RoomValidators.ValidIfPeopleCapacityIsPositive(peopleCapcity);
 
-        public void SetNote(string note) => Note = note;
-
-        public override string ToString()
-            => $"{Area?.Name} pokój {Name}";
-
-        public void Update(Area area, string name, int peopleCapcity)
-        {
-            RoomValidators.ValidIfAreaExist(area);
-            RoomValidators.ValidIfNameExist(name);
-            RoomValidators.ValidIfPeopleCapacityIsPositive(peopleCapcity);
-
-            Area = area;
-            Name = name;
-            PeopleCapacity = peopleCapcity;
-        }
+        Area = area;
+        Name = name;
+        PeopleCapacity = peopleCapcity;
     }
 }

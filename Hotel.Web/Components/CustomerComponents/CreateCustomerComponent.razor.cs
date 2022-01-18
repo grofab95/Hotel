@@ -5,28 +5,27 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
 
-namespace Hotel.Web.Components.CustomerComponents
+namespace Hotel.Web.Components.CustomerComponents;
+
+public partial class CreateCustomerComponent
 {
-    public partial class CreateCustomerComponent
+    [Parameter] public EventCallback<Customer> OnCreated { get; set; }
+    [Inject] ICustomerDao CustomerDao { get; set; }
+
+    private CustomerGetDto _newCustomer = new CustomerGetDto();
+
+    private async Task Create(CustomerGetDto newCustomer)
     {
-        [Parameter] public EventCallback<Customer> OnCreated { get; set; }
-        [Inject] ICustomerDao CustomerDao { get; set; }
-
-        private CustomerGetDto _newCustomer = new CustomerGetDto();
-
-        private async Task Create(CustomerGetDto newCustomer)
+        try
         {
-            try
-            {
-                var customer = await CustomerDao.AddAsync(Mapper.Map<Customer>(newCustomer));
+            var customer = await CustomerDao.AddAsync(Mapper.Map<Customer>(newCustomer));
 
-                await ShowNotification("Dodano pomyślnie", Radzen.NotificationSeverity.Success);
-                await OnCreated.InvokeAsync(customer);
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            await ShowNotification("Dodano pomyślnie", Radzen.NotificationSeverity.Success);
+            await OnCreated.InvokeAsync(customer);
+        }
+        catch (Exception ex)
+        {
+            await HandleException(ex);
         }
     }
 }

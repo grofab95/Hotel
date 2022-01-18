@@ -3,23 +3,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Hotel.Sql.Configurations
+namespace Hotel.Sql.Configurations;
+
+class PriceRuleConfiguration : IEntityTypeConfiguration<PriceRule>
 {
-    class PriceRuleConfiguration : IEntityTypeConfiguration<PriceRule>
+    public void Configure(EntityTypeBuilder<PriceRule> builder)
     {
-        public void Configure(EntityTypeBuilder<PriceRule> builder)
-        {
-            builder.ToTable("PriceRules");
-            builder.HasKey(x => x.Id);
-            builder.HasIndex(x => x.FriendlyName).IsUnique();
-            builder.Property(x => x.CreatedAt)
-                .HasDefaultValueSql("getdate()");
+        builder.ToTable("PriceRules");
+        builder.HasKey(x => x.Id);
+        builder.HasIndex(x => x.FriendlyName).IsUnique();
+        builder.Property(x => x.CreatedAt)
+            .HasDefaultValueSql("getdate()");
 
-            builder.Property(x => x.RuleName)
-                .HasConversion(new EnumToStringConverter<RuleName>());
+        builder.Property(x => x.RuleName)
+            .HasConversion(new EnumToStringConverter<RuleName>());
 
-            builder.Property(x => x.RuleType)
-                .HasConversion(new EnumToStringConverter<RuleType>());
-        }
+        builder.Property(x => x.RuleType)
+            .HasConversion(new EnumToStringConverter<RuleType>());
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace Hotel.Domain.Environment
+﻿namespace Hotel.Domain.Environment;
+
+public interface ILogger
 {
-    public interface ILogger
-    {
-        void Log(string message, LogLevel logLevel);
-    }
+    void Log(string message, LogLevel logLevel);
 }

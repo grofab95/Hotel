@@ -1,8 +1,7 @@
-﻿namespace Hotel.Web.Helpers.Enums
+﻿namespace Hotel.Web.Helpers.Enums;
+
+public enum TurnoverTypes
 {
-    public enum TurnoverTypes
-    {
-        Monthly,
-        Yearly
-    }
+    Monthly,
+    Yearly
 }

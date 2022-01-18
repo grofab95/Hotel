@@ -5,27 +5,26 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Radzen;
 
-namespace Hotel.Web.Registrators
+namespace Hotel.Web.Registrators;
+
+public static class BlazorServicesRegistrator
 {
-    public static class BlazorServicesRegistrator
+    public static void RegisterBlazorFactors(this IServiceCollection services)
     {
-        public static void RegisterBlazorFactors(this IServiceCollection services)
-        {
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
-            services.AddBlazoredLocalStorage();
-        }
+        services.AddRazorPages();
+        services.AddServerSideBlazor();
+        services.AddBlazoredLocalStorage();
+    }
 
-        public static void RegisterRadzenFactors(this IServiceCollection services)
-        {
-            services.AddScoped<NotificationService>();
-            services.AddScoped<DialogService>();
-            services.AddScoped<Window>();
-        }
+    public static void RegisterRadzenFactors(this IServiceCollection services)
+    {
+        services.AddScoped<NotificationService>();
+        services.AddScoped<DialogService>();
+        services.AddScoped<Window>();
+    }
 
-        public static void RegisterAuthentication(this IServiceCollection services)
-        {
-            services.AddScoped<AuthenticationStateProvider, AuthenticationProvider>();
-        }
+    public static void RegisterAuthentication(this IServiceCollection services)
+    {
+        services.AddScoped<AuthenticationStateProvider, AuthenticationProvider>();
     }
 }

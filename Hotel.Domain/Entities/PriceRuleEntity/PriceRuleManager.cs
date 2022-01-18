@@ -1,27 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Hotel.Domain.Entities.PriceRuleEntity
+namespace Hotel.Domain.Entities.PriceRuleEntity;
+
+public class PriceRuleManager
 {
-    public class PriceRuleManager
+    private List<PriceRule> _priceRules;
+
+    public PriceRuleManager(List<PriceRule> priceRules)
     {
-        private List<PriceRule> _priceRules;
+        _priceRules = priceRules;
+    }
 
-        public PriceRuleManager(List<PriceRule> priceRules)
-        {
-            _priceRules = priceRules;
-        }
+    public PriceRule GetRuleByName(RuleName ruleName)  => _priceRules.FirstOrDefault(x => x.RuleName == ruleName);
 
-        public PriceRule GetRuleByName(RuleName ruleName)  => _priceRules.FirstOrDefault(x => x.RuleName == ruleName);
+    public List<PriceRule> GetOrderedRules() => _priceRules.OrderBy(x => x.Priority).ToList();
 
-        public List<PriceRule> GetOrderedRules() => _priceRules.OrderBy(x => x.Priority).ToList();
+    public decimal GetCalculatedPrice(RuleName ruleName, decimal inputPrice)
+    {
+        var priceRule = GetRuleByName(ruleName);
+        var calculatedPrice = priceRule.GetCalculatedPrice(inputPrice);
 
-        public decimal GetCalculatedPrice(RuleName ruleName, decimal inputPrice)
-        {
-            var priceRule = GetRuleByName(ruleName);
-            var calculatedPrice = priceRule.GetCalculatedPrice(inputPrice);
-
-            return calculatedPrice;
-        }
+        return calculatedPrice;
     }
 }

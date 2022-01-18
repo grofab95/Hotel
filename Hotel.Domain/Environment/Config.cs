@@ -2,73 +2,72 @@
 using System;
 using System.IO;
 
-namespace Hotel.Domain.Environment
+namespace Hotel.Domain.Environment;
+
+public class Config
 {
-    public class Config
+    public string SqlConnection { get; set; }
+    public string WebAddress { get; set; }
+    public string WebPort { get; set; }
+    public decimal PriceForStay { get; set; }
+    public int FreeRoomHour { get; set; }
+
+    public static Config Get => GetConfig();
+
+    private static Config GetConfig()
     {
-        public string SqlConnection { get; set; }
-        public string WebAddress { get; set; }
-        public string WebPort { get; set; }
-        public decimal PriceForStay { get; set; }
-        public int FreeRoomHour { get; set; }
-
-        public static Config Get => GetConfig();
-
-        private static Config GetConfig()
+        try
         {
-            try
-            {
-                CreateDataFolderIfNotExist();
-                var configPath = GetConfigFilePath();
-                var configJson = File.ReadAllText($"{configPath}/config.json");
+            CreateDataFolderIfNotExist();
+            var configPath = GetConfigFilePath();
+            var configJson = File.ReadAllText($"{configPath}/config.json");
 
-                ValidConfig(configJson);
+            ValidConfig(configJson);
            
-                return JsonUtility.ParseToObject<Config>(configJson);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"błąd podczas odczytywania pliku config.json: {ex.Message}.");
-            }
+            return JsonUtility.ParseToObject<Config>(configJson);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"błąd podczas odczytywania pliku config.json: {ex.Message}.");
+        }
+    }
+
+    private static string GetConfigFilePath()
+    {
+        var configFileName = "config.json";
+
+        var configDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+        while (!File.Exists(Path.Combine(configDirectory.FullName, configFileName)))
+        {
+            configDirectory = new DirectoryInfo(configDirectory.FullName)?.Parent
+                              ?? throw new Exception("Brak pliku config.json!");
         }
 
-        private static string GetConfigFilePath()
+        return configDirectory.FullName;
+    }
+
+    private static void CreateDataFolderIfNotExist()
+    {
+        if (!Directory.Exists("data"))
+            Directory.CreateDirectory("data");
+
+        var currentDir = Directory.GetCurrentDirectory();
+        if (currentDir.Contains("Hotel.Web"))
         {
-            var configFileName = "config.json";
-
-            var configDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (!File.Exists(Path.Combine(configDirectory.FullName, configFileName)))
-            {
-                configDirectory = new DirectoryInfo(configDirectory.FullName)?.Parent
-                    ?? throw new Exception("Brak pliku config.json!");
-            }
-
-            return configDirectory.FullName;
+            if (!Directory.Exists("wwwroot/docs"))
+                Directory.CreateDirectory("wwwroot/docs");
         }
+    }
 
-        private static void CreateDataFolderIfNotExist()
+    private static void ValidConfig(string configJson)
+    {
+        try
         {
-            if (!Directory.Exists("data"))
-                Directory.CreateDirectory("data");
-
-            var currentDir = Directory.GetCurrentDirectory();
-            if (currentDir.Contains("Hotel.Web"))
-            {
-                if (!Directory.Exists("wwwroot/docs"))
-                    Directory.CreateDirectory("wwwroot/docs");
-            }
+            JsonUtility.ParseToObject<Config>(configJson);
         }
-
-        private static void ValidConfig(string configJson)
+        catch (Exception ex)
         {
-            try
-            {
-                JsonUtility.ParseToObject<Config>(configJson);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Nieprawidłowy config.");
-            }
+            throw new Exception("Nieprawidłowy config.");
         }
     }
 }

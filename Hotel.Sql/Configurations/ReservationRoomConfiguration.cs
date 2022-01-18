@@ -2,21 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Hotel.Sql.Configurations
+namespace Hotel.Sql.Configurations;
+
+class ReservationRoomConfiguration : IEntityTypeConfiguration<ReservationRoom>
 {
-    class ReservationRoomConfiguration : IEntityTypeConfiguration<ReservationRoom>
+    public void Configure(EntityTypeBuilder<ReservationRoom> builder)
     {
-        public void Configure(EntityTypeBuilder<ReservationRoom> builder)
-        {
-            builder.ToTable("ReservationRooms");
-            builder.HasKey(x => x.Id);
+        builder.ToTable("ReservationRooms");
+        builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.CreatedAt)
-                .HasDefaultValueSql("getdate()");
+        builder.Property(x => x.CreatedAt)
+            .HasDefaultValueSql("getdate()");
 
-            builder.HasMany(x => x.Guests)
-                .WithOne(x => x.ReservationRoom)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
+        builder.HasMany(x => x.Guests)
+            .WithOne(x => x.ReservationRoom)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

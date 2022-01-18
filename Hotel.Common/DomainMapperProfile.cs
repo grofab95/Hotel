@@ -10,38 +10,37 @@ using Hotel.Application.Dtos.UserDtos;
 using Hotel.Domain.Entities;
 using Hotel.Domain.Entities.PriceRuleEntity;
 
-namespace Hotel.Common
+namespace Hotel.Common;
+
+public class DomainMapperProfile : Profile
 {
-    public class DomainMapperProfile : Profile
+    public DomainMapperProfile()
     {
-        public DomainMapperProfile()
-        {
-            CreateMap<PriceRule, PriceRuleGetDto>();
-            CreateMap<PriceRuleGetDto, PriceRule>();
+        CreateMap<PriceRule, PriceRuleGetDto>();
+        CreateMap<PriceRuleGetDto, PriceRule>();
 
-            CreateMap<Guest, GuestGetDto>();
-            CreateMap<GuestGetDto, Guest>();
+        CreateMap<Guest, GuestGetDto>();
+        CreateMap<GuestGetDto, Guest>();
 
-            CreateMap<Room, RoomGetDto>();
-            CreateMap<RoomGetDto, Room>();
+        CreateMap<Room, RoomGetDto>();
+        CreateMap<RoomGetDto, Room>();
 
-            CreateMap<Area, AreaGetDto>();
-            CreateMap<AreaGetDto, Area>();
+        CreateMap<Area, AreaGetDto>();
+        CreateMap<AreaGetDto, Area>();
 
-            CreateMap<Customer, CustomerGetDto>();
-            CreateMap<CustomerGetDto, Customer>();
+        CreateMap<Customer, CustomerGetDto>();
+        CreateMap<CustomerGetDto, Customer>();
 
-            CreateMap<User, UserGetDto>();
-            CreateMap<UserGetDto, User>();
+        CreateMap<User, UserGetDto>();
+        CreateMap<UserGetDto, User>();
 
-            CreateMap<User, UserCreateDto>();
-            CreateMap<UserCreateDto, User>();
+        CreateMap<User, UserCreateDto>();
+        CreateMap<UserCreateDto, User>();
 
-            CreateMap<Reservation, ReservationGetDto>();
-            CreateMap<ReservationGetDto, Reservation>();
+        CreateMap<Reservation, ReservationGetDto>();
+        CreateMap<ReservationGetDto, Reservation>();
 
-            CreateMap<ReservationRoom, ReservationRoomGetDto>();
-            CreateMap<ReservationRoomGetDto, ReservationRoom>();
-        }
+        CreateMap<ReservationRoom, ReservationRoomGetDto>();
+        CreateMap<ReservationRoomGetDto, ReservationRoom>();
     }
 }

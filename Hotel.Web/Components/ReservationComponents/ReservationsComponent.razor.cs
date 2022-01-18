@@ -10,139 +10,138 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hotel.Web.Components.ReservationComponents
+namespace Hotel.Web.Components.ReservationComponents;
+
+public partial class ReservationsComponent
 {
-    public partial class ReservationsComponent
+    [Inject] IReservationDao ReservationDao { get; set; }
+    [Inject] IPriceRuleDao PriceRuleDao { get; set; }
+
+    private List<ReservationInfoView> _reservations;
+    private PriceCalculator _priceCalculator;
+    private Reservation _selectedReservation;
+    private ReservationFactors _reservationFactors;
+    private List<Room> _findedRooms;
+
+    private bool _roomSelectionActive = false;
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject] IReservationDao ReservationDao { get; set; }
-        [Inject] IPriceRuleDao PriceRuleDao { get; set; }
-
-        private List<ReservationInfoView> _reservations;
-        private PriceCalculator _priceCalculator;
-        private Reservation _selectedReservation;
-        private ReservationFactors _reservationFactors;
-        private List<Room> _findedRooms;
-
-        private bool _roomSelectionActive = false;
-
-        protected override async Task OnInitializedAsync()
+        try
         {
-            try
-            {
-                _priceCalculator = await PriceRuleDao.GetPriceCalculator();
-                _reservations = await ReservationDao.GetReservationBasicInfosAsync();
-                _findedRooms = new List<Room>();
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            _priceCalculator = await PriceRuleDao.GetPriceCalculator();
+            _reservations = await ReservationDao.GetReservationBasicInfosAsync();
+            _findedRooms = new List<Room>();
         }
-
-        private async Task LoadReservation(int id)
+        catch (Exception ex)
         {
-            try
-            {
-                _selectedReservation = null;
-                StateHasChanged();
-
-                _selectedReservation = await ReservationDao.GetAsync(x => x.Id == id);
-                _reservationFactors = new ReservationFactors
-                {
-                    BookingAmount = _selectedReservation.GetGuestsAmount(),
-                    CheckIn = _selectedReservation.CheckIn,
-                    CheckOut = _selectedReservation.CheckOut
-                };
-
-                _findedRooms.AddRange(_selectedReservation.GetRooms());
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            await HandleException(ex);
         }
+    }
 
-        private async Task DeleteReservation(int reservationId)
+    private async Task LoadReservation(int id)
+    {
+        try
         {
-            if (!(await ShowConfirm($"Czy napewno chcesz usunać rezerwację o id {reservationId} ?")))
-                return;
+            _selectedReservation = null;
+            StateHasChanged();
 
-            try
+            _selectedReservation = await ReservationDao.GetAsync(x => x.Id == id);
+            _reservationFactors = new ReservationFactors
             {
-                await ReservationDao.DeleteAsync(reservationId);
+                BookingAmount = _selectedReservation.GetGuestsAmount(),
+                CheckIn = _selectedReservation.CheckIn,
+                CheckOut = _selectedReservation.CheckOut
+            };
 
-                _reservations.Remove(_reservations.First(x => x.ReservationId == reservationId));
-                StateHasChanged();
-
-                await ShowNotification("Rezerwacja została usunięta.", Radzen.NotificationSeverity.Success);
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-            }
+            _findedRooms.AddRange(_selectedReservation.GetRooms());
         }
-
-        private async Task SaveChanges()
+        catch (Exception ex)
         {
-            try
-            {
-                _selectedReservation.GetReservationPrice(_priceCalculator);
-
-                await ReservationDao.UpdateAsync(_selectedReservation);
-
-                await ShowNotification("Zmiany został zapisane", Radzen.NotificationSeverity.Success);
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
-
-                await LoadReservation(_selectedReservation.Id);
-                StateHasChanged();
-            }
+            await HandleException(ex);
         }
+    }
 
-        private async Task CancelChanges()
+    private async Task DeleteReservation(int reservationId)
+    {
+        if (!(await ShowConfirm($"Czy napewno chcesz usunać rezerwację o id {reservationId} ?")))
+            return;
+
+        try
         {
-            if (_selectedReservation == null)
-                return;
+            await ReservationDao.DeleteAsync(reservationId);
+
+            _reservations.Remove(_reservations.First(x => x.ReservationId == reservationId));
+            StateHasChanged();
+
+            await ShowNotification("Rezerwacja została usunięta.", Radzen.NotificationSeverity.Success);
+        }
+        catch (Exception ex)
+        {
+            await HandleException(ex);
+        }
+    }
+
+    private async Task SaveChanges()
+    {
+        try
+        {
+            _selectedReservation.GetReservationPrice(_priceCalculator);
+
+            await ReservationDao.UpdateAsync(_selectedReservation);
+
+            await ShowNotification("Zmiany został zapisane", Radzen.NotificationSeverity.Success);
+        }
+        catch (Exception ex)
+        {
+            await HandleException(ex);
 
             await LoadReservation(_selectedReservation.Id);
-        }
-
-        private void OnFindedRooms(FindedRoomsFactors findedRoomsFactors)
-        {
-            _findedRooms = findedRoomsFactors.FindedRooms;
-            //_reservationFactors = findedRoomsFactors.ReservationFactors;
-
-            _roomSelectionActive = true;
-            CloseWindow();
-
             StateHasChanged();
         }
+    }
 
-        private void OnEvent(bool state) => StateHasChanged();
+    private async Task CancelChanges()
+    {
+        if (_selectedReservation == null)
+            return;
 
-        private async Task GetDocument(int reservationId)
+        await LoadReservation(_selectedReservation.Id);
+    }
+
+    private void OnFindedRooms(FindedRoomsFactors findedRoomsFactors)
+    {
+        _findedRooms = findedRoomsFactors.FindedRooms;
+        //_reservationFactors = findedRoomsFactors.ReservationFactors;
+
+        _roomSelectionActive = true;
+        CloseWindow();
+
+        StateHasChanged();
+    }
+
+    private void OnEvent(bool state) => StateHasChanged();
+
+    private async Task GetDocument(int reservationId)
+    {
+        try
         {
-            try
-            {
-                ShowWaitingWindow("Trwa generowanie ...");
+            ShowWaitingWindow("Trwa generowanie ...");
 
-                var reservation = await ReservationDao.GetAsync(x => x.Id == reservationId);
-                var reservationDocumentService = new ReservationDocumentService(reservation);
-                var document = reservationDocumentService.GetCreatedDocumentName();
-                var url = $"documents\\{document}.docx";
+            var reservation = await ReservationDao.GetAsync(x => x.Id == reservationId);
+            var reservationDocumentService = new ReservationDocumentService(reservation);
+            var document = reservationDocumentService.GetCreatedDocumentName();
+            var url = $"documents\\{document}.docx";
 
-                CloseWindow();
+            CloseWindow();
 
-                await JsRuntime.InvokeAsync<object>("open", new string[] { url, "_blank" });
-            }
-            catch (Exception ex)
-            {
-                await HandleException(ex);
+            await JsRuntime.InvokeAsync<object>("open", new string[] { url, "_blank" });
+        }
+        catch (Exception ex)
+        {
+            await HandleException(ex);
 
-                CloseWindow();
-            }
+            CloseWindow();
         }
     }
 }

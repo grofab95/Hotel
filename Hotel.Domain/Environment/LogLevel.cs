@@ -1,9 +1,8 @@
-﻿namespace Hotel.Domain.Environment
+﻿namespace Hotel.Domain.Environment;
+
+public enum LogLevel
 {
-    public enum LogLevel
-    {
-        Information,
-        Error,
-        Fatal
-    }
+    Information,
+    Error,
+    Fatal
 }

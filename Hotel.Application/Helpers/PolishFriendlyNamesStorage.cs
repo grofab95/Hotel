@@ -1,60 +1,59 @@
 ﻿using System;
 
-namespace Hotel.Application.Helpers
+namespace Hotel.Application.Helpers;
+
+public class PolishFriendlyNamesStorage
 {
-    public class PolishFriendlyNamesStorage
+    public static string GetFriendlyNameOfDay(int number)
     {
-        public static string GetFriendlyNameOfDay(int number)
-        {
-            if (number == 1)
-                return "dzień";
+        if (number == 1)
+            return "dzień";
 
-            if (number == 0 || number >= 2)
-                return "dni";
+        if (number == 0 || number >= 2)
+            return "dni";
 
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
+    }
 
-        public static string GetFriendlyNameOfWeek(int number)
-        {
-            if (number == 1)
-                return "tydzień";
+    public static string GetFriendlyNameOfWeek(int number)
+    {
+        if (number == 1)
+            return "tydzień";
 
-            if (number == 0 || number >= 5)
-                return "tygodni";
+        if (number == 0 || number >= 5)
+            return "tygodni";
 
-            if (number >= 2 || number <= 4)
-                return "tygodnie";
+        if (number >= 2 || number <= 4)
+            return "tygodnie";
 
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
+    }
 
-        public static string GetFriendlyNameOfMonth(int number)
-        {
-            if (number == 1)
-                return "miesiąc";
+    public static string GetFriendlyNameOfMonth(int number)
+    {
+        if (number == 1)
+            return "miesiąc";
 
-            if (number == 0 || number >= 5)
-                return "miesięcy";
+        if (number == 0 || number >= 5)
+            return "miesięcy";
 
-            if (number >= 2 || number <= 4)
-                return "miesiące";
+        if (number >= 2 || number <= 4)
+            return "miesiące";
 
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
+    }
 
-        public static string GetFriendlyNameOfYear(int number)
-        {
-            if (number == 1)
-                return "rok";
+    public static string GetFriendlyNameOfYear(int number)
+    {
+        if (number == 1)
+            return "rok";
 
-            if (number == 0 || number >= 5)
-                return "lat";
+        if (number == 0 || number >= 5)
+            return "lat";
 
-            if (number >= 2 || number <= 4)
-                return "lata";
+        if (number >= 2 || number <= 4)
+            return "lata";
 
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
     }
 }
